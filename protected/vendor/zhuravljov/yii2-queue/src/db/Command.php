@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link https://github.com/zhuravljov/yii2-queue
+ * @copyright Copyright (c) 2017 Roman Zhuravlev
+ * @license http://opensource.org/licenses/BSD-3-Clause
+ */
 
 namespace zhuravljov\yii\queue\db;
 
@@ -12,9 +17,24 @@ use zhuravljov\yii\queue\Command as BaseCommand;
 class Command extends BaseCommand
 {
     /**
-     * @var Driver
+     * @var Queue
      */
-    public $driver;
+    public $queue;
+
+    /**
+     * @var string
+     */
+    public $defaultAction = 'info';
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        return [
+            'info' => InfoAction::class,
+        ];
+    }
 
     /**
      * Runs all jobs from db-queue.
@@ -22,7 +42,7 @@ class Command extends BaseCommand
      */
     public function actionRun()
     {
-        $this->driver->run();
+        $this->queue->run();
     }
 
     /**
@@ -33,6 +53,6 @@ class Command extends BaseCommand
      */
     public function actionListen($delay = 3)
     {
-        $this->driver->listen($delay);
+        $this->queue->listen($delay);
     }
 }

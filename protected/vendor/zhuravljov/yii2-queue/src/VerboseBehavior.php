@@ -1,8 +1,14 @@
 <?php
+/**
+ * @link https://github.com/zhuravljov/yii2-queue
+ * @copyright Copyright (c) 2017 Roman Zhuravlev
+ * @license http://opensource.org/licenses/BSD-3-Clause
+ */
 
 namespace zhuravljov\yii\queue;
 
 use yii\base\Behavior;
+use yii\helpers\Console;
 
 /**
  * Class VerboseBehavior
@@ -23,16 +29,17 @@ class VerboseBehavior extends Behavior
     {
         return [
             Queue::EVENT_BEFORE_WORK => function (JobEvent $event) {
-                echo strtr('{time}: {class} has been started ... ', [
+                Console::stdout(strtr('{time}: {class} has been started ... ', [
                     '{time}' => date('Y-m-d H:i:s'),
                     '{class}' => get_class($event->job),
-                ]);
+                ]));
             },
             Queue::EVENT_AFTER_WORK => function (JobEvent $event) {
-                echo "OK\n";
+                Console::output('OK');
             },
             Queue::EVENT_AFTER_ERROR => function (ErrorEvent $event) {
-                echo "Error\n{$event->error}\n";
+                Console::output('Error');
+                Console::error($event->error);
             },
         ];
     }

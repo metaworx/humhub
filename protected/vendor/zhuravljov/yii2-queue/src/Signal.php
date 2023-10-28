@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link https://github.com/zhuravljov/yii2-queue
+ * @copyright Copyright (c) 2017 Roman Zhuravlev
+ * @license http://opensource.org/licenses/BSD-3-Clause
+ */
 
 namespace zhuravljov\yii\queue;
 
@@ -9,28 +14,32 @@ namespace zhuravljov\yii\queue;
  */
 class Signal
 {
-    private static $term = false;
+    private static $exit = false;
 
     /**
-     * Checks SIGTERM signal
+     * Checks exit signals
      * @return bool
      */
-    public static function isTerm()
+    public static function isExit()
     {
         if (function_exists('pcntl_signal')) {
             // Installs a signal handler
             static $handled = false;
             if (!$handled) {
-                pcntl_signal(SIGTERM, function () {
-                    static::$term = true;
-                });
+                foreach ([SIGTERM, SIGINT, SIGHUP] as $signal) {
+                    pcntl_signal($signal, function () {
+                        static::$exit = true;
+                    });
+                }
                 $handled = true;
             }
+
             // Checks signal
-            if (!static::$term) {
+            if (!static::$exit) {
                 pcntl_signal_dispatch();
             }
         }
-        return static::$term;
+
+        return static::$exit;
     }
 }

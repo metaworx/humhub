@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link https://github.com/zhuravljov/yii2-queue
+ * @copyright Copyright (c) 2017 Roman Zhuravlev
+ * @license http://opensource.org/licenses/BSD-3-Clause
+ */
 
 namespace zhuravljov\yii\queue;
 
@@ -12,9 +17,9 @@ use yii\console\Controller;
 abstract class Command extends Controller
 {
     /**
-     * @var Driver
+     * @var Queue
      */
-    public $driver;
+    public $queue;
     /**
      * @var boolean
      */
@@ -46,7 +51,7 @@ abstract class Command extends Controller
     public function beforeAction($action)
     {
         if ($this->verbose) {
-            $this->driver->queue->attachBehavior('verbose', VerboseBehavior::class);
+            $this->queue->attachBehavior('verbose', VerboseBehavior::class);
         }
 
         return parent::beforeAction($action);
