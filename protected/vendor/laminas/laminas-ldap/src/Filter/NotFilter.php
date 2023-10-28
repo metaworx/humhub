@@ -9,15 +9,11 @@ class NotFilter extends AbstractFilter
 {
     /**
      * The underlying filter.
-     *
-     * @var AbstractFilter
      */
-    private $filter;
+    private AbstractFilter $filter;
 
     /**
      * Creates a Laminas\Ldap\Filter\NotFilter.
-     *
-     * @param AbstractFilter $filter
      */
     public function __construct(AbstractFilter $filter)
     {
