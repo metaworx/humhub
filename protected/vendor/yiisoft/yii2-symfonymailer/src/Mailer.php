@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\symfonymailer;
@@ -123,7 +123,7 @@ class Mailer extends BaseMailer
             );
             $transport = $transportObj->fromDsnObject($dsn);
         } else {
-            $transport = $transportObj->fromString('null://null');
+            throw new InvalidConfigException('Transport configuration array must contain either "dsn", or "scheme" and "host" keys.');
         }
         return $transport;
     }

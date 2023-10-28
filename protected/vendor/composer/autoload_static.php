@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2aaaaa29c4e85166419143c790999855
+class ComposerStaticInita7bd91dbd32521f46da1029808d9f461
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -66,10 +66,6 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
         array (
             'raoul2000\\jcrop\\' => 16,
         ),
-        'p' => 
-        array (
-            'phpDocumentor\\Reflection\\' => 25,
-        ),
         'k' => 
         array (
             'kartik\\widgets\\' => 15,
@@ -102,10 +98,6 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
         'Z' => 
         array (
             'ZipStream\\' => 10,
-        ),
-        'W' => 
-        array (
-            'Webmozart\\Assert\\' => 17,
         ),
         'T' => 
         array (
@@ -155,7 +147,6 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
             'Psr\\EventDispatcher\\' => 20,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
-            'Prophecy\\' => 9,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'M' => 
@@ -335,12 +326,6 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
         array (
             0 => __DIR__ . '/..' . '/raoul2000/yii2-jcrop-widget',
         ),
-        'phpDocumentor\\Reflection\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-        ),
         'kartik\\widgets\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widgets/src',
@@ -436,10 +421,6 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
-        ),
-        'Webmozart\\Assert\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
         'Twig\\' => 
         array (
@@ -601,10 +582,6 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
-        ),
-        'Prophecy\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
         ),
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
@@ -1411,7 +1388,7 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
-        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
         'TheSeer\\Tokenizer\\Exception' => __DIR__ . '/..' . '/theseer/tokenizer/src/Exception.php',
         'TheSeer\\Tokenizer\\NamespaceUri' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUri.php',
@@ -1428,10 +1405,10 @@ class ComposerStaticInit2aaaaa29c4e85166419143c790999855
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita7bd91dbd32521f46da1029808d9f461::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita7bd91dbd32521f46da1029808d9f461::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInita7bd91dbd32521f46da1029808d9f461::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInita7bd91dbd32521f46da1029808d9f461::$classMap;
 
         }, null, ClassLoader::class);
     }
