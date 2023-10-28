@@ -1938,6 +1938,11 @@ table {
   }
 }
 
+.detail-view > tbody > tr > th,
+.detail-view > tbody > tr > td {
+  padding: 10px;
+}
+
 //
 // Comments
 // --------------------------------------------------
@@ -2337,6 +2342,7 @@ ul.tag_input.focus {
 .file_upload_remove_link,
 .file_upload_remove_link:hover {
   color: @danger;
+  cursor: pointer;
 }
 
 // Contentform error
@@ -2840,7 +2846,6 @@ img.bounceIn {
   }
   img {
     max-width: 100%;
-    width: 100%;
     display: table-cell !important;
   }
 
@@ -2867,6 +2872,10 @@ img.bounceIn {
 
 .md-editor.active {
   border: 2px solid @info !important;
+}
+
+.md-editor textarea {
+  padding: 10px !important;
 }
 
 //

@@ -9,8 +9,9 @@
 namespace humhub\modules\user\models;
 
 use Yii;
+use humhub\components\ActiveRecord;
 use humhub\modules\space\models\Space;
-use humhub\modules\user\models\User;
+
 
 /**
  * This is the model class for table "group".
@@ -24,7 +25,7 @@ use humhub\modules\user\models\User;
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Group extends \yii\db\ActiveRecord
+class Group extends ActiveRecord
 {
 
     const SCENARIO_EDIT = 'edit';
@@ -47,9 +48,8 @@ class Group extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required', 'on' => self::SCENARIO_EDIT],
-            [['space_id', 'created_by', 'updated_by'], 'integer'],
+            [['space_id'], 'integer'],
             [['description', 'managerGuids', 'defaultSpaceGuid'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 45]
         ];
     }

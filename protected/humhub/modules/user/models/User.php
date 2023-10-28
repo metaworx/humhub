@@ -11,7 +11,7 @@ namespace humhub\modules\user\models;
 use Yii;
 use yii\base\Exception;
 use humhub\modules\content\components\ContentContainerActiveRecord;
-use humhub\modules\user\models\GroupUser;
+
 use humhub\modules\user\components\ActiveQueryUser;
 use humhub\modules\friendship\models\Friendship;
 
@@ -95,9 +95,9 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
     {
         return [
             [['username', 'email'], 'required'],
-            [['wall_id', 'status', 'created_by', 'updated_by', 'visibility'], 'integer'],
+            [['wall_id', 'status', 'visibility'], 'integer'],
             [['tags'], 'string'],
-            [['last_activity_email', 'created_at', 'updated_at', 'last_login'], 'safe'],
+            [['last_activity_email', 'last_login'], 'safe'],
             [['guid'], 'string', 'max' => 45],
             [['username'], 'string', 'max' => 50, 'min' => Yii::$app->params['user']['minUsernameLength']],
             [['time_zone'], 'in', 'range' => \DateTimeZone::listIdentifiers()],

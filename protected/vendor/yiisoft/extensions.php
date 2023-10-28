@@ -60,7 +60,7 @@ return array (
   'yiisoft/yii2-debug' => 
   array (
     'name' => 'yiisoft/yii2-debug',
-    'version' => '2.0.6.0',
+    'version' => '2.0.7.0',
     'alias' => 
     array (
       '@yii/debug' => $vendorDir . '/yiisoft/yii2-debug',
@@ -87,7 +87,7 @@ return array (
   'yiisoft/yii2-apidoc' => 
   array (
     'name' => 'yiisoft/yii2-apidoc',
-    'version' => '2.0.5.0',
+    'version' => '2.0.6.0',
     'alias' => 
     array (
       '@yii/apidoc' => $vendorDir . '/yiisoft/yii2-apidoc',
