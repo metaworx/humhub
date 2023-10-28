@@ -105,7 +105,7 @@ return array (
   'kartik-v/yii2-widget-fileinput' => 
   array (
     'name' => 'kartik-v/yii2-widget-fileinput',
-    'version' => '1.0.9.0',
+    'version' => '1.1.0.0',
     'alias' => 
     array (
       '@kartik/file' => $vendorDir . '/kartik-v/yii2-widget-fileinput/src',
@@ -141,7 +141,7 @@ return array (
   'kartik-v/yii2-widget-colorinput' => 
   array (
     'name' => 'kartik-v/yii2-widget-colorinput',
-    'version' => '1.0.5.0',
+    'version' => '1.0.6.0',
     'alias' => 
     array (
       '@kartik/color' => $vendorDir . '/kartik-v/yii2-widget-colorinput/src',
