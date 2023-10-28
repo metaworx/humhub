@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit18a0396f054b1ae81da8632862e743c0
+class ComposerStaticInit2aaaaa29c4e85166419143c790999855
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -338,8 +338,8 @@ class ComposerStaticInit18a0396f054b1ae81da8632862e743c0
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'kartik\\widgets\\' => 
         array (
@@ -1428,10 +1428,10 @@ class ComposerStaticInit18a0396f054b1ae81da8632862e743c0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit18a0396f054b1ae81da8632862e743c0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit18a0396f054b1ae81da8632862e743c0::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit18a0396f054b1ae81da8632862e743c0::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit18a0396f054b1ae81da8632862e743c0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit2aaaaa29c4e85166419143c790999855::$classMap;
 
         }, null, ClassLoader::class);
     }
