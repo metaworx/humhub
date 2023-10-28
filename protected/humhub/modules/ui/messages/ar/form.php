@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Invalid icon.' => '',
-    'Select icon' => '',
+    'Invalid icon.' => 'رمز غير صالح.',
+    'Select icon' => 'حدد الرمز',
+    'Sort Order' => '',
+    'Values between 0 and 10000, the existing elements usually use steps of 100.' => '',
 ];
