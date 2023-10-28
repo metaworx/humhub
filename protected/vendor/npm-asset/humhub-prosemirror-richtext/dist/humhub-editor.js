@@ -13410,24 +13410,39 @@
   };
 
   MenuItem.prototype.adoptItemState = function adoptItemState (state, forceEnable, forceActive) {
-      this.selected = true;
-      if (this.options.select) {
-          this.selected = this.options.select(state);
-          this.dom.style.display = this.selected || forceEnable ? "" : "none";
-          if (!this.selected) { return false }
-      }
+      this.setEnabledItemState(state, forceEnable);
+      this.setActiveItemState(state, forceActive);
+      this.setSelectedItemState(state, forceEnable);
+  };
 
-      this.enabled = true;
-
-      if (this.options.enable) {
-          this.enabled = this.options.enable(state) || forceEnable || false;
-          setClass(this.dom, prefix$1 + "-disabled", !this.enabled);
-      }
-
+  MenuItem.prototype.setActiveItemState = function setActiveItemState (state, forceActive) {
       this.active = false;
       if (this.options.active) {
           this.active = (this.options.active(state) || forceActive) || false;
           setClass(this.dom, prefix$1 + "-active", this.active);
+      }
+  };
+
+  MenuItem.prototype.setEnabledItemState = function setEnabledItemState (state, forceEnable) {
+      this.enabled = true;
+      if (this.options.enable) {
+          this.enabled = this.options.enable(state) || forceEnable || false;
+          setClass(this.dom, prefix$1 + "-disabled", !this.enabled);
+      }
+  };
+
+  MenuItem.prototype.setSelectedItemState = function setSelectedItemState (state, forceEnable) {
+      this.selected = true;
+      if (this.options.select) {
+          this.selected = this.options.select(state);
+          this.dom.style.display = this.selected || forceEnable ? "" : "none";
+
+          if(!this.selected) {
+              this.dom.classList.add('hidden');
+          } else {
+              this.dom.classList.remove('hidden');
+          }
+          if (!this.selected) { return false }
       }
   };
 
@@ -32431,10 +32446,11 @@
       group: "block",
       code: true,
       defining: true,
+      marks: "",
       attrs: {params: {default: ""}},
       parseDOM: [{
           tag: "pre", preserveWhitespace: true, getAttrs: function (node) {
-              return ({params: node.getAttribute("data-params")});
+              return ({params: node.getAttribute("data-params") || ""});
           }
       }],
       toDOM: function toDOM(node) {
@@ -76218,6 +76234,9 @@
                           }
                       }
                   }],
+              toDOM: function toDOM(node) { var ref = node.attrs;
+              var href = ref.href;
+              var title = ref.title; return ["a", {href: href, title: title}, 0] },
               parseMarkdown: {
                   mark: "link", getAttrs: function (tok) {
                       var href = (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("href")).url : tok.attrGet("href");
@@ -79915,26 +79934,15 @@
    *
    */
 
-
-  var SELECTOR_DEFAULT = '.ProseMirror-menu-linkItem, .helper-group, .format-group, .insert-dropdown, .ProseMirror-menu-insertTable, .ProseMirror-menu-fullScreen';
-
-  var cache$2 = {};
+  var SELECTOR_DEFAULT = '.helper-group, .format-group, .insert-dropdown, .ProseMirror-menu-insertTable:not(.hidden), .ProseMirror-menu-fullScreen:not(.hidden)';
 
   function resizeNav(context) {
-
-      context.event.on('clear', function() {
-          cache$2 = {};
-      });
-
-      humhub.event.on('humhub:ready', function() {
-          cache$2 = {};
-      });
 
       return new MenuItem({
           id: 'resizeNav',
           title: "More",
           sortOrder: 400,
-          run: function() {
+          run: function run() {
               var $nodes = getNodes(context);
               if(!context.editor.$.find('.helper-group').is(':visible')) {
                   $nodes.fadeIn();
@@ -79951,11 +79959,7 @@
   }
 
   function getNodes(context) {
-      if(!cache$2[context.id]) {
-          cache$2[context.id] = context.editor.$.find(getSelector(context));
-      }
-
-      return cache$2[context.id];
+      return context.editor.$.find(getSelector(context));
   }
 
   function getSelector(context) {
@@ -80009,7 +80013,7 @@
   };
 
   MaxHeightState.prototype.update = function update () {
-      var stageHeight = this.context.editor.getStage().innerHeight();
+      var stageHeight = this.context.editor.getStage()[0].offsetHeight;
 
       if(stageHeight === this.oldStageHeight) {
           return;
@@ -80018,7 +80022,7 @@
       this.oldStageHeight = stageHeight;
 
       if(!this.scrollActive && this.context.editor.getStage()[0].scrollHeight > stageHeight) {
-          if(!this.niceScrollInit && this.context.editor.getStage().niceScroll) {
+          if(!this.niceScrollInit && !humhub.require('ui.view').isSmall() && this.context.editor.getStage().niceScroll) {
               this.context.editor.getStage().niceScroll({
                   cursorwidth: "7",
                   cursorborder: "",
@@ -80295,13 +80299,15 @@
   registerPlugin(paragraph$2, 'markdown');
   registerPlugin(blockquote$1, 'markdown');
   registerPlugin(bullet_list, 'markdown');
+  registerPlugin(strikethrough$2, 'markdown');
+  registerPlugin(em, 'markdown');
   registerPlugin(strong, 'markdown');
-  registerPlugin(link$4, 'markdown');
   registerPlugin(code$2, 'markdown');
+  registerPlugin(link$4, 'markdown');
   registerPlugin(code_block$1, 'markdown');
   registerPlugin(emoji);
   registerPlugin(hard_break, 'markdown');
-  registerPlugin(em, 'markdown');
+
   registerPlugin(horizontal_rule, 'markdown');
   registerPlugin(image$4, 'markdown');
   registerPlugin(list_item, 'markdown');
@@ -80309,7 +80315,7 @@
   registerPlugin(oembed$1);
   registerPlugin(ordered_list, 'markdown');
   registerPlugin(heading$2, 'markdown');
-  registerPlugin(strikethrough$2, 'markdown');
+
   registerPlugin(table$2, 'markdown');
   registerPlugin(text$2, 'markdown');
   registerPlugin(attributes, 'markdown');
@@ -81236,8 +81242,11 @@
           bind("Shift-Enter", cmd);
           if (mac$3) { bind("Ctrl-Enter", cmd); }
       }
+
+      var splitList;
+
       if (type = schema.nodes.list_item) {
-          bind("Enter", splitListItem(type));
+          splitList = splitListItem(type);
           bind("Mod-[", liftListItem(type));
           bind("Mod-]", sinkListItem(type));
       }
@@ -81256,6 +81265,13 @@
       }
 
       baseKeymap['Backspace'] = chainCommands(undoInputRule, deleteSelection, joinBackward, selectNodeBackward);
+
+      if(splitList) {
+          baseKeymap['Enter'] = chainCommands(splitList, newlineInCode, createParagraphNear, liftEmptyBlock, splitBlock);
+      } else {
+          baseKeymap['Enter'] = chainCommands(newlineInCode, createParagraphNear, liftEmptyBlock, splitBlock);
+      }
+
 
       for (var key in baseKeymap) {
           bind(key, baseKeymap[key]);
