@@ -1,0 +1,22 @@
+<?php
+return array (
+  '<strong>Manage</strong> spaces' => '<strong>Gestionar</strong> espacios',
+  'All' => 'Todos',
+  'By Invite' => 'Por invitación',
+  'By invite' => 'Por invitación',
+  'Delete space' => 'Eliminar espacio',
+  'Edit space' => 'Editar espacio',
+  'Everbody' => 'Todo el mundo',
+  'Free' => 'Libre',
+  'In this overview you can find every space and manage it.' => 'En esta vista puedes ver cada espacio y gestionarlo.',
+  'Invisible' => 'Invisible',
+  'Invite & Request' => 'Invitación y solicitud',
+  'Invite / Request' => 'Invitación / solicitud',
+  'Registrated only' => 'Solo registrados',
+  'Search for space name' => 'Buscar por nombre de espacio',
+  'Search for space owner' => 'Buscar por dueño del espacio',
+  'Space name' => 'Nombre del espacio',
+  'Space owner' => 'Dueño del espacio',
+  'View space' => 'Ver espacio',
+  'Visible' => 'Visible',
+);

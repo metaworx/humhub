@@ -1,0 +1,23 @@
+<?php
+return array (
+  '<strong>Administration</strong> menu' => 'Menú de <strong>administración</strong>',
+  'About' => 'Acerca de',
+  'Authentication' => 'Autenticación',
+  'Basic' => 'Básica',
+  'Caching' => 'Caché',
+  'Cron jobs' => 'Cronjobs',
+  'Design' => 'Diseño',
+  'Files' => 'Archivos',
+  'Groups' => 'Grupos',
+  'Logging' => 'Registro',
+  'Mailing' => 'Correos',
+  'Modules' => 'Módulos',
+  'Security & Roles' => 'Seguridad y roles',
+  'Self test & update' => 'Auto test y actualización',
+  'Settings' => 'Ajustes',
+  'Spaces' => 'Espacios',
+  'Statistics' => 'Estadísticas',
+  'User approval' => 'Aprobación de usuarios',
+  'User profiles' => 'Perfiles de usarios',
+  'Users' => 'Usuarios',
+);
