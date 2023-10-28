@@ -1,6 +1,46 @@
 HumHub Change Log
 =================
 
+1.3.2  (September 4, 2018)
+--------------------------
+
+- Fix #3241: Profile header space count invalid
+- Fix: Disabled Notification E-Mails for installation sample contents
+- Fix: No e-mail summary immediately after installation
+- Enh: Added queuing for search updates of commments
+- Enh: Added queue clear option at Administration - Information
+- Enh: Improved support of languages unsupported Yii2 
+- Enh: Added Amharic language support
+- Enh: Added Finnish language support
+- Enh: Added dashboard warning for admins if cron jobs not working
+- Fix: Queue worker problem with spaces in PHP binary path
+- Fix: Comment buttons overlap editor text
+- Enh: Added windows support for grunt tasks
+- Enh: Added `grunt test-server` and `grunt test`
+- Chng: `humhub\modules\content\models\Content` now implements `humhub\modules\content\interfaces\ContentOwner`
+- Fix: Target container not available in `humhub\modules\content\components\ContentActiveRecord:afterMove()`
+- Chng: `humhub\modules\topic\models\Topic::attach` now accepts `humhub\modules\content\interfaces\ContentOwner` instances
+- Fix: Richtext without focusMenu on small devices overlaps previous sibling
+- Enh: Added random default color to `humhub\modules\ui\form\widgets\ColorPicker`
+- Chng: `humhub\modules\content\models\ContentTag:deleteAll()` and `humhub\modules\content\models\ContentTag:findAll()` now respect the tag type condition by default- Fix: Space admin user remove broken
+- Fix: Space admin user remove broken
+- Fix: Invalid "Member since" date in space administration
+- Fix: Suprressed stream entry button not rendered.
+- Fix: Author stream filter not working.
+- Chng: Use of relative urls in richtext files/images
+- Fix: Permalink better handling of deleted content
+- Fix: Activity exception on integrity check
+- Fix: Ensure profile field "internal name" contains at least one character
+- Fix: Do not allow user self deletion via admin section
+- Fix: Refactored ActiveQueryContent::contentTag method, added method parameter
+- Fix: Richtext prompt not removed on pjax load
+- Enh: Added `humhub\modules\content\widgets\richtext\ProsemirrorRichText::parseOutput` for pre render parsing
+- Enh: Added `humhub.modules.file.getFileUrl` and `humhub.modules.file.filterFileUrl` for file guid based url handling
+- Fix: `humhub\modules\space\modules\manage\components\Controller` only accessible by system admins
+- Enh: Added scheme parameter to Content::getUrl method
+- Enh: Added `ui.richtext.prosemirror.config.link.validate` to intercept link input validation
+- Chng: Updated `humhub.prosemirror` dependency to 1.0.9
+
 
 1.3.1  (August 7, 2018)
 -----------------------

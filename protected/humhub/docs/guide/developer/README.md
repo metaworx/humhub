@@ -14,10 +14,12 @@ Module Developement
 * [Module Migration Guide](modules-migrate.md)
 * [Change core behavior](module-change-behavior.md)
 * [Embedded Themes](embedded-themes.md)
+* [Testing](testing.md)
 
 Basic Concepts
 ------------------
 * [Database and Models](models.md)
+* [Users](modules-users.md)
 * [Content](content.md)
 * [Streams](stream.md)
 * [Events](events.md)

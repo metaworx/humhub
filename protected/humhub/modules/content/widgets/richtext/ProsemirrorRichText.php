@@ -154,7 +154,7 @@ class ProsemirrorRichText extends AbstractRichText
             }
         }
 
-        $this->text = static::parseMentionings($this->text, $this->edit);
+        $this->text = $this->parseOutput();
 
         if ($this->maxLength > 0) {
             $this->text = Helpers::truncateText($this->text, $this->maxLength);
@@ -166,6 +166,14 @@ class ProsemirrorRichText extends AbstractRichText
 
         return trim($output);
 
+    }
+
+    /**
+     * @since v1.3.2
+     */
+    protected function parseOutput()
+    {
+        return static::parseMentionings($this->text, $this->edit);
     }
 
     /**
@@ -206,18 +214,22 @@ class ProsemirrorRichText extends AbstractRichText
 
             if(!$contentContainer || !$contentContainer->getPolymorphicRelation()) {
                 // If no user or space was found we leave out the url in the non edit mode.
-                return $edit ?  '['.Html::encode($match[1]).'](mention:'.$match[3].' "'.$match[4].'")' : $notFoundResult;
+                return $edit ?  '['.$match[1].'](mention:'.$match[3].' "'.$match[4].'")' : $notFoundResult;
             }
 
             $container = $contentContainer->getPolymorphicRelation();
 
             if($container instanceof User) {
                 return $container->isActive()
-                    ?  '['.Html::encode($container->getDisplayName()).'](mention:'.$container->guid.' "'.$container->getUrl().'")'
+                    ?  '['.$container->getDisplayName().'](mention:'.$container->guid.' "'.$container->getUrl().'")'
                     : $notFoundResult;
-            } elseif($container instanceof Space) {
-                return '['.Html::encode($container->name).'](mention:'.$container->guid.' "'.$container->getUrl().'")';
             }
+
+            if($container instanceof Space) {
+                return '['.$container->name.'](mention:'.$container->guid.' "'.$container->getUrl().'")';
+            }
+
+            return '';
         });
     }
 

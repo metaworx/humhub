@@ -15,6 +15,7 @@ return array (
   'Design' => 'Design',
   'Files' => 'Arquivos',
   'Groups' => 'Grupos',
+  'Groups (Note: The Administrator group of this user can\'t be managed with your permissions)' => 'Grupos (Nota: O grupo Administrador deste usuário não pode ser gerenciado com suas permissões)',
   'Invite' => 'Convite',
   'Invited by' => 'Convidado por',
   'Logging' => 'Registros de Log',
