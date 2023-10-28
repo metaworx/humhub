@@ -29,5 +29,6 @@ return array(
     'Zend\\Ldap\\' => array($vendorDir . '/zendframework/zend-ldap/src'),
     'Zend\\Http\\' => array($vendorDir . '/zendframework/zend-http/src'),
     'Zend\\Escaper\\' => array($vendorDir . '/zendframework/zend-escaper/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

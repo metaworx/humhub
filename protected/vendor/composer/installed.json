@@ -153,12 +153,12 @@
         "version_normalized": "3.2.7.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/RobinHerbots/jquery.inputmask.git",
+            "url": "https://github.com/RobinHerbots/Inputmask.git",
             "reference": "5a72c563b502b8e05958a524cdfffafe9987be38"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/RobinHerbots/jquery.inputmask/zipball/5a72c563b502b8e05958a524cdfffafe9987be38",
+            "url": "https://api.github.com/repos/RobinHerbots/Inputmask/zipball/5a72c563b502b8e05958a524cdfffafe9987be38",
             "reference": "5a72c563b502b8e05958a524cdfffafe9987be38",
             "shasum": ""
         },
@@ -718,24 +718,24 @@
     },
     {
         "name": "yiisoft/yii2-swiftmailer",
-        "version": "2.0.5",
-        "version_normalized": "2.0.5.0",
+        "version": "2.0.6",
+        "version_normalized": "2.0.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/yiisoft/yii2-swiftmailer.git",
-            "reference": "e2c6315caff30a9271a7afad4d684627721dc69a"
+            "reference": "26b900767f1031ff3a4668dfa36c10595875f0a5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/e2c6315caff30a9271a7afad4d684627721dc69a",
-            "reference": "e2c6315caff30a9271a7afad4d684627721dc69a",
+            "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/26b900767f1031ff3a4668dfa36c10595875f0a5",
+            "reference": "26b900767f1031ff3a4668dfa36c10595875f0a5",
             "shasum": ""
         },
         "require": {
             "swiftmailer/swiftmailer": "~5.0",
-            "yiisoft/yii2": ">=2.0.4"
+            "yiisoft/yii2": "~2.0.4"
         },
-        "time": "2016-03-17 03:58:49",
+        "time": "2016-09-09 11:48:11",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
@@ -1160,23 +1160,23 @@
     },
     {
         "name": "jbroadway/urlify",
-        "version": "1.0.8-stable",
-        "version_normalized": "1.0.8.0",
+        "version": "1.0.9-stable",
+        "version_normalized": "1.0.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/jbroadway/urlify.git",
-            "reference": "984c991881501098eafdc41053b243237191cff8"
+            "reference": "d3e240cdd5bfb63b84a65916154a3185038ab887"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/jbroadway/urlify/zipball/984c991881501098eafdc41053b243237191cff8",
-            "reference": "984c991881501098eafdc41053b243237191cff8",
+            "url": "https://api.github.com/repos/jbroadway/urlify/zipball/d3e240cdd5bfb63b84a65916154a3185038ab887",
+            "reference": "d3e240cdd5bfb63b84a65916154a3185038ab887",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2016-07-27 15:26:43",
+        "time": "2016-09-14 14:22:45",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1461,17 +1461,17 @@
     },
     {
         "name": "bower-asset/blueimp-load-image",
-        "version": "v2.6.1",
-        "version_normalized": "2.6.1.0",
+        "version": "v2.6.2",
+        "version_normalized": "2.6.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
-            "reference": "da2e77837e81a2a0a143a77034dc01604173790a"
+            "reference": "5cae749216b942ae663a0daabf5dfde4afeaa355"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/da2e77837e81a2a0a143a77034dc01604173790a",
-            "reference": "da2e77837e81a2a0a143a77034dc01604173790a",
+            "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/5cae749216b942ae663a0daabf5dfde4afeaa355",
+            "reference": "5cae749216b942ae663a0daabf5dfde4afeaa355",
             "shasum": ""
         },
         "type": "bower-asset-library",
@@ -2275,25 +2275,33 @@
     },
     {
         "name": "psr/log",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/php-fig/log.git",
-            "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-            "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
+            "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
             "shasum": ""
         },
-        "time": "2012-12-21 11:40:51",
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-09-19 16:02:08",
         "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
         "installation-source": "dist",
         "autoload": {
-            "psr-0": {
-                "Psr\\Log\\": ""
+            "psr-4": {
+                "Psr\\Log\\": "Psr/Log/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -2307,6 +2315,7 @@
             }
         ],
         "description": "Common interface for logging libraries",
+        "homepage": "https://github.com/php-fig/log",
         "keywords": [
             "log",
             "psr",
