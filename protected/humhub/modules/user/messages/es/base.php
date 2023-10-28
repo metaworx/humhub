@@ -69,6 +69,7 @@ return [
     'Sign up' => 'Registrarse',
     'Sign up now' => 'Registrarse ahora',
     'Sort order' => 'Ordenado por',
+    'Source' => 'Fuente',
     'Space ID' => 'ID del Espacio',
     'Status' => 'Estado',
     'Tags' => 'Etiquetas',
@@ -94,4 +95,6 @@ return [
     'invited you to join {name}.' => 'le ha invitado a unirse a {name}.',
     'invited you to join {space} on {name}.' => 'le ha invitado a unerse a {space} en {name}.',
     'or' => 'o',
+    'Profile posts only' => '',
+    'Show all content' => '',
 ];

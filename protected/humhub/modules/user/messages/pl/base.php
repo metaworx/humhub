@@ -69,6 +69,7 @@ return [
     'Sign up' => 'Zarejestruj się',
     'Sign up now' => 'Zapisz się teraz',
     'Sort order' => 'Kierunek segregowania',
+    'Source' => 'Źródło',
     'Space ID' => 'ID Strefy',
     'Status' => 'Status',
     'Tags' => 'Tagi',
@@ -94,4 +95,6 @@ return [
     'invited you to join {name}.' => 'zaprosił Cię do dołączenia do {name}',
     'invited you to join {space} on {name}.' => 'zaprosił Cię do dołączenia do {space} w {name}',
     'or' => 'lub',
+    'Profile posts only' => '',
+    'Show all content' => '',
 ];
