@@ -16,7 +16,7 @@
         <?php if ($enabled): ?>
             <?php if ($errorMessage != ""): ?>
                 <div
-                    class="danger"><?php echo Yii::t('AdminModule.views_setting_authentication_ldap', 'Status: Error! (Message: {message}', array('{message}' => $errorMessage)); ?></div>
+                    class="danger"><?php echo Yii::t('AdminModule.views_setting_authentication_ldap', 'Status: Error! (Message: {message})', array('{message}' => $errorMessage)); ?></div>
             <?php else: ?>
                 <div
                     class="success"><?php echo Yii::t('AdminModule.views_setting_authentication_ldap', 'Status: OK! ({userCount} Users)', array('{userCount}' => $userCount)); ?></div>
@@ -73,7 +73,7 @@
         <div class="form-group">
             <?php echo $form->labelEx($model, 'loginFilter'); ?>
             <?php echo $form->textField($model, 'loginFilter', array('class' => 'form-control', 'readonly' => HSetting::IsFixed('loginFilter', 'authentication_ldap'))); ?>
-            <p class="help-block"><?php echo Yii::t('AdminModule.views_setting_authentication_ldap', 'Defines the filter to apply, when login is attempted. %uid replaces the username in the login action. Example: &quot;(sAMAccountName=%s)&quot; or &quot;(cn=%s)&quot;'); ?></p>
+            <p class="help-block"><?php echo Yii::t('AdminModule.views_setting_authentication_ldap', 'Defines the filter to apply, when login is attempted. %uid replaces the username in the login action. Example: &quot;(sAMAccountName=%s)&quot; or &quot;(uid=%s)&quot;'); ?></p>
         </div>
 
         <div class="form-group">
