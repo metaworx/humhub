@@ -16,7 +16,7 @@ Yii::$classMap['Zend\Stdlib\ArrayObject'] = '@humhub/compat/ArrayObject.php';
 
 $config = [
     'name' => 'HumHub',
-    'version' => '1.3.13',
+    'version' => '1.3.14',
     'basePath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR,
     'bootstrap' => ['log', 'humhub\components\bootstrap\ModuleAutoLoader', 'queue', 'humhub\modules\ui\view\bootstrap\ThemeLoader'],
     'sourceLanguage' => 'en',
@@ -183,7 +183,7 @@ $config = [
             'el' => 'Ελληνικά',
             'ja' => '日本語',
             'hu' => 'Magyar',
-            'nb_no' => 'Nnorsk bokmål',
+            'nb_no' => 'Norsk bokmål',
             'nn_no' => 'Nynorsk',
             'zh_cn' => '中文(简体)',
             'zh_tw' => '中文(台灣)',
