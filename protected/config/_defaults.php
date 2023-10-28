@@ -106,10 +106,16 @@ return array(
         // Installed Flag
         'installed' => false,
         'availableLanguages' => array(
-            'en' => 'English',
+            'en' => 'English (US)',
+            'en_gb' => 'English (UK)',
             'de' => 'Deutsch*',
             'fr' => 'Francais*',
-            'nl' => 'Nederlands*'
+            'nl' => 'Nederlands*',
+            'pl' => 'Polish*',
+            'pt' => 'Portuguese*',
+            'pt_br' => 'Portuguese (Brazilian)*',
+            'es' => 'Spanish*',
+            'it' => 'Italian*',
         ),
         'dynamicConfigFile' => dirname(__FILE__) . '/local/_settings.php',
     ),
