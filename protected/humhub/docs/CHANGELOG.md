@@ -1,6 +1,30 @@
 HumHub Change Log
 =================
 
+1.3.9  (February 13, 2019)
+--------------------------
+
+- Fix: StreamSuppressedQuery with limit = 2 throws query not executed exception
+- Fix #3378: Update user in search index when group memberships changes
+- Fix: Space un-archived activity view path broken
+- Enh: Accepting module README.md files in 'docs' directory
+- Fix: Include user profile posts option in dashboard stream broken
+- Fix: Check SoftDeleted user state in ControllerAccess
+- Fix: Removed database charset configuration in dynamic config
+- Fix: User soft deletion membership cache overwrite
+- Fix #3422 Stream suppressed loading logic loads unnecessary stream entries
+- Fix: "Back to home" button in registration broken with user approvals and guest mode activated
+- Fix #1683 #553: Added link to show/edit users awaiting admin approval
+- Fix: TextFilterInput uses `keypress` event instead of `keydown`
+- Fix #3452: Soft deleted user remain in other users as friends
+- Fix #3170: Wrong cancel invitation mail handling
+- Enh: Added `humhub\modules\space\models\Membership::isCurrentUser()`
+- Enh: Added `humhub\widgets\Link::post()` for `data-method="POST` requests
+- Fix: Use `humhub\modules\user\components\ActiveQueryUser::active()` on UserPicker fillquery by default
+- Added `relativeUrl` to notification view parameter
+- Fix #3335: Queue migration broken on some database configurations
+- Enh: Added new admin setting "Include captcha in registration form"
+- Enh: Added contentTags to the search index
 
 
 1.3.8  (December 10, 2018)
