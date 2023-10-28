@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.9.0 - 2018-04-25
+
+### Added
+
+- [#78](https://github.com/zendframework/zend-ldap/pull/78) Added support for PHP 7.2
+- [#60](https://github.com/zendframework/zend-ldap/pull/60) Adds tests for nightly PHP-builds
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#61](https://github.com/zendframework/zend-ldap/pull/61) Removed support for PHP 5.5.
+- [#78](https://github.com/zendframework/zend-ldap/pull/78) Removed support for HHVM.
+
+### Fixed
+
+- [#71](https://github.com/zendframework/zend-ldap/pull/71) Removes composer-flag ```--ignore-platform-deps``` to fix Travis-CI build
+- [#77](https://github.com/zendframework/zend-ldap/pull/77) Fixes links to PR in CHANGELOG.md)
+- [#78](https://github.com/zendframework/zend-ldap/pull/78) Updated Location for docs.
+- [#78](https://github.com/zendframework/zend-ldap/pull/78) Updated PHPUnit.
+
 ## 2.8.0 - 2017-03-06
 
 ### Added
@@ -65,7 +88,7 @@ coding-standards.
 ### Fixed
 
 - [#17](https://github.com/zendframework/zend-ldap/issues/17) Fixes HHVM builds
-- [#44](https://github.com/zendframework/zend-ldap/pull/40) Fixes broken builds
+- [#44](https://github.com/zendframework/zend-ldap/pull/44) Fixes broken builds
   in PHP7 due to faulty sorting-test
 - [#40](https://github.com/zendframework/zend-ldap/pull/40) Fixes connection test
   that failed due to different failure messages in PHP5 and 7
@@ -86,7 +109,7 @@ coding-standards.
 
 ### Fixed
 
-- [#19](https://github.com/zendframework/zend-ldap/pull/20) checks whether the
+- [#20](https://github.com/zendframework/zend-ldap/pull/20) checks whether the
   LDAP-connection shall use SSL or not and decides based on that which port to
   use if no port has been set.
 - [#25](https://github.com/zendframework/zend-ldap/issues/25) Check for correct
