@@ -30179,7 +30179,9 @@ var entities$3 = Object.freeze({
 
 	    $(this.dom).on("mousedown", function (e) {
 	        e.preventDefault();
-	        options.run.call(this$1, view.state, view.dispatch, view, e);
+	        if (!$(this$1.dom).hasClass(prefix + "-disabled")) {
+	            options.run.call(this$1, view.state, view.dispatch, view, e);
+	        }
 	    });
 
 	    return this.dom;
@@ -54162,25 +54164,6 @@ var full$1 = Object.freeze({
 	 *
 	 */
 
-	// We don't use the official repo https://github.com/valeriangalliat/markdown-it-anchor/issues/39
-	var anchors = {
-	    id: 'anchor',
-	    registerMarkdownIt: function (markdownIt, context) {
-	        var anchorOptions = context.getPluginOption('anchors');
-	        anchorOptions = (anchorOptions === true) ? {} : anchorOptions;
-	        if(anchorOptions) {
-	            markdownIt.use(markdownItAnchor, anchorOptions);
-	        }
-	    }
-	};
-
-	/*
-	 * @link https://www.humhub.org/
-	 * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
-	 * @license https://www.humhub.com/licences
-	 *
-	 */
-
 	function fullScreen(context) {
 	    return new MenuItem({
 	        id: 'fullscreen',
@@ -54274,7 +54257,6 @@ var full$1 = Object.freeze({
 	}
 
 	function getNodes(context) {
-	    debugger;
 	    if(!cache[context.id]) {
 	        cache[context.id] = context.editor.$.find(getSelector(context));
 	    }
@@ -54283,7 +54265,6 @@ var full$1 = Object.freeze({
 	}
 
 	function getSelector(context) {
-	    debugger;
 	    return context.getPluginOption('resizeNav', 'selector', SELECTOR_DEFAULT);
 	}
 
@@ -54343,6 +54324,7 @@ var full$1 = Object.freeze({
 	 *
 	 */
 
+	//import anchors from "./anchors";
 	var plugins = [];
 	var pluginMap = {};
 
@@ -54466,7 +54448,7 @@ var full$1 = Object.freeze({
 	registerPlugin(attributes, 'markdown');
 	registerPlugin(upload, 'markdown');
 	registerPlugin(placeholder, 'markdown');
-	registerPlugin(anchors, 'markdown');
+	//registerPlugin(anchors, 'markdown');
 	registerPlugin(fullscreen, 'markdown');
 	registerPlugin(resizeNav, 'markdown');
 	registerPlugin(maxHeight, 'markdown');
@@ -55591,15 +55573,18 @@ var full$1 = Object.freeze({
 	        state: state
 	    });
 
-	    this.$menuBar = this.$.find('.ProseMirror-menubar').hide();
+	    // TODO: put into menu class...
+	    if(this.$.is('.focusMenu')) {
+	        this.$menuBar = this.$.find('.ProseMirror-menubar').hide();
 
-	    this.$editor = $(this.view.dom).on('focus', function () {
-	        this$1.$menuBar.show();
-	    }).on('blur', function () {
-	        if(!this$1.$.is('.fullscreen')) {
-	            this$1.$menuBar.hide();
-	        }
-	    });
+	        this.$editor = $(this.view.dom).on('focus', function () {
+	            this$1.$menuBar.show();
+	        }).on('blur', function () {
+	            if(!this$1.$.is('.fullscreen')) {
+	                this$1.$menuBar.hide();
+	            }
+	        });
+	    }
 
 	    this.$editor = $(this.view.dom);
 

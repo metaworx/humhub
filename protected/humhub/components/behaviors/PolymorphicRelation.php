@@ -15,6 +15,7 @@ use Yii;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
+use Yii\db\IntegrityException;
 
 /**
  * PolymorphicRelations behavior provides simple support for polymorphic relations in ActiveRecords.
@@ -33,6 +34,11 @@ class PolymorphicRelation extends Behavior
      * @var string the primary key attribute
      */
     public $pkAttribute = 'object_id';
+
+    /**
+     * @var boolean if set to true an exception is thrown if `object_model` and `object_id` is set but does not exist
+     */
+    public $strict = false;
 
     /**
      * @var array the related object needs to be a "instanceof" at least one of these given classnames
@@ -59,6 +65,10 @@ class PolymorphicRelation extends Behavior
             $this->owner->getAttribute($this->classAttribute),
             $this->owner->getAttribute($this->pkAttribute)
         );
+
+        if ($this->strict && !$object && !empty($this->classAttribute) && !empty($this->pkAttribute)) {
+            throw new IntegrityException('Call to an inconsistent polymorphic relation detected on ' . get_class($this->owner) . ' (' . $this->classAttribute . ' : ' . $this->pkAttribute . ')');
+        }
 
         if ($object !== null && $this->validateUnderlyingObjectType($object)) {
             $this->_cached = $object;
@@ -125,10 +135,14 @@ class PolymorphicRelation extends Behavior
      */
     public static function loadActiveRecord($className, $primaryKey)
     {
+        if (empty($className) || empty($primaryKey)) {
+            return null;
+        }
+
         try {
             $class = new ReflectionClass($className);
         } catch (ReflectionException $e) {
-            Yii::error('Could not load polymorphic relation! Class (' . $e->getMessage() . ')');
+            Yii::error('Could not load polymorphic relation! Class: ' . $className . ' (' . $e->getMessage() . ')');
             return null;
         }
 

@@ -8,12 +8,35 @@ Make copying on the web as easy as:
 
 As of October 2017, this library is a polyfill for the modern `Promise`-based [asynchronous clipboard API](https://www.w3.org/TR/clipboard-apis/#async-clipboard-api).
 
-# Usage
+## Why `clipboard-polyfill`?
 
-Get the source using one of the following:
+Browsers have implemented several clipboard APIs over time, and writing to the clipboard without [triggering bugs in various old and current browsers](https://github.com/lgarron/clipboard-polyfill/blob/master/experiment/Conclusions.md) is fairly tricky. In every browser that supports copying to the clipboard in some way, `clipboard-polyfill` attempts to act as close as possible to the async clipboard API. (Read to the end of this document for all the limitations.)
+
+Note: If you only need to copy text and want a super simple polyfill that gets you 80% of the way, consider using [this gist](https://gist.github.com/lgarron/d1dee380f4ed9d825ca7).
+
+# Installation
+
+Get the code using one of the following. If you don't know how to pick and want maximum browser compatibility, start by using "With Promise Polyfill".
+
+## Without Promise Polyfill
+
+This version is smaller, but does not work in Internet Explorer unless you add your own `Promise` polyfill (see below).
 
 - Download [`build/clipboard-polyfill.js`](https://raw.githubusercontent.com/lgarron/clipboard-polyfill/master/build/clipboard-polyfill.js) and include it using a `<script>` tag.
-- `npm install clipboard-polyfill` and import as `clipboard`.
+- `npm install clipboard-polyfill` and `import clipboard from "clipboard-polyfill"`.
+
+## With Promise Polyfill
+
+This version works "out of the box" in all browsers that support copying to the clipboard, but is about 2.5x as large.
+
+- Download [`build/clipboard-polyfill.promise.js`](https://raw.githubusercontent.com/lgarron/clipboard-polyfill/master/build/clipboard-polyfill.promise.js) and include it using a `<script>` tag.
+- `npm install clipboard-polyfill` and `import clipboard from "clipboard-polyfill/build/clipboard-polyfill.promise"`.
+
+## Which One?
+
+The async clipboard API design uses ES6 [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which is not supported in Internet Explorer. If you want the `clipboard-polyfill` to work in as many browsers as possible, you will need to include a polyfill for `Promise`. You can do this by either using the "With Promise Polyfill" version, or by using the "Without Promise Polyfill" version with a polyfill of your own choice. Recommendations include [es6-promise](https://github.com/stefanpenner/es6-promise) and [core-js](https://github.com/zloirock/core-js). Instructions for how to use these polyfills are dependent on your build system and can be found in the `README`s of these libraries.
+
+# Usage
 
 ## Plain Text
 
@@ -101,18 +124,17 @@ Try [this gist](https://gist.github.com/lgarron/d1dee380f4ed9d825ca7) for a simp
 ### Limitations
 
 - In Microsoft Edge, it seems to be impossible to detect whether the copy action actually succeeded ([Edge Bug #14110451](https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/14110451/), [Edge Bug #14080262](https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/14080262/)). `clipboard-polyfill` will always call `resolve()` in Edge.
-- In Microsoft Edge, only the *first* data type you specify is copied to the clipboard ([Edge Bug #14080506](https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/14080506/)).
-  - `DataTransfer` and `clipbard.DT` keep track of the order in which you set items. If you care which data type Edge copies, call `setData()` with that data type first.
+- In Microsoft Edge, only the *last* data type you specify is copied to the clipboard ([Edge Bug #14080506](https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/14080506/)).
+  - `DataTransfer` and `clipbard.DT` keep track of the order in which you set items. If you care which data type Edge copies, call `setData()` with that data type last.
 - On iOS Safari ([WebKit Bug #177715](https://bugs.webkit.org/show_bug.cgi?id=177715)) and Internet Explorer, only text copying works.
   - On iOS Safari, `clipboard-polyfill` needs to use the DOM to copy, so the text will be copied as rich text. `clipboard-polyfill` attempts to use shadow DOM in order to avoid some of the page formatting (e.g. background color) from affecting the copied text. However, such formatting might be copied if shadow DOM is not available.
   - In other browsers, writing copy data that does *not* include the `text/plain` data type will succeed, but also show a console warning:
 
-> clipboard.write() was called without a `text/plain` data type. On some platforms, this may result in an empty clipboard. Call clipboard.suppressWarnings() to suppress this warning.
+> clipboard.write() was called without a `text/plain` data type. On some platforms, this may result in an empty clipboard. Call `clipboard.suppressWarnings()` to suppress this warning.
 
-- `clipboard-polyfill` attemps to avoid changing the document selection or modifying the DOM. However, `clipboard-polyfill` will automatically fall back to using them if needed:
+- `clipboard-polyfill` attemps to avoid changing the document selection or modifying the DOM. However, `clipboard-polyfill` will automatically fall back to using such techniques if needed:
   - On iOS Safari, the user's current selection will be cleared. This *should* not happen on other platforms unless there are unanticipated bugs. (Please [file an issue](https://github.com/lgarron/clipboard-polyfill/issues/new) if you observe this!)
   - On iOS Safari and under certain conditions on desktop Safari ([WebKit Bug #177715](https://bugs.webkit.org/show_bug.cgi?id=156529)), `clipbard-polyfill` needs to add a temporary element to the DOM. This will trigger a [mutation observer](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) if you have attached one to `document.body`. Please [file an issue](https://github.com/lgarron/clipboard-polyfill/issues/new) if you'd like to discuss how to detect temporary elements added by `clipboard-polyfill`.
 - `read()` currently only works in Internet Explorer.
   - Internet Explorer can only read `text/plain` values from the clipboard.
-- Internet Explorer does not have a native `Promise` implementation, so the standalone build file for `clipboard-polyfill` also includes `stefanpenner`'s [`es6-promise` polyfill](https://github.com/stefanpenner/es6-promise). This adds significant size to the build. Please [file an issue](https://github.com/lgarron/clipboard-polyfill/issues/new) if you're interested in a minimal build without Internet Explorer support.
-- Microsoft Edge (at least version <17) does not write `text/html` to the clipboard using the Windows `CF_HTML` clipboard format ([Edge Bug #14372529](https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/14372529/)), which prevents other programs (including other browsers) from recognizing the copied HTML data ([issue #73](https://github.com/lgarron/clipboard-polyfill/issues/73)). `clipboard-polyfill` currently does not attempt to work around this issue.
+- Microsoft Edge (at least EdgeHTML version <17) does not write `text/html` to the clipboard using the Windows `CF_HTML` clipboard format ([Edge Bug #14372529](https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/14372529/)), which prevents other programs (including other browsers) from recognizing the copied HTML data ([issue #73](https://github.com/lgarron/clipboard-polyfill/issues/73)). `clipboard-polyfill` currently does not attempt to work around this issue.
