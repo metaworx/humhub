@@ -1,0 +1,23 @@
+<?php
+return array (
+  'Back to stream' => 'Tornar a l\'inicio',
+  'Content with attached files' => 'Conteniu con fichers adchuntos',
+  'Created by me' => 'Creyau per yo',
+  'Creation time' => 'Hora de creyación',
+  'Filter' => 'Filtro',
+  'Include archived posts' => 'Incluyir publicacions archivadas',
+  'Last update' => 'Zaguera actualización',
+  'Load more' => 'Cargar mas',
+  'No matches with your selected filters!' => 'No s\'ha trobau cosa con os filtros seleccionaus!',
+  'Nothing here yet!' => 'Encara no i hai cosa aquí!',
+  'Only private posts' => 'Nomás publicacions privadas',
+  'Only public posts' => 'Nomás publicacions publicas',
+  'Posts only' => 'Nomás publicacions',
+  'Posts with links' => 'Publicacions con vinclos',
+  'Sorting' => 'Filtrar',
+  'The content has been archived.' => '',
+  'The content has been deleted.' => '',
+  'The content has been unarchived.' => '',
+  'Where I´m involved' => 'An soi involucrau',
+  'Your last edit state has been saved!' => '',
+);

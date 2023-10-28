@@ -1,0 +1,23 @@
+<?php
+return array (
+  '<strong>Space</strong> followers' => '<strong>Nätverks</strong> följare',
+  'Administrator:' => 'Administratör:',
+  'Could not delete user who is a space owner! Name of Space: {spaceName}' => 'Kan inte ta bort användare som är nätverkets ägare! Namn på nätverket: {spaceName}',
+  'Default' => 'Default',
+  'Everyone can enter' => 'Vem som helst kan gå med',
+  'Invite and request' => 'Inbjudan och begäran',
+  'Moderator:' => 'Moderator:',
+  'No spaces found.' => 'Inga nätverk funna',
+  'Only by invite' => 'Endast via inbjudan',
+  'Owner:' => 'Ägare',
+  'Private' => 'Privat',
+  'Private (Invisible)' => 'Privat (osynlig)',
+  'Public' => 'Publik',
+  'Public (Members & Guests)' => 'Publik (medlemmar & gäster)',
+  'Public (Members only)' => 'Publik (endast medlemmar)',
+  'Public (Registered users only)' => 'Publik (endast registrerade användare)',
+  'Public (Visible)' => 'Publik (synlig)',
+  'Settings' => 'Inställningar',
+  'Space' => 'Nätverk',
+  'Visible for all (members and guests)' => 'Synlig för alla (medlemmar & gäster)',
+);
