@@ -78,6 +78,7 @@ return array (
   'Port number' => 'Poortnummer',
   'Prevent client caching of following scripts' => 'Voorkom dat client-caching de volgende scripts bevat',
   'Redis' => 'Redis',
+  'Reported database time: {dateTime}' => 'Gemelde gegevensbanktijd: {dateTime}',
   'SMTP Options' => 'SMTP opties',
   'Save' => 'Bewaar',
   'Save & Flush Caches' => 'Bewaar &amp; vernieuw de caches',
