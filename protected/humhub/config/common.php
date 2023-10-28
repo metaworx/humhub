@@ -24,7 +24,7 @@ if (!defined('PKCS7_DETACHED')) {
 
 $config = [
     'name' => 'HumHub',
-    'version' => '1.5.3',
+    'version' => '1.5.4',
     'basePath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR,
     'bootstrap' => ['log', 'humhub\components\bootstrap\ModuleAutoLoader', 'queue', 'humhub\modules\ui\view\bootstrap\ThemeLoader'],
     'sourceLanguage' => 'en',
@@ -130,6 +130,11 @@ $config = [
         ],
         'db' => [
             'class' => \yii\db\Connection::class,
+            // Fix for MySQL 8.0.21+: https://github.com/yiisoft/yii2/issues/18207
+            'schemaMap' => [
+                'mysqli' => 'humhub\components\db\MysqlSchema',
+                'mysql' => 'humhub\components\db\MysqlSchema'
+            ],
             'dsn' => 'mysql:host=localhost;dbname=humhub',
             'username' => '',
             'password' => '',
