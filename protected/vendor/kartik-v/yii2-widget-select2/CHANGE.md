@@ -1,6 +1,14 @@
 Change Log: `yii2-widget-select2`
 =================================
 
+## Version 2.2.1
+
+**Date:** 09-Jun-2021
+
+- (enh #334): Correct multiple select placeholder styles.
+- (enh #332): Enhance Select2 required attribute validation when used with model.
+- Fix Krajee BS themes styling for multiple select.
+
 ## Version 2.2.0
 
 **Date:** 28-Sep-2020

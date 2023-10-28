@@ -204,10 +204,25 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
      */
     public function getLocationOnScreenOnceScrolledIntoView()
     {
-        $location = $this->executor->execute(
-            DriverCommand::GET_ELEMENT_LOCATION_ONCE_SCROLLED_INTO_VIEW,
-            [':id' => $this->id]
-        );
+        if ($this->isW3cCompliant) {
+            $script = <<<JS
+var e = arguments[0];
+e.scrollIntoView({ behavior: 'instant', block: 'end', inline: 'nearest' }); 
+var rect = e.getBoundingClientRect(); 
+return {'x': rect.left, 'y': rect.top};
+JS;
+
+            $result = $this->executor->execute(DriverCommand::EXECUTE_SCRIPT, [
+                'script' => $script,
+                'args' => [[JsonWireCompat::WEB_DRIVER_ELEMENT_IDENTIFIER => $this->id]],
+            ]);
+            $location = ['x' => $result['x'], 'y' => $result['y']];
+        } else {
+            $location = $this->executor->execute(
+                DriverCommand::GET_ELEMENT_LOCATION_ONCE_SCROLLED_INTO_VIEW,
+                [':id' => $this->id]
+            );
+        }
 
         return new WebDriverPoint($location['x'], $location['y']);
     }
@@ -410,12 +425,23 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
     public function submit()
     {
         if ($this->isW3cCompliant) {
+            // Submit method cannot be called directly in case an input of this form is named "submit".
+            // We use this polyfill to trigger 'submit' event using form.dispatchEvent().
+            $submitPolyfill = $script = <<<HTXT
+                var form = arguments[0];
+                while (form.nodeName !== "FORM" && form.parentNode) { // find the parent form of this element
+                    form = form.parentNode;
+                }
+                if (!form) {
+                    throw Error('Unable to find containing form element');
+                }
+                var event = new Event('submit', {bubbles: true, cancelable: true});
+                if (form.dispatchEvent(event)) {
+                    HTMLFormElement.prototype.submit.call(form);
+                }
+HTXT;
             $this->executor->execute(DriverCommand::EXECUTE_SCRIPT, [
-                // cannot call the submit method directly in case an input of this form is named "submit"
-                'script' => sprintf(
-                    'return Object.getPrototypeOf(%1$s).submit.call(%1$s);',
-                    $this->getTagName() === 'form' ? 'arguments[0]' : 'arguments[0].form'
-                ),
+                'script' => $submitPolyfill,
                 'args' => [[JsonWireCompat::WEB_DRIVER_ELEMENT_IDENTIFIER => $this->id]],
             ]);
 
