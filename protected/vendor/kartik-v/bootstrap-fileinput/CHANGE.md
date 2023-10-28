@@ -1,6 +1,16 @@
 Change Log: `bootstrap-fileinput`
 =================================
 
+## version 5.2.7
+
+**Date**: 17-Dec-2021
+
+- (enh #1767): Enhance ajax task queuing to validate `maxAjaxThreads` correctly. 
+   - enhancement for async uploads (with correct firing of events `filebatchuploadsuccess` and `filebatchuploaderror`)
+- (enh #1765): Map missing icons in `gly` theme.
+- (enh #1763): Preview centering enhancements for thumbnail, object and zoom content.
+- (bug #1758): Correct bootstrap module parser.
+
 ## version 5.2.6
 
 **Date**: 23-Sep-2021

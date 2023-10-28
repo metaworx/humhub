@@ -6,7 +6,7 @@ return array (
   'kartik-v/yii2-krajee-base' => 
   array (
     'name' => 'kartik-v/yii2-krajee-base',
-    'version' => '3.0.1.0',
+    'version' => '3.0.4.0',
     'alias' => 
     array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base/src',
@@ -33,7 +33,7 @@ return array (
   'kartik-v/yii2-widget-timepicker' => 
   array (
     'name' => 'kartik-v/yii2-widget-timepicker',
-    'version' => '1.0.4.0',
+    'version' => '1.0.5.0',
     'alias' => 
     array (
       '@kartik/time' => $vendorDir . '/kartik-v/yii2-widget-timepicker/src',
@@ -69,7 +69,7 @@ return array (
   'kartik-v/yii2-widget-select2' => 
   array (
     'name' => 'kartik-v/yii2-widget-select2',
-    'version' => '2.2.2.0',
+    'version' => '2.2.3.0',
     'alias' => 
     array (
       '@kartik/select2' => $vendorDir . '/kartik-v/yii2-widget-select2/src',
@@ -78,7 +78,7 @@ return array (
   'kartik-v/yii2-widget-rating' => 
   array (
     'name' => 'kartik-v/yii2-widget-rating',
-    'version' => '1.0.4.0',
+    'version' => '1.0.5.0',
     'alias' => 
     array (
       '@kartik/rating' => $vendorDir . '/kartik-v/yii2-widget-rating/src',
@@ -123,7 +123,7 @@ return array (
   'kartik-v/yii2-widget-datetimepicker' => 
   array (
     'name' => 'kartik-v/yii2-widget-datetimepicker',
-    'version' => '1.4.9.0',
+    'version' => '1.5.0.0',
     'alias' => 
     array (
       '@kartik/datetime' => $vendorDir . '/kartik-v/yii2-widget-datetimepicker/src',
@@ -132,7 +132,7 @@ return array (
   'kartik-v/yii2-widget-datepicker' => 
   array (
     'name' => 'kartik-v/yii2-widget-datepicker',
-    'version' => '1.4.7.0',
+    'version' => '1.4.8.0',
     'alias' => 
     array (
       '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker/src',
@@ -150,7 +150,7 @@ return array (
   'kartik-v/yii2-widget-alert' => 
   array (
     'name' => 'kartik-v/yii2-widget-alert',
-    'version' => '1.1.4.0',
+    'version' => '1.1.5.0',
     'alias' => 
     array (
       '@kartik/alert' => $vendorDir . '/kartik-v/yii2-widget-alert/src',
@@ -168,7 +168,7 @@ return array (
   'kartik-v/yii2-widget-activeform' => 
   array (
     'name' => 'kartik-v/yii2-widget-activeform',
-    'version' => '1.6.0.0',
+    'version' => '1.6.2.0',
     'alias' => 
     array (
       '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform/src',
@@ -204,7 +204,7 @@ return array (
   'yiisoft/yii2-authclient' => 
   array (
     'name' => 'yiisoft/yii2-authclient',
-    'version' => '2.2.11.0',
+    'version' => '2.2.12.0',
     'alias' => 
     array (
       '@yii/authclient' => $vendorDir . '/yiisoft/yii2-authclient/src',
@@ -240,26 +240,26 @@ return array (
   'yiisoft/yii2-queue' => 
   array (
     'name' => 'yiisoft/yii2-queue',
-    'version' => '2.3.2.0',
+    'version' => '2.3.3.0',
     'alias' => 
     array (
       '@yii/queue' => $vendorDir . '/yiisoft/yii2-queue/src',
-      '@yii/queue/amqp' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/amqp',
-      '@yii/queue/amqp_interop' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/amqp_interop',
-      '@yii/queue/beanstalk' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/beanstalk',
       '@yii/queue/db' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/db',
-      '@yii/queue/file' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/file',
-      '@yii/queue/gearman' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/gearman',
-      '@yii/queue/redis' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/redis',
-      '@yii/queue/sync' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/sync',
       '@yii/queue/sqs' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/sqs',
+      '@yii/queue/amqp' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/amqp',
+      '@yii/queue/file' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/file',
+      '@yii/queue/sync' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/sync',
+      '@yii/queue/redis' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/redis',
       '@yii/queue/stomp' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/stomp',
+      '@yii/queue/gearman' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/gearman',
+      '@yii/queue/beanstalk' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/beanstalk',
+      '@yii/queue/amqp_interop' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/amqp_interop',
     ),
   ),
   'yiisoft/yii2-redis' => 
   array (
     'name' => 'yiisoft/yii2-redis',
-    'version' => '2.0.16.0',
+    'version' => '2.0.17.0',
     'alias' => 
     array (
       '@yii/redis' => $vendorDir . '/yiisoft/yii2-redis/src',

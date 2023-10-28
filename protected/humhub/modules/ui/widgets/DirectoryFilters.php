@@ -9,11 +9,14 @@ namespace humhub\modules\ui\widgets;
 
 use humhub\components\Widget;
 use humhub\libs\Html;
+use humhub\modules\ui\form\widgets\BasePicker;
+use humhub\modules\user\widgets\PeopleFilterAutocomplete;
+use humhub\widgets\Button;
 use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
- * DirectoryFilters displays the filters on the directory people/spaces pages
+ * DirectoryFilters displays the filters on the directory people/spaces/modules pages
  *
  * @since 1.9
  * @author Luke
@@ -30,6 +33,11 @@ abstract class DirectoryFilters extends Widget
      */
     public $pageUrl;
 
+    /**
+     * @var bool True - if paganation is used for the filtered results
+     * @since 1.11
+     */
+    public $paginationUsed = true;
 
     /**
      * @inheritDoc
@@ -37,6 +45,13 @@ abstract class DirectoryFilters extends Widget
     public function init()
     {
         $this->initDefaultFilters();
+
+        $this->addFilter('reset', [
+            'type' => 'info',
+            'wrapperClass' => 'col-md-2 form-search-without-info',
+            'info' => Html::a(Yii::t('UiModule.base', 'Reset filters'), [$this->pageUrl], ['class' => 'form-search-reset']),
+            'sortOrder' => 10000,
+        ]);
 
         parent::init();
 
@@ -71,7 +86,7 @@ abstract class DirectoryFilters extends Widget
         return [
             'wrapperClass' => 'col-md-2',
             'titleClass' => 'form-search-field-info',
-            'inputClass' => 'form-control form-search-filter',
+            'inputClass' => 'form-control',
             'beforeInput' => '',
             'afterInput' => '',
         ];
@@ -88,11 +103,43 @@ abstract class DirectoryFilters extends Widget
         switch ($data['type']) {
             case 'dropdown':
             case 'dropdownlist':
-                $inputOptions['data-action-change'] = 'directory.applyFilters';
+                $inputOptions['data-action-change'] = 'cards.applyFilters';
                 $inputOptions['options'] = ['separator' => ['disabled' => '']];
                 $inputHtml = Html::dropDownList($filter, self::getValue($filter), $data['options'], $inputOptions);
                 break;
 
+            case 'tags':
+                $inputHtml = '';
+                if (empty($data['tags'])) {
+                    break;
+                }
+
+                $activeTags = self::getValue($filter);
+                $filterOptions = empty($data['multiple']) ? [] : ['data-multiple' => 1];
+                $inputHtml .= Html::hiddenInput($filter, $activeTags, $filterOptions);
+                $activeTags = empty($activeTags) ? [] : explode(',', $activeTags);
+
+                foreach ($data['tags'] as $tagKey => $tagLabel) {
+                    $isActiveTag = (empty($tagKey) && empty($activeTags))
+                        || in_array($tagKey, $activeTags);
+
+                    $inputHtml .= Button::none($tagLabel)
+                        ->options(['class' => 'btn btn-sm btn-info' . ($isActiveTag ? ' active' : '')])
+                        ->action('cards.selectTag')
+                        ->options([
+                            'data-filter' => $filter,
+                            'data-tag' => $tagKey,
+                        ]);
+                }
+                break;
+
+            case 'info':
+                $inputHtml = $data['info'];
+                break;
+            case 'widget':
+                $inputOptions['data-action-change'] = 'cards.applyFilters';
+                $inputHtml = $data['widget']::widget(array_merge(['name' => $filter, 'options' => $inputOptions], $data['widgetOptions']));
+                break;
             case 'input':
             case 'text':
             default:

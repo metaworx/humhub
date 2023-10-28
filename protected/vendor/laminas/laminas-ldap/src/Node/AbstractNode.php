@@ -1,15 +1,10 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-ldap for the canonical source repository
- * @copyright https://github.com/laminas/laminas-ldap/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-ldap/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Ldap\Node;
 
 use ArrayAccess;
 use Countable;
+use ReturnTypeWillChange;
 use Laminas\Ldap;
 use Laminas\Ldap\Exception;
 
@@ -403,6 +398,7 @@ abstract class AbstractNode implements ArrayAccess, Countable
      * @param  mixed  $value
      * @throws \Laminas\Ldap\Exception\BadMethodCallException
      */
+    #[ReturnTypeWillChange]
     public function offsetSet($name, $value)
     {
         throw new Exception\BadMethodCallException();
@@ -418,6 +414,7 @@ abstract class AbstractNode implements ArrayAccess, Countable
      * @return mixed
      * @throws \Laminas\Ldap\Exception\LdapException
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->getAttribute($name, null);
@@ -434,6 +431,7 @@ abstract class AbstractNode implements ArrayAccess, Countable
      * @param  $name
      * @throws \Laminas\Ldap\Exception\BadMethodCallException
      */
+    #[ReturnTypeWillChange]
     public function offsetUnset($name)
     {
         throw new Exception\BadMethodCallException();
@@ -448,6 +446,7 @@ abstract class AbstractNode implements ArrayAccess, Countable
      * @param  string $name
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return $this->existsAttribute($name, false);
@@ -459,6 +458,7 @@ abstract class AbstractNode implements ArrayAccess, Countable
      *
      * @return int
      */
+    #[ReturnTypeWillChange]
     public function count()
     {
         return count($this->currentData);

@@ -65,6 +65,7 @@ return [
     'Show less' => 'Δείξε λιγότερα',
     'Show more' => 'Δείτε περισσότερα',
     'Some files could not be uploaded:' => 'Δεν ήταν δυνατή η μεταφόρτωση ορισμένων αρχείων:',
+    'Stop impersonation' => 'Σταμάτα την πλαστοπροσωπία',
     'Text could not be copied to clipboard' => 'Δεν ήταν δυνατή η αντιγραφή κειμένου στο πρόχειρο',
     'Text has been copied to clipboard' => 'Έχει αντιγραφεί κείμενο στο πρόχειρο',
     'The date has to be in the past.' => 'Η ημερομηνία πρέπει να είναι στο παρελθόν.',
@@ -85,5 +86,7 @@ return [
     '{nFormatted}B' => '{nFormatted}B',
     '{nFormatted}K' => '{nFormatted}K',
     '{nFormatted}M' => '{nFormatted}M',
-    'Stop impersonation' => '',
+    'Allow content from external source' => '',
+    'Always allow content from this provider!' => '',
+    'Do you want to enable content from \'{urlPrefix}\'?' => '',
 ];
