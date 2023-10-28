@@ -17,11 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Export' => '',
+    'Invalid request method!' => '',
     'Logo of {appName}' => '',
-    'My profile image' => '',
     'Profile dropdown' => '',
     'Profile image of {displayName}' => '',
     'Profile picture of {displayName}' => '',
+    'Select Me' => '',
+    'Time Zone' => '',
     'Toggle comment menu' => '',
     'Toggle panel menu' => '',
     'Toggle post menu' => '',
@@ -66,6 +69,7 @@ return [
     'Menu' => '菜单',
     'Module is not enabled on this content container!' => '该内容容器上没有启用模块！',
     'My profile' => '我的资料',
+    'My profile image' => '我的用户图像',
     'New profile image' => '新图片',
     'Next' => '下一步',
     'No error information given.' => '没有给出错误消息。',
