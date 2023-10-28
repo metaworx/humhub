@@ -68,6 +68,11 @@ return [
     'email' => 'ایمیل',
     'password' => 'گذرواژ',
     'username or email' => 'نام كاربری یا ایمیل',
+    '<strong>Change</strong> Password' => '',
+    'Confirm' => '',
+    'Due to security reasons you are required to change your password in order to access the platform.' => '',
+    'Log out' => '',
     'Please click on the link below to view request:' => '',
+    'Please wait' => '',
     'User or Password incorrect.' => '',
 ];

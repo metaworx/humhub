@@ -34,6 +34,8 @@ return [
     'Basic' => 'Básica',
     'Caching' => 'Caché',
     'Cronjobs' => 'Tareas programadas',
+    'Delete all' => 'Eliminarlas todas',
+    'Delete selected rows' => 'Eliminar las filas seleccionadas',
     'Design' => 'Diseño',
     'Files' => 'Archivos',
     'General' => 'General',
@@ -53,7 +55,6 @@ return [
     'Pending user registrations' => 'Registros de usuario pendientes',
     'Permissions' => 'Permisos',
     'Proxy' => 'Proxy',
-    'Security' => 'Seguridad',
     'Self test' => 'Auto prueba',
     'Settings' => 'Ajustes',
     'Sign up' => 'Registrarse',
@@ -64,4 +65,6 @@ return [
     'User posts' => 'Publicaciones de usuario',
     'Userprofiles' => 'Perfiles de usuario',
     'Users' => 'Usuarios',
+    '<strong>Maintenance</strong> Mode' => '',
+    'Default' => '',
 ];
