@@ -237,15 +237,6 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker/src',
     ),
   ),
-  'yiisoft/yii2-gii' => 
-  array (
-    'name' => 'yiisoft/yii2-gii',
-    'version' => '2.1.4.0',
-    'alias' => 
-    array (
-      '@yii/gii' => $vendorDir . '/yiisoft/yii2-gii/src',
-    ),
-  ),
   'yiisoft/yii2-imagine' => 
   array (
     'name' => 'yiisoft/yii2-imagine',
@@ -253,6 +244,15 @@ return array (
     'alias' => 
     array (
       '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine/src',
+    ),
+  ),
+  'yiisoft/yii2-gii' => 
+  array (
+    'name' => 'yiisoft/yii2-gii',
+    'version' => '2.1.4.0',
+    'alias' => 
+    array (
+      '@yii/gii' => $vendorDir . '/yiisoft/yii2-gii/src',
     ),
   ),
   'yiisoft/yii2-jui' => 
