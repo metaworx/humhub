@@ -125,7 +125,8 @@ return array(
             'ja' => '日本語',
             'hu' => 'Magyar',
             'nb_no' => 'Nnorsk bokmål',
-            'zh_cn' => '简体中文',
+            'zh_cn' => '中文(简体)',
+            'zh_tw' => '中文(台灣)',
             'an' => 'Aragonés',
             'vi' => 'Tiếng Việt',
             'sv' => 'Svenska',
@@ -134,7 +135,8 @@ return array(
             'uz' => 'Ўзбек',
             'fa_ir' => 'فارسی',
             'bg' => 'български',
-            'sk' => 'slovenčina'
+            'sk' => 'slovenčina',
+            'ro' => 'română'
         ),
         'dynamicConfigFile' => dirname(__FILE__) . '/local/_settings.php',
     ),
