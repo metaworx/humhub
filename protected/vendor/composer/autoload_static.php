@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944
+class ComposerStaticInit8547aad640638ddbf4d19cd5313a8dbe
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -266,7 +266,7 @@ class ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944
         ),
         'yii\\debug\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yiisoft/yii2-debug',
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-debug/src',
         ),
         'yii\\composer\\' => 
         array (
@@ -298,7 +298,7 @@ class ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944
         ),
         'kartik\\widgets\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widgets',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widgets/src',
         ),
         'kartik\\typeahead\\' => 
         array (
@@ -310,7 +310,7 @@ class ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944
         ),
         'kartik\\time\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-timepicker',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-timepicker/src',
         ),
         'kartik\\switchinput\\' => 
         array (
@@ -318,7 +318,7 @@ class ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944
         ),
         'kartik\\spinner\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-spinner',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-spinner/src',
         ),
         'kartik\\sidenav\\' => 
         array (
@@ -358,7 +358,7 @@ class ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944
         ),
         'kartik\\depdrop\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-depdrop',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-depdrop/src',
         ),
         'kartik\\datetime\\' => 
         array (
@@ -1114,10 +1114,10 @@ class ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit3c995d8e6c7b402bca5fe2114b9c4944::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8547aad640638ddbf4d19cd5313a8dbe::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8547aad640638ddbf4d19cd5313a8dbe::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit8547aad640638ddbf4d19cd5313a8dbe::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit8547aad640638ddbf4d19cd5313a8dbe::$classMap;
 
         }, null, ClassLoader::class);
     }

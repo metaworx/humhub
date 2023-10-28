@@ -4,7 +4,7 @@
  * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
  * @package    yii2-widgets
  * @subpackage yii2-widget-activeform
- * @version    1.5.3
+ * @version    1.5.7
  */
 
 namespace kartik\form;
@@ -107,27 +107,6 @@ class ActiveField extends YiiActiveField
     ];
 
     /**
-     * @var array the bootstrap grid column css prefixes mapping, the key is the bootstrap versions, and the value is
-     * an array containing the sizes and their corresponding grid column css prefixes
-     */
-    protected static $bsColCssPrefixes = [
-        '3' => [
-            ActiveForm::SIZE_X_SMALL => 'col-xs-',
-            ActiveForm::SIZE_SMALL => 'col-sm-',
-            ActiveForm::SIZE_MEDIUM => 'col-md-',
-            ActiveForm::SIZE_LARGE => 'col-lg-',
-            ActiveForm::SIZE_X_LARGE => 'col-lg-',
-        ],
-        '4' => [
-            ActiveForm::SIZE_X_SMALL => 'col-',
-            ActiveForm::SIZE_SMALL => 'col-sm-',
-            ActiveForm::SIZE_MEDIUM => 'col-md-',
-            ActiveForm::SIZE_LARGE => 'col-lg-',
-            ActiveForm::SIZE_X_LARGE => 'col-xl-',
-        ],
-    ];
-
-    /**
      * @var boolean whether to override the form layout styles and skip field formatting as per the form layout.
      * Defaults to `false`.
      */
@@ -143,6 +122,11 @@ class ActiveField extends YiiActiveField
      * @var bool whether to render the wrapper in the template if [[wrapperOptions]] is empty.
      */
     public $renderEmptyWrapper = false;
+
+    /**
+     * @inheritdoc
+     */
+    public $labelOptions = [];
 
     /**
      * @var integer the hint display type. If set to `self::HINT_DEFAULT`, the hint will be displayed as a text block below
@@ -264,31 +248,39 @@ class ActiveField extends YiiActiveField
     public $contentAfterHint = '';
 
     /**
-     * @var string the template for checkboxes and radios in default layout (applicable for BS4 only)
+     * @var string the template for rendering the Bootstrap 4.x custom file browser control
+     * @see https://getbootstrap.com/docs/4.1/components/forms/#file-browser
+     */
+    public $customFileTemplate = "<div class=\"custom-file\">\n{input}\n{label}\n</div>\n{error}\n{hint}";
+
+    /**
+     * @var string the template for rendering checkboxes and radios for a default Bootstrap markup without an enclosed
+     * label
      */
     public $checkTemplate = "{input}\n{label}\n{error}\n{hint}";
 
     /**
-     * @var string the `enclosed by label` template for checkboxes and radios in default layout (applicable for BS4 only)
+     * @var string the template for rendering checkboxes and radios for a default Bootstrap markup with an enclosed
+     * label
      */
     public $checkEnclosedTemplate = "{beginLabel}\n{input}\n{labelTitle}\n{endLabel}\n{error}\n{hint}";
 
     /**
      * @var array the HTML attributes for the container wrapping BS4 checkbox or radio controls within which the content
-     * will be rendered via the [[checkTemplate]] or [[checkEnclosedTemplate]] (applicable for BS4 only)
+     * will be rendered via the [[checkTemplate]] or [[checkEnclosedTemplate]]
      */
     public $checkWrapperOptions = [];
 
     /**
      * @var array addon options for text and password inputs. The following settings can be configured:
      * - `prepend`: _array_, the prepend addon configuration
-     * - `content`: _string_, the prepend addon content
-     * - `asButton`: _boolean_, whether the addon is a button or button group. Defaults to false.
-     * - `options`: _array_, the HTML attributes to be added to the container.
+     *      - `content`: _string_, the prepend addon content
+     *      - `asButton`: _boolean_, whether the addon is a button or button group. Defaults to false.
+     *      - `options`: _array_, the HTML attributes to be added to the container.
      * - `append`: _array_, the append addon configuration
-     * - `content`: _string_|_array_, the append addon content
-     * - `asButton`: _boolean_, whether the addon is a button or button group. Defaults to false.
-     * - `options`: _array_, the HTML attributes to be added to the container.
+     *      - `content`: _string_|_array_, the append addon content
+     *      - `asButton`: _boolean_, whether the addon is a button or button group. Defaults to false.
+     *      - `options`: _array_, the HTML attributes to be added to the container.
      * - `groupOptions`: _array_, HTML options for the input group
      * - `contentBefore`: _string_, content placed before addon
      * - `contentAfter`: _string_, content placed after addon
@@ -335,7 +327,7 @@ class ActiveField extends YiiActiveField
     public $autoPlaceholder;
 
     /**
-     * @var array options for the wrapper tag, used in the `{beginWrapper}` placeholder
+     * @var array options for the wrapper tag, used in the `{beginWrapper}` token within [[template]].
      */
     public $wrapperOptions = [];
 
@@ -552,8 +544,7 @@ class ActiveField extends YiiActiveField
     public function dropDownList($items, $options = [])
     {
         $this->initDisability($options);
-        $custom = $this->isCustomControl($options);
-        Html::addCssClass($options, $custom ? 'custom-select' : $this->addClass);
+        Html::addCssClass($options, $this->isCustomControl($options) ? 'custom-select' : $this->addClass);
         return parent::dropDownList($items, $options);
     }
 
@@ -589,21 +580,13 @@ class ActiveField extends YiiActiveField
      */
     public function fileInput($options = [])
     {
-        $custom = $this->isCustomControl($options);
-        if (!$custom) {
-            return parent::fileInput($options);
+        if ($this->isCustomControl($options)) {
+            Html::removeCssClass($options, 'form-control');
+            Html::addCssClass($options, 'custom-file-input');
+            Html::addCssClass($this->labelOptions, 'custom-file-label');
+            $this->template = $this->customFileTemplate;
         }
-        Html::removeCssClass($options, 'form-control');
-        Html::removeCssClass($this->labelOptions, 'control-label');
-        Html::addCssClass($options, 'custom-file-input');
-        Html::addCssClass($this->labelOptions, 'custom-file-label');
-        $this->template = "{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}";
-        parent::fileInput($options);
-        $this->label();
-        $parts = $this->parts['{input}'] . $this->parts['{label}'];
-        $this->parts['{input}'] = Html::tag('div', $parts, ['class' => 'custom-file']);
-        $this->parts['{label}'] = '';
-        return $this;
+        return parent::fileInput($options);
     }
 
     /**
@@ -613,8 +596,7 @@ class ActiveField extends YiiActiveField
     public function input($type, $options = [])
     {
         $this->initFieldOptions($options);
-        $custom = $this->isCustomControl($options);
-        if ($custom && $type === 'range') {
+        if ($this->isCustomControl($options) && $type === 'range') {
             Html::addCssClass($options, 'custom-range');
         }
         if ($type !== 'range' && $type !== 'color') {
@@ -664,8 +646,7 @@ class ActiveField extends YiiActiveField
     public function listBox($items, $options = [])
     {
         $this->initDisability($options);
-        $custom = $this->isCustomControl($options);
-        Html::addCssClass($options, $custom ? 'custom-select' : $this->addClass);
+        Html::addCssClass($options, $this->isCustomControl($options) ? 'custom-select' : $this->addClass);
         return parent::listBox($items, $options);
     }
 
@@ -826,8 +807,7 @@ class ActiveField extends YiiActiveField
     {
         $content = isset($this->staticValue) ? $this->staticValue :
             Html::getAttributeValue($this->model, $this->attribute);
-        $css = $this->form->isBs4() ? 'form-control-plaintext' : 'form-control-static';
-        Html::addCssClass($options, $css);
+        $this->form->addCssClass($options, ActiveForm::BS_FORM_CONTROL_STATIC);
         $this->parts['{input}'] = Html::tag('div', $content, $options);
         $this->_isStatic = true;
         return $this;
@@ -960,7 +940,7 @@ class ActiveField extends YiiActiveField
     protected function getColCss($size)
     {
         $bsVer = $this->form->isBs4() ? '4' : '3';
-        $sizes = ArrayHelper::getValue(static::$bsColCssPrefixes, $bsVer, []);
+        $sizes = ArrayHelper::getValue($this->form->bsColCssPrefixes, $bsVer, []);
         if ($size == self::NOT_SET || !isset($sizes[$size])) {
             return 'col-' . ActiveForm::SIZE_MEDIUM . '-';
         }
@@ -992,24 +972,21 @@ class ActiveField extends YiiActiveField
             unset($options['template']);
         }
         $prefix = $isBs4 ? ($custom ? 'custom-control' : 'form-check') : $type;
+        Html::removeCssClass($options, 'form-control');
+        $this->form->removeCssClass($this->labelOptions, ActiveForm::BS_CONTROL_LABEL);
         Html::addCssClass($this->checkWrapperOptions, $prefix);
         if ($isBs4) {
-            Html::removeCssClass($this->labelOptions, 'control-label');
             Html::addCssClass($this->labelOptions, "{$prefix}-label");
             Html::addCssClass($options, "{$prefix}-input");
             if ($custom) {
                 Html::addCssClass($this->checkWrapperOptions, "custom-{$type}");
             }
-            Html::removeCssClass($options, 'form-control');
         } elseif (!$enclosedByLabel) {
             Html::addCssClass($this->checkWrapperOptions, "not-enclosed");
         }
         $this->template = Html::tag('div', $this->template, $this->checkWrapperOptions);
-        if ($this->form->type === ActiveForm::TYPE_HORIZONTAL) {
-            Html::removeCssClass(
-                $this->labelOptions,
-                ['control-label', 'col-form-label', $this->getColCss($this->deviceSize) . $this->labelSpan]
-            );
+        if ($this->form->isHorizontal()) {
+            Html::removeCssClass($this->labelOptions, $this->getColCss($this->deviceSize) . $this->labelSpan);
             if ($this->autoOffset) {
                 $this->template = Html::tag('div', '', ['class' => $this->_labelCss]) .
                     Html::tag('div', $this->template, ['class' => $this->_inputCss]);
@@ -1017,7 +994,7 @@ class ActiveField extends YiiActiveField
                 Html::removeCssClass($this->options, 'row');
             }
         }
-        if ($this->form->type === ActiveForm::TYPE_INLINE) {
+        if ($this->form->isInline()) {
             Html::removeCssClass($this->labelOptions, ActiveForm::SCREEN_READER);
         }
         if ($enclosedByLabel) {
@@ -1086,19 +1063,21 @@ class ActiveField extends YiiActiveField
             $this->showLabels = $this->enableLabel;
         }
         $isBs4 = $this->form->isBs4();
+        $isInline = $this->form->isInline();
+        $isHorizontal = $this->form->isHorizontal();
         if ($isBs4) {
             $errCss = $this->form->tooltipStyleFeedback ? 'invalid-tooltip' : 'invalid-feedback';
             Html::addCssClass($this->errorOptions, $errCss);
         }
         $showLabels = $this->getConfigParam('showLabels');
         $this->_isHintSpecial = $this->hintType === self::HINT_SPECIAL;
-        if ($this->form->type === ActiveForm::TYPE_INLINE && !isset($this->autoPlaceholder) && $showLabels !== true) {
+        if ($isInline && !isset($this->autoPlaceholder) && $showLabels !== true) {
             $this->autoPlaceholder = true;
         } elseif (!isset($this->autoPlaceholder)) {
             $this->autoPlaceholder = false;
         }
-        if ($this->form->type === ActiveForm::TYPE_VERTICAL && !$isBs4) {
-            Html::addCssClass($this->labelOptions, 'control-label');
+        if (!isset($this->labelOptions['class']) && ($isHorizontal || !$isBs4 && !$isInline)) {
+            $this->labelOptions['class'] = $this->form->getCssClass(ActiveForm::BS_CONTROL_LABEL);
         }
         if ($showLabels === ActiveForm::SCREEN_READER) {
             Html::addCssClass($this->labelOptions, ActiveForm::SCREEN_READER);
@@ -1106,7 +1085,7 @@ class ActiveField extends YiiActiveField
         if ($this->highlightAddon) {
             Html::addCssClass($this->options, 'highlight-addon');
         }
-        if ($this->form->type === ActiveForm::TYPE_HORIZONTAL) {
+        if ($isHorizontal) {
             $this->initHorizontal();
         }
         $this->initLabels();
@@ -1168,9 +1147,6 @@ class ActiveField extends YiiActiveField
         $size = $this->getConfigParam('deviceSize', '');
         if ($this->form->isBs4()) {
             Html::addCssClass($this->options, 'row');
-            Html::addCssClass($this->labelOptions, 'col-form-label');
-        } else {
-            Html::addCssClass($this->labelOptions, 'control-label');
         }
         // check horizontalCssClasses['wrapper'] if there is a col- class
         if (isset($hor['wrapper']) && strpos($hor['wrapper'], 'col-') !== false) {
@@ -1563,11 +1539,10 @@ class ActiveField extends YiiActiveField
         $key = $id . '-' . $cat;
         $this->inputOptions['aria-describedby'] = empty($this->inputOptions['aria-describedby']) ? $key :
             $this->inputOptions['aria-describedby'] . ' ' . $key;
-        Html::addCssClass($options, 'form-control-feedback');
-        Html::addCssClass($options, 'kv-feedback-' . $cat);
-
+        Html::addCssClass($options, ['form-control-feedback', "kv-feedback-{$cat}"]);
         $icon = $type === 'raw' ? $markup : Html::tag('i', '', ['class' => $prefix . $markup]);
-        return Html::tag('span', $icon, $options) . Html::tag('span', $desc, ['id' => $key, 'class' => 'sr-only']);
+        return Html::tag('span', $icon, $options) .
+            Html::tag('span', $desc, ['id' => $key, 'class' => ActiveForm::SCREEN_READER]);
     }
 
     /**

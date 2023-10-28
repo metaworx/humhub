@@ -1,6 +1,32 @@
 Change Log: `yii2-widget-activeform`
 ====================================
 
+## Version 1.5.7
+
+**Date**: 27-Sep-2018
+
+- (enh #115): Enhance rendering of Bootstrap 4.x custom file control.
+
+## Version 1.5.6
+
+**Date**: 27-Sep-2018
+
+- Bump up version.
+
+## Version 1.5.5
+
+**Date**: 26-Sep-2018
+
+- New `ActiveForm` methods `isHorizontal`, `isInline`, `isVertical` for easy layout detection.
+- Label styling enhancements.
+
+## Version 1.5.4
+
+**Date**: 22-Sep-2018
+
+- Refactor code via `kartik\base\BootstrapInterface`. 
+- (enh #113): Enhance checkbox styling for BS3.
+
 ## Version 1.5.3
 
 **Date**: 20-Sep-2018
