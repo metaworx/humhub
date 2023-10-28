@@ -34,10 +34,8 @@ class AppAsset extends AssetBundle
      * @inheritdoc
      */
     public $css = [
-        'css/temp.css',
         'css/bootstrap-wysihtml5.css',
         'css/flatelements.css',
-        'css/blueimp-gallery.min.css'
     ];
 
     /**
@@ -56,13 +54,12 @@ class AppAsset extends AssetBundle
         'humhub\assets\JqueryTimeAgoAsset',
         'humhub\assets\JqueryWidgetAsset',
         'humhub\assets\JqueryColorAsset',
-        'humhub\assets\JqueryPlaceholderAsset',
         'humhub\assets\FontAwesomeAsset',
         'humhub\assets\BlueimpFileUploadAsset',
+        'humhub\assets\BlueimpGalleryAsset',
         'humhub\assets\JqueryHighlightAsset',
         'humhub\assets\JqueryCookieAsset',
         'humhub\assets\JqueryAutosizeAsset',
-        'humhub\assets\AtJsAsset',
         'humhub\assets\AnimateCssAsset',
         'humhub\assets\CoreApiAsset',
         'humhub\modules\content\assets\ProseMirrorRichTextAsset',
@@ -80,21 +77,19 @@ class AppAsset extends AssetBundle
         'humhub\modules\comment\assets\CommentAsset',
         'humhub\modules\like\assets\LikeAsset',
         'humhub\assets\NProgressAsset',
-        'humhub\assets\IE9FixesAsset',
-        'humhub\assets\IEFixesAsset',
         'humhub\assets\PagedownConverterAsset',
         'humhub\assets\ClipboardJsAsset',
         'humhub\assets\ImagesLoadedAsset',
         'humhub\assets\SocketIoAsset',
         'humhub\assets\OpenSansAsset',
         'humhub\assets\HighlightJsAsset',
+        'humhub\assets\SwipedEventsAssets',
     ];
 
     /**
      * @inheritdoc
      */
     public $js = [
-        'js/blueimp-gallery.min.js',
         'js/jquery.highlight.min.js',
         'js/desktop-notify-min.js',
         'js/desktop-notify-config.js',

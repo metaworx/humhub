@@ -228,19 +228,20 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
      * @param array $labels
      * @param bool $includeContentName
      * @return Label[]|\string[] content labels used for example in wallentrywidget
+     * @throws \Exception
      */
     public function getLabels($labels = [], $includeContentName = true)
     {
         if ($this->content->isPinned()) {
-            $labels[] = Label::danger(Yii::t('ContentModule.widgets_views_label', 'Pinned'))->icon('fa-map-pin')->sortOrder(100);
+            $labels[] = Label::danger(Yii::t('ContentModule.base', 'Pinned'))->icon('fa-map-pin')->sortOrder(100);
         }
 
         if($this->content->isArchived()) {
-            $labels[] = Label::warning(Yii::t('ContentModule.widgets_views_label', 'Archived'))->icon('fa-archive')->sortOrder(200);
+            $labels[] = Label::warning(Yii::t('ContentModule.base', 'Archived'))->icon('fa-archive')->sortOrder(200);
         }
 
         if ($this->content->isPublic()) {
-            $labels[] = Label::info(Yii::t('ContentModule.widgets_views_label', 'Public'))->icon('fa-globe')->sortOrder(300);
+            $labels[] = Label::info(Yii::t('ContentModule.base', 'Public'))->icon('fa-globe')->sortOrder(300);
         }
 
         if ($includeContentName) {
@@ -279,22 +280,30 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
     {
         if(!$this->hasManagePermission()) {
             return null;
-        } elseif(is_string($this->managePermission)) { // Simple Permission class specification
+        }
+
+        if(is_string($this->managePermission)) { // Simple Permission class specification
             return $this->managePermission;
-        } elseif(is_array($this->managePermission)) {
+        }
+
+        if(is_array($this->managePermission)) {
             if(isset($this->managePermission['class'])) { // ['class' => '...', 'callback' => '...']
                 $handler = $this->managePermission['class'].'::'.$this->managePermission['callback'];
                 return call_user_func($handler, $this);
-            } else { // Simple Permission array specification
-                return $this->managePermission;
             }
-        } elseif(is_callable($this->managePermission)) { // anonymous function
-            return $this->managePermission($this);
-        } elseif($this->managePermission instanceof BasePermission) {
+            // Simple Permission array specification
             return $this->managePermission;
-        } else {
-            return null;
         }
+
+        if(is_callable($this->managePermission)) { // anonymous function
+            return $this->managePermission($this);
+        }
+
+        if($this->managePermission instanceof BasePermission) {
+            return $this->managePermission;
+        }
+
+        return null;
     }
 
     /**
@@ -317,28 +326,35 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
      */
     public function getWallOut($params = [])
     {
-        $wallEntryWidget = $this->getWallEntryWidget();
-        if ($wallEntryWidget !== null) {
-            Yii::configure($wallEntryWidget, $params);
-            return $wallEntryWidget->renderWallEntry();
+        if(!empty($this->wallEntryClass)) {
+            $params['contentObject'] = $this;
+            return call_user_func($this->wallEntryClass.'::widget', $params);
         }
+
         return "";
     }
 
     /**
-     * Returns the assigned wall entry widget instance
+     * Returns an instance of the assigned wall entry widget instance. This can be used to check matadata fields
+     * of the related widget.
      *
-     * @return null|\humhub\modules\content\widgets\WallEntry for this class by wallEntryClass property , null will be
+     * @return null|WallEntry for this class by wallEntryClass property , null will be
      * returned if this wallEntryClass is empty
      */
     public function getWallEntryWidget()
     {
+        if(empty($this->wallEntryClass)) {
+            return null;
+        }
+
         if (is_subclass_of($this->wallEntryClass, WallEntry::class) ) {
             $class = $this->wallEntryClass;
             $widget = new $class;
             $widget->contentObject = $this;
             return $widget;
-        } elseif(!empty($this->wallEntryClass)) {
+        }
+
+        if($this->wallEntryClass) {
             $class = $this->wallEntryClass;
             $widget = new $class;
             return $widget;
@@ -349,6 +365,7 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public function beforeSave($insert)
     {
@@ -385,6 +402,24 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
         parent::afterSave($insert, $changedAttributes);
     }
 
+    /**
+     * Returns the class used in the polymorphic content relation.
+     * By default this function will return the static class.
+     *
+     * Subclasses of existing content record classes may overwrite this function in order to remain the actual
+     * base type as follows:
+     *
+     * ```
+     * public static function getObjectModel() {
+     *     return BaseType::class
+     * }
+     * ```
+     *
+     * This will force the usage of the `BaseType` class when creating, deleting or querying the content relation.
+     * This is used in cases in which a subclass extends the a base record class without implementing a custom content type.
+     *
+     * @return string
+     */
     public static function getObjectModel() {
         return static::class;
     }
@@ -403,7 +438,7 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
     }
 
     /**
-     * @return \humhub\modules\user\models\User the owner of this content record
+     * @return User the owner of this content record
      */
     public function getOwner()
     {
@@ -443,12 +478,22 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
     /**
      * Returns an ActiveQueryContent to find content.
      *
+     * Results of this query will be static typed.
+     * In order to force a specific type as query result this function needs to be overwritten as:
+     *
+     * ```
+     * public static function find()
+     * {
+     *   return new ActiveQueryContent(MyBaseType::class);
+     * }
+     * ```
+     *
      * {@inheritdoc}
      * @return ActiveQueryContent
      */
     public static function find()
     {
-        return new ActiveQueryContent(static::getObjectModel());
+        return new ActiveQueryContent(static::class);
     }
 
     /**
@@ -483,13 +528,14 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner, Movable
     /**
      * {@inheritdoc}
      */
-    public final function move(ContentContainerActiveRecord $container = null, $force = false)
+    final public function move(ContentContainerActiveRecord $container = null, $force = false)
     {
         return $this->content->move($container, $force);
     }
 
     /**
-     * This function can be overwritten in order to define model specific logic as moving sub-content or other related
+     * This function is called after the content hast been moved and can be overwritten
+     * in order to define model specific logic as moving sub-content or other related.
      * @param ContentContainerActiveRecord|null $container
      */
     public function afterMove(ContentContainerActiveRecord $container = null) {}

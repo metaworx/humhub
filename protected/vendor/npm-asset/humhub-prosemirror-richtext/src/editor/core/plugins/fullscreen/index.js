@@ -5,20 +5,28 @@
  *
  */
 
-import {menu} from "./menu"
+import {menu, minimize, maximize} from "./menu"
 
 const fullscreen = {
     id: 'fullscreen',
     init(context) {
-        if(context.getPluginOption('fullscreen', 'preventAutoFullScreen') !== false) {
+        if(context.getPluginOption('fullscreen', 'autoFullScreen') === true) {
             context.editor.$.on('click', '.ProseMirror', function(e) {
                 if(humhub.require('ui.view').isSmall() && !context.editor.$.is('.fullscreen')) {
-                    context.editor.$.find('.ProseMirror-menu-fullscreen').trigger('mousedown');
+                    maximize(context);
                 }
             });
         }
+
+        context.editor.$.on('clear', function() {
+            minimize(context);
+        });
     },
-    menu: (context) => menu(context)
+    menu: (context) => {
+        let fullScreenMenu = menu(context);
+        context.fullScreenMenuItem = fullScreenMenu[0].item;
+        return fullScreenMenu;
+    }
 };
 
 export default fullscreen;

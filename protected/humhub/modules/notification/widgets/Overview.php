@@ -23,6 +23,8 @@ class Overview extends JsWidget
 {
     public $id = 'notification_widget';
 
+    public $jsWidget = 'notification.NotificationDropDown';
+
     public function init()
     {
         $this->view->registerJsConfig('notification', [
@@ -30,7 +32,7 @@ class Overview extends JsWidget
             'loadEntriesUrl' => Url::to(['/notification/list']),
             'sendDesktopNotifications' => boolval(Yii::$app->notification->getDesktopNoficationSettings(Yii::$app->user->getIdentity())),
             'text' =>  [
-                'placeholder' => Yii::t('NotificationModule.widgets_views_list', 'There are no notifications yet.')
+                'placeholder' => Yii::t('NotificationModule.base', 'There are no notifications yet.')
             ]
         ]);
 
@@ -63,7 +65,6 @@ class Overview extends JsWidget
     {
         return [
             'ui-init' => ListController::getUpdates(),
-            'ui-widget' => "notification.NotificationDropDown"
         ];
     }
 }

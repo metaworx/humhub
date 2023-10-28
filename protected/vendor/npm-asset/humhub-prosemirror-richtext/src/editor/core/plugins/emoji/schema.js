@@ -28,7 +28,11 @@ const schema = {
             },
             parseMarkdown:  {
                 node: "emoji", getAttrs: function (tok) {
-                    let $dom = $(twemoji.parse(tok.content));
+
+                    // Workaround, since the context is not available here, so we can't use context.getPluginOption('emoji', 'twemoji');
+                    var options = (humhub && humhub.config) ? humhub.config.get('ui.richtext.prosemirror', 'emoji')['twemoji'] : null;
+
+                    let $dom = $(twemoji.parse(tok.content, options));
                     return ({
                         'data-name': String(tok.markup),
                         alt: $dom.attr('alt'),

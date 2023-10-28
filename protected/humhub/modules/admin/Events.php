@@ -8,6 +8,7 @@
 
 namespace humhub\modules\admin;
 
+use humhub\components\Application;
 use humhub\modules\admin\widgets\AdminMenu;
 use humhub\modules\user\events\UserEvent;
 use Yii;
@@ -54,20 +55,11 @@ class Events extends \yii\base\BaseObject
     }
 
     /**
-     * On console application initialization
-     *
-     * @param \yii\base\Event $event
-     */
-    public static function onConsoleApplicationInit($event)
-    {
-        $application = $event->sender;
-        $application->controllerMap['module'] = commands\ModuleController::class;
-    }
-
-    /**
      * @param $event UserEvent
      */
     public static function onSwitchUser($event) {
-        AdminMenu::reset();
+        if(Yii::$app instanceof Application) {
+            AdminMenu::reset();
+        }
     }
 }

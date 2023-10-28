@@ -76,7 +76,7 @@ class MailTarget extends BaseTarget
         $mail = Yii::$app->mailer->compose($this->view, $viewParams)
                 ->setFrom([Yii::$app->settings->get('mailer.systemEmailAddress') => $from])
                 ->setTo($recipient->email)
-                ->setSubject(trim($notification->getMailSubject()));
+                ->setSubject(str_replace("\n", " ", trim($notification->getMailSubject())));
 
         if ($notification->beforeMailSend($mail)) {
             $mail->send();
@@ -92,7 +92,7 @@ class MailTarget extends BaseTarget
     public function isActive(User $user = null)
     {
         // Do not send mail notifications for example content during installlation.
-        return Yii::$app->params['installed'];
+        return parent::isActive() && Yii::$app->params['installed'];
     }
 
 }

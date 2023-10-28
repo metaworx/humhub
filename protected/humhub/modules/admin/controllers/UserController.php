@@ -100,7 +100,7 @@ class UserController extends Controller
         $user->initGroupSelection();
 
         if ($user == null) {
-            throw new HttpException(404, Yii::t('AdminModule.controllers_UserController', 'User not found!'));
+            throw new HttpException(404, Yii::t('AdminModule.user', 'User not found!'));
         }
 
         $user->scenario = 'editAdmin';
@@ -130,8 +130,8 @@ class UserController extends Controller
                     'type' => 'multiselectdropdown',
                     'items' => UserEditForm::getGroupItems(),
                     'options' => [
-                        'data-placeholder' => Yii::t('AdminModule.controllers_UserController', 'Select Groups'),
-                        'data-placeholder-more' => Yii::t('AdminModule.controllers_UserController', 'Add Groups...')
+                        'data-placeholder' => Yii::t('AdminModule.user', 'Select Groups'),
+                        'data-placeholder-more' => Yii::t('AdminModule.user', 'Add Groups...')
                     ],
                     'isVisible' => Yii::$app->user->can(new ManageGroups())
                 ],
@@ -143,9 +143,9 @@ class UserController extends Controller
                 'type' => 'dropdownlist',
                 'class' => 'form-control',
                 'items' => [
-                    User::STATUS_ENABLED => Yii::t('AdminModule.controllers_UserController', 'Enabled'),
-                    User::STATUS_DISABLED => Yii::t('AdminModule.controllers_UserController', 'Disabled'),
-                    User::STATUS_NEED_APPROVAL => Yii::t('AdminModule.controllers_UserController', 'Unapproved'),
+                    User::STATUS_ENABLED => Yii::t('AdminModule.user', 'Enabled'),
+                    User::STATUS_DISABLED => Yii::t('AdminModule.user', 'Disabled'),
+                    User::STATUS_NEED_APPROVAL => Yii::t('AdminModule.user', 'Unapproved'),
                 ],
             ];
         }
@@ -157,7 +157,7 @@ class UserController extends Controller
         $definition['buttons'] = [
             'save' => [
                 'type' => 'submit',
-                'label' => Yii::t('AdminModule.controllers_UserController', 'Save'),
+                'label' => Yii::t('AdminModule.user', 'Save'),
                 'class' => 'btn btn-primary',
             ],
 
@@ -167,7 +167,7 @@ class UserController extends Controller
             if (!$user->isCurrentUser()) {
                 $definition['buttons']['delete'] = [
                     'type' => 'submit',
-                    'label' => Yii::t('AdminModule.controllers_UserController', 'Delete'),
+                    'label' => Yii::t('AdminModule.user', 'Delete'),
                     'class' => 'btn btn-danger',
                 ];
             }
@@ -231,7 +231,7 @@ class UserController extends Controller
     public function checkGroupAccess(User $user = null)
     {
         if (!$user) {
-            throw new HttpException(404, Yii::t('AdminModule.controllers_GroupController', 'Group not found!'));
+            throw new HttpException(404, Yii::t('AdminModule.user', 'Group not found!'));
         }
 
         if ($user->isSystemAdmin() && !Yii::$app->user->isAdmin()) {

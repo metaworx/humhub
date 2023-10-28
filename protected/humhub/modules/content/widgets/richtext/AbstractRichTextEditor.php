@@ -81,7 +81,7 @@ class AbstractRichTextEditor extends JsInputWidget
      *
      * @var string
      */
-    protected $mentioningRoute = "/search/search/mentioning";
+    protected $mentioningRoute = "/search/mentioning";
 
     /**
      * RichText plugin supported for this instance.
@@ -238,11 +238,17 @@ class AbstractRichTextEditor extends JsInputWidget
             'exclude' => $this->exclude,
             'include' => $this->include,
             'mentioning-url' => $this->getMentioningUrl(),
-            'placeholder' => $this->placeholder,
             'plugin-options' => $this->pluginOptions,
-            'preset' => $this->preset,
             'focus' => $this->focus
         ];
+
+        if(!empty($this->preset)) {
+            $result['preset'] = $this->preset;
+        }
+
+        if(!empty($this->placeholder)) {
+            $result['placeholder'] = $this->placeholder;
+        }
 
         if ($this->disabled) {
             $result['disabled'] = true;

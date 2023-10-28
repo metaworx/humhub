@@ -36,7 +36,8 @@ class CreatePost extends \humhub\libs\BasePermission
     protected $fixedGroups = [
         Space::USERGROUP_USER,
         Space::USERGROUP_GUEST,
-        User::USERGROUP_SELF
+        User::USERGROUP_SELF,
+        User::USERGROUP_GUEST
     ];
 
     /**
@@ -49,7 +50,7 @@ class CreatePost extends \humhub\libs\BasePermission
      */
     public function getTitle()
     {
-        return Yii::t('PostModule.permissions', 'Create post');
+        return Yii::t('PostModule.base', 'Create post');
     }
 
     /**
@@ -58,9 +59,9 @@ class CreatePost extends \humhub\libs\BasePermission
     public function getDescription()
     {
         if ($this->contentContainer instanceof User) {
-            return Yii::t('PostModule.permissions', 'Allow others to create new posts on your profile page');
+            return Yii::t('PostModule.base', 'Allow others to create new posts on your profile page');
         }
-        return Yii::t('PostModule.permissions', 'Allows the user to create posts');
+        return Yii::t('PostModule.base', 'Allows the user to create posts');
     }
 
 }

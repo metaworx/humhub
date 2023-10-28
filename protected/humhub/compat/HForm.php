@@ -15,6 +15,7 @@ use humhub\modules\ui\form\widgets\DatePicker;
 use humhub\modules\ui\form\widgets\MultiSelect;
 use Yii;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 /**
  * HForm - Yii1 compatible form generator
@@ -37,7 +38,13 @@ class HForm extends \yii\base\Component
     const EVENT_BEFORE_RENDER = 'beforeRender';
 
     public $showErrorSummary;
+
+
+    /**
+     * @var ActiveForm
+     */
     protected $form;
+
     public $primaryModel = null;
     public $models = [];
     public $definition = [];
@@ -275,9 +282,12 @@ class HForm extends \yii\base\Component
                         if (isset($options['readOnly']) && $options['readOnly']) {
                             $options['disabled'] = 'disabled';
                         }
+
                         $value = $model->$name;
+
                         if (is_string($value)) {
-                            $model->$name = explode(',', $model->$name);
+                            $delimiter = isset($definition['delimiter']) ? $definition['delimiter'] : ',';
+                            $model->$name = explode($delimiter, $model->$name);
                         }
 
                         return $this->form->field($model, $name)->checkboxList($definition['items'], $options);

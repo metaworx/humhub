@@ -6,6 +6,7 @@ humhub.module('client', function (module, require, $) {
     var object = require('util').object;
     var event = require('event');
     var action = require('action');
+    var additions = require('ui.additions');
 
     /**
      * Response Wrapper Object for easily accessing common data
@@ -40,8 +41,8 @@ humhub.module('client', function (module, require, $) {
 
     Response.prototype.isAbort = function () {
         return this.textStatus == "abort";
-    }
-    
+    };
+
     Response.prototype.header = function (key) {
         return this.xhr.getResponseHeader(key);
     };
@@ -130,7 +131,7 @@ humhub.module('client', function (module, require, $) {
 
         return ajax(url, cfg, originalEvent);
     };
-    
+
     var actionPost = function (evt) {
         post(evt).catch(function(e) {
             module.log.error(e, true);
@@ -208,7 +209,7 @@ humhub.module('client', function (module, require, $) {
 
         var promise = new Promise(function (resolve, reject) {
             cfg = cfg || {};
-            
+
             // allows data-action-data-type="json" on $trigger
             if(originalEvent && object.isFunction(originalEvent.data)) {
                 cfg.dataType = originalEvent.data('data-type', cfg.dataType);
@@ -219,6 +220,7 @@ humhub.module('client', function (module, require, $) {
                 var response = new Response(xhr, url, textStatus, cfg.dataType).setError(errorThrown);
                 if (response.status == 302) {
                     _redirect(xhr);
+                    resolve(response);
                     return;
                 }
 
@@ -313,13 +315,63 @@ humhub.module('client', function (module, require, $) {
             originalEvent.finish();
         }
     };
-    
+
     var back = function() {
         history.back();
     };
 
+    var onBeforeLoad = function(form, msg) {
+
+        // Only one handler at the same time
+        offBeforeLoad();
+
+        var $form = $(form);
+
+        if(!$form.is('form')) {
+            $form = $form.find('form');
+        }
+
+        if(!$form.length  || !$form.is('form')) {
+            return;
+        }
+
+        var state = $form.serialize();
+
+        msg = msg || module.text('warn.onBeforeLoad');
+
+        $form.on('submit', function() {
+            offBeforeLoad();
+        });
+
+        // Note some browser do not support custom messages for this event.
+        $(window).on('beforeunload.humhub_client', function () {
+            if ($form.serialize() !== state) {
+                return msg;
+            }
+        });
+
+        $(document).on('pjax:beforeSend.humhub_client', function(evt) {
+            if ($form.serialize() !== state && !window.confirm(msg)) {
+                evt.preventDefault();
+            } else {
+                offBeforeLoad();
+            }
+        })
+    };
+
+    var offBeforeLoad = function() {
+        $(window).off('beforeunload.humhub_client');
+        $(document).off('pjax:beforeSend.humhub_client');
+    };
+
+    module.initOnPjaxLoad = true;
+
     var init = function (isPjax) {
         if (!isPjax) {
+            if(module.config.reloadableScripts) {
+                $.extend(yii.reloadableScripts, module.config.reloadableScripts)
+            }
+
             action.registerHandler('post', function (evt) {
                 evt.block = 'manual';
                 module.post(evt).then(function (resp) {
@@ -329,6 +381,13 @@ humhub.module('client', function (module, require, $) {
                     module.log.error(err, true);
                 });
             });
+
+            additions.register('acknowledgeForm', function($match) {
+                onBeforeLoad($match, ($match.data('acknowledgeMessage') || null));
+            });
+
+        } else {
+            offBeforeLoad();
         }
     };
 
@@ -343,7 +402,9 @@ humhub.module('client', function (module, require, $) {
         submit: submit,
         init: init,
         json: json,
-        //upload: upload,
-        Response: Response
+        Response: Response,
+        onBeforeLoad: onBeforeLoad,
+        offBeforeLoad: offBeforeLoad
+
     });
 });

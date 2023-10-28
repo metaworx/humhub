@@ -59,7 +59,7 @@ class MarkdownEditor {
     }
 
     isEdit() {
-        return this.$.is('.ProsemirrorEditor');
+        return this.context.options.edit || this.$.is('.ProsemirrorEditor');
     }
 
     clear() {
@@ -116,14 +116,18 @@ class MarkdownEditor {
 
         this.$editor = $(this.view.dom);
 
+        // Dirty workaround, force inline menus to be removed, this is required e.g. if the editor is removed from dom
+        $('.humhub-richtext-inline-menu').remove();
         this.trigger('init');
     }
     
     serialize() {
+        this.trigger('serialize');
         return this.serializer.serialize(this.view.state.doc);
     }
 
     trigger(trigger, args) {
+        this.context.event.trigger(trigger, args);
         this.$.trigger(trigger, args);
     }
 
@@ -132,7 +136,7 @@ class MarkdownEditor {
     }
 
     render() {
-        return this.renderer.render(this.$.text());
+        return this.renderer.render(this.$.text(), this);
     }
 }
 

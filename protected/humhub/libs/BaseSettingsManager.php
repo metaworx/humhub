@@ -12,6 +12,7 @@ use Yii;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\db\conditions\LikeCondition;
+use yii\db\StaleObjectException;
 use yii\helpers\Json;
 
 /**
@@ -117,7 +118,7 @@ abstract class BaseSettingsManager extends Component
      * Returns value of setting
      *
      * @param string $name the name of setting
-     * @return string the setting value or null when not exists
+     * @return string|null the setting value or null when not exists
      */
     public function get($name, $default = null)
     {
@@ -140,14 +141,18 @@ abstract class BaseSettingsManager extends Component
      * Deletes setting
      *
      * @param string $name
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
      */
     public function delete($name)
     {
         $record = $this->find()->andWhere(['name' => $name])->one();
         if ($record !== null) {
-            $record->delete();
+            try {
+                $record->delete();
+            } catch (StaleObjectException $e) {
+                Yii::error('Could not delete setting "' . $name . '".  Error: ' . $e->getMessage(), 'base');
+            } catch (\Throwable $e) {
+                Yii::error('Could not delete setting "' . $name . '".  Error: ' . $e->getMessage(), 'base');
+            }
         }
 
         if (isset($this->_loaded[$name])) {
@@ -246,8 +251,8 @@ abstract class BaseSettingsManager extends Component
     /**
      * Checks if settings table exists or application is not installed yet
      *
-     * @since 1.3
      * @return bool
+     * @since 1.3
      */
     public static function isDatabaseInstalled()
     {

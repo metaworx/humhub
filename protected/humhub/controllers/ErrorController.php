@@ -8,6 +8,7 @@
 
 namespace humhub\controllers;
 
+use humhub\modules\user\helpers\AuthHelper;
 use Yii;
 use yii\web\HttpException;
 use yii\base\UserException;
@@ -27,6 +28,9 @@ class ErrorController extends Controller
      */
     public function actionIndex()
     {
+        // Fix: https://github.com/humhub/humhub/issues/3848
+        Yii::$app->view->theme->register();
+
         if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
             return '';
         }
@@ -48,7 +52,7 @@ class ErrorController extends Controller
         /**
          * Show special login required view for guests
          */
-        if (Yii::$app->user->isGuest && $exception instanceof HttpException && $exception->statusCode == '401' && Yii::$app->getModule('user')->settings->get('auth.allowGuestAccess')) {
+        if (Yii::$app->user->isGuest && $exception instanceof HttpException && $exception->statusCode == '401' && AuthHelper::isGuestAccessEnabled()) {
             return $this->render('@humhub/views/error/401_guests', ['message' => $message]);
         }
 

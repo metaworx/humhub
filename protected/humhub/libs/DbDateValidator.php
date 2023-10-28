@@ -37,13 +37,7 @@ class DbDateValidator extends DateValidator
     public $timeAttribute = '';
 
     /**
-     * @var defines the source time zone which is by default the user time zone, this can be used if a form uses an own
-     * timestamp setting.
-     */
-    public $timeZone;
-
-    /**
-     * @var string attribute name to save converted value to 
+     * @var string attribute name to save converted value to
      */
     public $targetAttribute = null;
 
@@ -52,8 +46,12 @@ class DbDateValidator extends DateValidator
      */
     public function init()
     {
-        if ($this->format === null) {
+        if (!$this->format) {
             $this->format = Yii::$app->formatter->dateInputFormat;
+        }
+
+        if(!$this->timeZone) {
+            $this->timeZone = DateHelper::getUserTimeZone(true);
         }
 
         parent::init();
@@ -64,13 +62,14 @@ class DbDateValidator extends DateValidator
      */
     public function validateAttribute($model, $attribute)
     {
-
-        // If no source timeZone
-        if (empty($this->timeZone)) {
-            $this->timeZone = (!\Yii::$app->formatter->timeZone) ? \Yii::$app->timeZone : \Yii::$app->formatter->timeZone;
+        // If the date is already in system format, we do not need any further translation or parsing
+        if(DateHelper::isInDbFormat($model->$attribute, $this->isDateOnly())) {
+            return;
         }
 
-        $timestamp = $this->parseDateTimeValue($model->$attribute, $this->getTimeValue($model));
+
+        $timeValue = $this->getTimeValue($model);
+        $timestamp = $this->parseDateTimeValue($model->$attribute, $timeValue);
 
         if ($timestamp === false) {
             $this->addError($model, $attribute, $this->message, []);
@@ -78,17 +77,14 @@ class DbDateValidator extends DateValidator
             $this->addError($model, $attribute, $this->tooSmall, ['min' => $this->minString]);
         } elseif ($this->max !== null && $timestamp > $this->max) {
             $this->addError($model, $attribute, $this->tooBig, ['max' => $this->maxString]);
-        } elseif (!$this->isInDbFormat($model->$attribute)) {
+        } else {
             // If there is no error, and attribute is not yet in DB Format - convert to DB
-            $date = new \DateTime();
+            $date = new \DateTime(null, new \DateTimeZone('UTC'));
             $date->setTimestamp($timestamp);
-            if ($this->hasTime()) {
-                // Convert timestamp to apps timeZone
-                $date->setTimezone(new \DateTimeZone(\Yii::$app->timeZone));
-            } else {
-                // If we do not need to respect time, set timezone to utc
-                // To ensure we're saving 00:00:00 time infos.
-                $date->setTimezone(new \DateTimeZone('UTC'));
+
+            if ($timeValue) {
+                // Convert timestamp to apps timezone
+                $date->setTimezone(DateHelper::getSystemTimeZone());
             }
 
             $targetAttribute = ($this->targetAttribute === null) ? $attribute : $this->targetAttribute;
@@ -100,57 +96,22 @@ class DbDateValidator extends DateValidator
     }
 
     /**
-     * Checks a time attribute name is given, if empty don't handle time
-     *
-     * @return boolean
-     */
-    protected function hasTime()
-    {
-        return ($this->timeAttribute != "");
-    }
-
-    /**
-     * Returns time value
-     *
-     * @return string time value (e.g. 12:00)
-     */
-    protected function getTimeValue($model)
-    {
-        if ($this->hasTime()) {
-            $attributeName = $this->timeAttribute;
-            return $model->$attributeName;
-        }
-
-        return '';
-    }
-
-    /**
-     * Parses a date and optionally a time if timeAttribute is specified.
+     * Parses a date and a time value if timeAttribute is specified.
      *
      * @param string $value
-     * @return int timestamp in utc
+     * @return int|false timestamp in system timezone
+     * @throws \Exception
      */
-    public static function parseDateTime($value, $timeValue = null)
-    {
-        return (new self())->parseDateTimeValue($value, $timeValue);
-    }
-
-    /**
-     * Parses a date and optionally a time if timeAttribute is specified.
-     *
-     * @param string $value
-     * @return int timestamp in utc
-     */
-    protected function parseDateTimeValue($value, $timeValue = "")
+    protected function parseDateTimeValue($value, $timeValue = null)
     {
         // It's already a database datetime / no conversion needed.
-        if ($this->isInDbFormat($value)) {
+        if (DateHelper::isInDbFormat($value)) {
             return strtotime($value);
         }
 
         $timestamp = $this->parseDateValue($value);
 
-        if ($this->hasTime() && $timeValue != "") {
+        if ($timestamp !== false && $this->hasTime() && !empty($timeValue)) {
             $timestamp += $this->parseTimeValue($timeValue);
             $timestamp = $this->fixTimestampTimeZone($timestamp, $this->timeZone);
         }
@@ -159,22 +120,50 @@ class DbDateValidator extends DateValidator
     }
 
     /**
-     * Converts the given timestamp from user (or configured) timezone to a utc timestamp
+     * Checks a time attribute name is given, if empty don't handle time
      *
-     * @param long $ts the timestamp
-     * @param String $timeZone users timezone
-     * @return long the timestamp in utc
+     * @return boolean
      */
-    protected function fixTimestampTimeZone($ts, $timeZone)
+    protected function hasTime()
     {
-        // Create date string
-        $fromDateTime = new \DateTime("@" . $ts);
+        return !empty($this->timeAttribute);
+    }
 
-        // Create date object
-        $toDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $fromDateTime->format('Y-m-d H:i:s'), new \DateTimeZone($timeZone));
-        $toDateTime->setTimezone(new \DateTimeZone('UTC'));
+    /**
+     * @return bool checks if the validator should validate date only fields
+     */
+    protected function isDateOnly()
+    {
+        return !$this->hasTime();
+    }
 
-        return $toDateTime->getTimestamp();
+    /**
+     * Returns time value if provided by the model
+     *
+     * @return string|null time value (e.g. 12:00)
+     */
+    protected function getTimeValue($model)
+    {
+        if ($this->hasTime()) {
+            $attributeName = $this->timeAttribute;
+            return $model->$attributeName ?: null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Parses a date and optionally a time if timeAttribute is specified.
+     *
+     * Returns false in case the value could not be parsed.
+     *
+     * @param string $value
+     * @return int|false
+     * @throws \Exception
+     */
+    public static function parseDateTime($value, $timeValue = null)
+    {
+        return (new self())->parseDateTimeValue($value, $timeValue);
     }
 
     /**
@@ -190,13 +179,22 @@ class DbDateValidator extends DateValidator
     }
 
     /**
-     * Checks whether the given value is a db date format or not.
+     * Converts the given timestamp from user (or configured) timezone to a utc timestamp
      *
-     * @param string $value the date value
-     * @return boolean
+     * @param int $ts the timestamp
+     * @param String $timeZone users timezone
+     * @return int
+     * @throws \Exception
      */
-    protected function isInDbFormat($value)
+    protected function fixTimestampTimeZone($ts, $timeZone)
     {
-        return (preg_match(self::REGEX_DBFORMAT_DATE, $value) || preg_match(self::REGEX_DBFORMAT_DATETIME, $value));
+        // Create date string
+        $fromDateTime = new \DateTime('@' . $ts);
+
+        // Create date object
+        $toDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $fromDateTime->format('Y-m-d H:i:s'), new \DateTimeZone($timeZone));
+        $toDateTime->setTimezone(new \DateTimeZone('UTC'));
+
+        return $toDateTime->getTimestamp();
     }
 }
