@@ -1,5 +1,6 @@
 <?php
 return array (
+  'Fetch/Update Users Automatically' => 'Cargar/actualizar usuarios automáticamente',
   'Base DN' => 'DN de base',
   'Enable LDAP Support' => 'Activar soporte LDAP',
   'Encryption' => 'Cifrado',

@@ -1,13 +1,14 @@
 <?php
 return array (
+  'Fetch/Update Users Automatically' => 'Fetch/Update usuários automaticamente',
+  'Hostname' => 'Hostname',
+  'User Filer' => 'Usuário arquivado',
+  'Username Attribute' => 'Atributo do nome do usuário',
   'Base DN' => 'Base DN',
   'Enable LDAP Support' => 'Habilitar suporte LDAP',
   'Encryption' => 'Criptografia',
-  'Hostname' => '',
   'Login Filter' => 'Filtro de login',
   'Password' => 'Senha',
   'Port' => 'Porta',
-  'User Filer' => '',
   'Username' => 'Nome de usuário',
-  'Username Attribute' => '',
 );
