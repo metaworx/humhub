@@ -113,6 +113,7 @@ class SettingController extends Controller
         $form->internalRequireApprovalAfterRegistration = HSetting::Get('needApproval', 'authentication_internal');
         $form->internalAllowAnonymousRegistration = HSetting::Get('anonymousRegistration', 'authentication_internal');
         $form->defaultUserGroup = HSetting::Get('defaultUserGroup', 'authentication_internal');
+        $form->defaultUserIdleTimeoutSec = HSetting::Get('defaultUserIdleTimeoutSec', 'authentication_internal');
 
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'authentication-settings-form') {
             echo CActiveForm::validate($form);
@@ -128,7 +129,8 @@ class SettingController extends Controller
                 $form->internalRequireApprovalAfterRegistration = HSetting::Set('needApproval', $form->internalRequireApprovalAfterRegistration, 'authentication_internal');
                 $form->internalAllowAnonymousRegistration = HSetting::Set('anonymousRegistration', $form->internalAllowAnonymousRegistration, 'authentication_internal');
                 $form->defaultUserGroup = HSetting::Set('defaultUserGroup', $form->defaultUserGroup, 'authentication_internal');
-
+                $form->defaultUserIdleTimeoutSec = HSetting::Set('defaultUserIdleTimeoutSec', $form->defaultUserIdleTimeoutSec, 'authentication_internal');
+                
                 // set flash message
                 Yii::app()->user->setFlash('data-saved', Yii::t('AdminModule.controllers_SettingController', 'Saved'));
 
@@ -158,6 +160,7 @@ class SettingController extends Controller
 
         // Load Defaults
         $form->enabled = HSetting::Get('enabled', 'authentication_ldap');
+        $form->refreshUsers = HSetting::Get('refreshUsers', 'authentication_ldap');
         $form->username = HSetting::Get('username', 'authentication_ldap');
         $form->password = HSetting::Get('password', 'authentication_ldap');
         $form->hostname = HSetting::Get('hostname', 'authentication_ldap');
@@ -183,6 +186,7 @@ class SettingController extends Controller
 
             if ($form->validate()) {
                 HSetting::Set('enabled', $form->enabled, 'authentication_ldap');
+                HSetting::Set('refreshUsers', $form->refreshUsers, 'authentication_ldap');
                 HSetting::Set('hostname', $form->hostname, 'authentication_ldap');
                 HSetting::Set('port', $form->port, 'authentication_ldap');
                 HSetting::Set('encryption', $form->encryption, 'authentication_ldap');
@@ -364,6 +368,7 @@ class SettingController extends Controller
 
         $form->port = HSetting::Get('port', 'mailing');
         $form->encryption = HSetting::Get('encryption', 'mailing');
+        $form->allowSelfSignedCerts = HSetting::Get('allowSelfSignedCerts', 'mailing');
         $form->systemEmailAddress = HSetting::Get('systemEmailAddress', 'mailing');
         $form->systemEmailName = HSetting::Get('systemEmailName', 'mailing');
 
@@ -386,6 +391,7 @@ class SettingController extends Controller
                     $form->password = HSetting::Set('password', $form->password, 'mailing');
                 $form->port = HSetting::Set('port', $form->port, 'mailing');
                 $form->encryption = HSetting::Set('encryption', $form->encryption, 'mailing');
+                $form->allowSelfSignedCerts = HSetting::Set('allowSelfSignedCerts', $form->allowSelfSignedCerts, 'mailing');
                 $form->systemEmailAddress = HSetting::Set('systemEmailAddress', $form->systemEmailAddress, 'mailing');
                 $form->systemEmailName = HSetting::Set('systemEmailName', $form->systemEmailName, 'mailing');
 
@@ -396,7 +402,7 @@ class SettingController extends Controller
             }
         }
 
-        $encryptionTypes = array('' => 'None', 'ssl' => 'SSL');
+        $encryptionTypes = array('' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS');
         $transportTypes = array('php' => 'PHP', 'smtp' => 'SMTP');
 
         $this->render('mailing_server', array('model' => $form, 'encryptionTypes' => $encryptionTypes, 'transportTypes' => $transportTypes));
@@ -498,8 +504,12 @@ class SettingController extends Controller
         $form = new FileSettingsForm;
         $form->imageMagickPath = HSetting::Get('imageMagickPath', 'file');
         $form->maxFileSize = HSetting::Get('maxFileSize', 'file') / 1024 / 1024;
+        $form->maxPreviewImageWidth = HSetting::Get('maxPreviewImageWidth', 'file');
+        $form->maxPreviewImageHeight = HSetting::Get('maxPreviewImageHeight', 'file');
+        $form->hideImageFileInfo = HSetting::Get('hideImageFileInfo', 'file');
         $form->useXSendfile = HSetting::Get('useXSendfile', 'file');
         $form->allowedExtensions = HSetting::Get('allowedExtensions', 'file');
+        $form->showFilesWidgetBlacklist = HSetting::Get('showFilesWidgetBlacklist','file');
 
         // Ajax Validation
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'file-settings-form') {
@@ -514,8 +524,12 @@ class SettingController extends Controller
             if ($form->validate()) {
                 $form->imageMagickPath = HSetting::Set('imageMagickPath', $form->imageMagickPath, 'file');
                 $form->maxFileSize = HSetting::Set('maxFileSize', $form->maxFileSize * 1024 * 1024, 'file');
+                $form->maxPreviewImageWidth = HSetting::Set('maxPreviewImageWidth', $form->maxPreviewImageWidth, 'file');
+                $form->maxPreviewImageHeight = HSetting::Set('maxPreviewImageHeight', $form->maxPreviewImageHeight, 'file');
+                $form->hideImageFileInfo = HSetting::Set('hideImageFileInfo', $form->hideImageFileInfo, 'file');
                 $form->useXSendfile = HSetting::Set('useXSendfile', $form->useXSendfile, 'file');
                 $form->allowedExtensions = HSetting::Set('allowedExtensions', strtolower($form->allowedExtensions), 'file');
+                $form->showFilesWidgetBlacklist = HSetting::Set('showFilesWidgetBlacklist',$form->showFilesWidgetBlacklist,'file');
 
                 // set flash message
                 Yii::app()->user->setFlash('data-saved', Yii::t('AdminModule.controllers_SettingController', 'Saved'));
@@ -547,6 +561,51 @@ class SettingController extends Controller
 
         $this->render('cronjob', array(
         ));
+    }
+
+    /**
+     * Proxy Settings
+     */
+    public function actionProxy()
+    {
+        Yii::import('admin.forms.*');
+
+        $form = new ProxySettingsForm;
+
+        // uncomment the following code to enable ajax-based validation
+/*        if (isset($_POST['ajax']) && $_POST['ajax'] === 'design-settings-form') {
+            echo CActiveForm::validate($form);
+            Yii::app()->end();
+        }*/
+
+        if (isset($_POST['ProxySettingsForm'])) {
+            $_POST['ProxySettingsForm'] = Yii::app()->input->stripClean($_POST['ProxySettingsForm']);
+            $form->attributes = $_POST['ProxySettingsForm'];
+
+            if ($form->validate()) {
+
+                HSetting::Set('enabled', $form->enabled, 'proxy');
+                HSetting::Set('server', $form->server, 'proxy');
+                HSetting::Set('port', $form->port, 'proxy');
+                HSetting::Set('user', $form->user, 'proxy');
+                HSetting::Set('password', $form->password, 'proxy');
+                HSetting::Set('noproxy', $form->noproxy, 'proxy');
+
+                // set flash message
+                Yii::app()->user->setFlash('data-saved', Yii::t('AdminModule.controllers_ProxyController', 'Saved'));
+
+                $this->redirect(Yii::app()->createUrl('//admin/setting/proxy'));
+            }
+        } else {
+            $form->enabled = HSetting::Get('enabled', 'proxy');
+            $form->server = HSetting::Get('server', 'proxy');
+            $form->port = HSetting::Get('port', 'proxy');
+            $form->user = HSetting::Get('user', 'proxy');
+            $form->password = HSetting::Get('password', 'proxy');
+            $form->noproxy = HSetting::Get('noproxy', 'proxy');
+        }
+
+        $this->render('proxy', array('model' => $form));
     }
 
     /**

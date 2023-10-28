@@ -1,5 +1,6 @@
 <?php
 return array (
+  'Allow Self-Signed Certificates?' => 'Разрешить самоподписанные сертификаты?',
   'E-Mail sender address' => 'E-mail отправителя',
   'E-Mail sender name' => 'Имя отправителя',
   'Encryption' => 'Шифрование',
