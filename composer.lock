@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "04754278b8583cec15c1c5cd8c92a76c",
+    "hash": "0bc1500263f7d99c8df83e67c8e10f58",
     "packages": [
         {
             "name": "bower-asset/At.js",
-            "version": "v1.5.2",
+            "version": "v1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ichord/At.js.git",
-                "reference": "1a6d3cc6e203dc77f240f3f817c9d56284daaf2a"
+                "reference": "e1c58592d49bd84fea4b0ec69e0a031c82da93f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ichord/At.js/zipball/1a6d3cc6e203dc77f240f3f817c9d56284daaf2a",
-                "reference": "1a6d3cc6e203dc77f240f3f817c9d56284daaf2a",
+                "url": "https://api.github.com/repos/ichord/At.js/zipball/e1c58592d49bd84fea4b0ec69e0a031c82da93f8",
+                "reference": "e1c58592d49bd84fea4b0ec69e0a031c82da93f8",
                 "shasum": ""
             },
             "require": {
@@ -110,16 +110,16 @@
         },
         {
             "name": "bower-asset/bluebird",
-            "version": "v3.4.7",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/petkaantonov/bluebird.git",
-                "reference": "9ed7d49b600cfc1336e6bc44c1bea4834b2be834"
+                "reference": "0b703cb447c24075662b8cfdf2d579184c5078a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/petkaantonov/bluebird/zipball/9ed7d49b600cfc1336e6bc44c1bea4834b2be834",
-                "reference": "9ed7d49b600cfc1336e6bc44c1bea4834b2be834",
+                "url": "https://api.github.com/repos/petkaantonov/bluebird/zipball/0b703cb447c24075662b8cfdf2d579184c5078a0",
+                "reference": "0b703cb447c24075662b8cfdf2d579184c5078a0",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -235,16 +235,16 @@
         },
         {
             "name": "bower-asset/blueimp-load-image",
-            "version": "v2.12.1",
+            "version": "v2.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
-                "reference": "7135455875aa7dff64626f7205665aaf802a0088"
+                "reference": "caf36d45d843b38b8763cb4a921d7ce51681a08c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/7135455875aa7dff64626f7205665aaf802a0088",
-                "reference": "7135455875aa7dff64626f7205665aaf802a0088",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/caf36d45d843b38b8763cb4a921d7ce51681a08c",
+                "reference": "caf36d45d843b38b8763cb4a921d7ce51681a08c",
                 "shasum": ""
             },
             "type": "bower-asset-library"
@@ -380,6 +380,43 @@
             }
         },
         {
+            "name": "bower-asset/clipboard.js",
+            "version": "v0.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lgarron/clipboard.js.git",
+                "reference": "f2cb70da2037803021fd467b9ac147c0f78a826c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lgarron/clipboard.js/zipball/f2cb70da2037803021fd467b9ac147c0f78a826c",
+                "reference": "f2cb70da2037803021fd467b9ac147c0f78a826c",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "clipboard.js",
+                "bower-asset-ignore": [
+                    "index.html"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "A web shim to handle clipboard APIs across browsers using a simple Promise API.",
+            "keywords": [
+                "HTML5",
+                "clipboard",
+                "copy",
+                "copying",
+                "cut",
+                "execCommand",
+                "getData",
+                "paste",
+                "setData"
+            ]
+        },
+        {
             "name": "bower-asset/fontawesome",
             "version": "v4.7.0",
             "source": {
@@ -444,6 +481,54 @@
                     "build.xml"
                 ]
             }
+        },
+        {
+            "name": "bower-asset/jplayer",
+            "version": "2.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/happyworm/jPlayer.git",
+                "reference": "34e55cd7694552447bd0dbc38d886fdc96df0d06"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/happyworm/jPlayer/zipball/34e55cd7694552447bd0dbc38d886fdc96df0d06",
+                "reference": "34e55cd7694552447bd0dbc38d886fdc96df0d06",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.7.2"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "./dist/jplayer/jquery.jplayer.js",
+                    "./dist/jplayer/jquery.jplayer.swf",
+                    "./dist/skin/pink.flag/jplayer.pink.flag.css",
+                    "./dist/skin/pink.flag/mustache/jplayer.pink.flag.audio.single.html"
+                ],
+                "bower-asset-ignore": [
+                    "artwork",
+                    "examples",
+                    "lib",
+                    "src",
+                    "**/*.md",
+                    "**/*.txt",
+                    "Gruntfile.js"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "The jQuery HTML5 Audio / Video Library. Allows you to create a media player with a consistent interface and experience across all browsers.",
+            "keywords": [
+                "audio",
+                "jplayer",
+                "jquery-plugin",
+                "media",
+                "player",
+                "video"
+            ]
         },
         {
             "name": "bower-asset/jquery",
@@ -948,20 +1033,23 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.8.0",
+            "version": "v4.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2"
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
             },
             "type": "library",
             "autoload": {
@@ -988,7 +1076,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2016-07-16 12:58:58"
+            "time": "2017-03-13 06:30:53"
         },
         {
             "name": "imagine/imagine",
@@ -2821,8 +2909,6 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {
-        "php": ">=5.4.0"
-    },
+    "platform": [],
     "platform-dev": []
 }

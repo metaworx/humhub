@@ -55,7 +55,7 @@ class SettingController extends Controller
     /**
      * @inheritdoc
      */
-    public static function getAccessRules()
+    public function getAccessRules()
     {
         return [
             ['permissions' => \humhub\modules\admin\permissions\ManageSettings::className()]
@@ -110,13 +110,7 @@ class SettingController extends Controller
             return $this->redirect(['/admin/setting/caching']);
         }
 
-        $cacheTypes = array(
-            'yii\caching\DummyCache' => Yii::t('AdminModule.controllers_SettingController', 'No caching (Testing only!)'),
-            'yii\caching\FileCache' => Yii::t('AdminModule.controllers_SettingController', 'File'),
-            'yii\caching\ApcCache' => Yii::t('AdminModule.controllers_SettingController', 'APC'),
-        );
-
-        return $this->render('caching', array('model' => $form, 'cacheTypes' => $cacheTypes));
+        return $this->render('caching', array('model' => $form, 'cacheTypes' => $form->getTypes()));
     }
 
     /**
@@ -192,17 +186,25 @@ class SettingController extends Controller
 
         // Determine PHP Upload Max FileSize
         $maxUploadSize = \humhub\libs\Helpers::GetBytesOfPHPIniValue(ini_get('upload_max_filesize'));
+        $fileSizeKey = 'upload_max_filesize';
         if ($maxUploadSize > \humhub\libs\Helpers::GetBytesOfPHPIniValue(ini_get('post_max_size'))) {
             $maxUploadSize = \humhub\libs\Helpers::GetBytesOfPHPIniValue(ini_get('post_max_size'));
+            $fileSizeKey = 'post_max_size';
         }
+
         $maxUploadSize = floor($maxUploadSize / 1024 / 1024);
+        $maxUploadSizeText = "(" . $fileSizeKey . "): " . $maxUploadSize;
 
         // Determine currently used ImageLibary
         $currentImageLibary = 'GD';
-        if (Yii::$app->getModule('file')->settings->get('imageMagickPath'))
+        if (Yii::$app->getModule('file')->settings->get('imageMagickPath')) {
             $currentImageLibary = 'ImageMagick';
+        }
 
-        return $this->render('file', array('model' => $form, 'maxUploadSize' => $maxUploadSize, 'currentImageLibary' => $currentImageLibary));
+        return $this->render('file', ['model' => $form,
+                    'maxUploadSize' => $maxUploadSize,
+                    'maxUploadSizeText' => $maxUploadSizeText,
+                    'currentImageLibary' => $currentImageLibary]);
     }
 
     /**
@@ -234,9 +236,9 @@ class SettingController extends Controller
     {
         $logsCount = Log::find()->count();
         $dating = Log::find()
-            ->orderBy('log_time', 'asc')
-            ->limit(1)
-            ->one();
+                ->orderBy('log_time', 'asc')
+                ->limit(1)
+                ->one();
 
         // I wish..
         if ($dating) {
@@ -256,10 +258,10 @@ class SettingController extends Controller
         }
 
         return $this->render('logs', array(
-            'logsCount' => $logsCount,
-            'model' => $form,
-            'limitAgeOptions' => $limitAgeOptions,
-            'dating' => $dating
+                    'logsCount' => $logsCount,
+                    'model' => $form,
+                    'limitAgeOptions' => $limitAgeOptions,
+                    'dating' => $dating
         ));
     }
 

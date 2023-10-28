@@ -17,8 +17,9 @@ humhub.module('client', function (module, require, $) {
         //Textstatus = "timeout", "error", "abort", "parsererror", "application"
         this.textStatus = textStatus;
         this.dataType = dataType;
+        this.xhr = xhr;
 
-        var responseType = xhr.getResponseHeader('content-type');
+        var responseType = this.header('content-type');
 
         // If we expect json and received json we merge the json result with our response object.
         if ((!dataType || dataType === 'json') && responseType && responseType.indexOf('json') > -1) {
@@ -26,6 +27,10 @@ humhub.module('client', function (module, require, $) {
         } else if (dataType) {
             this[dataType] = this.response;
         }
+    };
+    
+    Response.prototype.header = function (key) {
+        return this.xhr.getResponseHeader(key);
     };
 
     Response.prototype.setSuccess = function (data) {
@@ -56,24 +61,22 @@ humhub.module('client', function (module, require, $) {
             result.response = this.response.substr(0, 500)
             result.response += (this.response.length > 500) ? '...' : '';
         }
-        ;
 
         if (this.html && object.isString(this.html)) {
             result.html = this.html.substr(0, 500)
             result.html += (this.html.length > 500) ? '...' : '';
         }
-        ;
 
         return result;
     };
-    
-    var reload = function(preventPjax) {
-        if(!preventPjax && module.pjax.config.active) {
+
+    var reload = function (preventPjax) {
+        if (!preventPjax && module.pjax.config.active) {
             module.pjax.reload();
         } else {
             location.reload(true);
         }
-    }
+    };
 
     var submit = function ($form, cfg, originalEvent) {
         if ($form instanceof $.Event && $form.$form && $form.length) {
@@ -99,11 +102,17 @@ humhub.module('client', function (module, require, $) {
         var url = cfg.url || originalEvent.url || $form.attr('action');
         return ajax(url, cfg, originalEvent);
     };
+    
+    var actionPost = function (evt) {
+        post(evt).catch(function(e) {
+            module.log.error(e, true);
+        });
+    };
 
     var post = function (url, cfg, originalEvent) {
         if (url instanceof $.Event) {
             originalEvent = url;
-            url = originalEvent.url;
+            url = originalEvent.url || cfg.url;
         } else if (cfg instanceof $.Event) {
             originalEvent = cfg;
             cfg = {};
@@ -120,7 +129,7 @@ humhub.module('client', function (module, require, $) {
     var html = function (url, cfg, originalEvent) {
         if (url instanceof $.Event) {
             originalEvent = url;
-            url = originalEvent.url;
+            url = originalEvent.url || cfg.url;
         } else if (cfg instanceof $.Event) {
             originalEvent = cfg;
             cfg = {};
@@ -138,7 +147,7 @@ humhub.module('client', function (module, require, $) {
     var get = function (url, cfg, originalEvent) {
         if (url instanceof $.Event) {
             originalEvent = url;
-            url = originalEvent.url;
+            url = originalEvent.url || cfg.url;
         } else if (cfg instanceof $.Event) {
             originalEvent = cfg;
             cfg = {};
@@ -162,27 +171,20 @@ humhub.module('client', function (module, require, $) {
             cfg = {'success': cfg};
         }
 
-
         var promise = new Promise(function (resolve, reject) {
             cfg = cfg || {};
+            
+            // allows data-action-data-type="json" on $trigger
+            if(originalEvent && object.isFunction(originalEvent.data)) {
+                cfg.dataType = originalEvent.data('data-type', cfg.dataType);
+            }
 
             var errorHandler = cfg.error;
             var error = function (xhr, textStatus, errorThrown) {
                 var response = new Response(xhr, url, textStatus, cfg.dataType).setError(errorThrown);
 
                 if (response.status == 302) {
-
-                    url = null;
-                    if (xhr.getResponseHeader('X-Pjax-Url')) {
-                        url = xhr.getResponseHeader('X-Pjax-Url');
-                    } else {
-                        url = xhr.getResponseHeader('X-Redirect');
-                    }
-
-                    if (url !== null) {
-                        document.location = url;
-                        return;
-                    }
+                    _redirect(xhr);
                 }
 
                 if (errorHandler && object.isFunction(errorHandler)) {
@@ -256,6 +258,24 @@ humhub.module('client', function (module, require, $) {
         return promise;
     };
 
+    var _redirect = function (xhr) {
+        var url = null;
+        if (xhr.getResponseHeader('X-Pjax-Url')) {
+            url = xhr.getResponseHeader('X-Pjax-Url');
+        } else {
+            url = xhr.getResponseHeader('X-Redirect');
+        }
+
+        if (url !== null) {
+            if(module.pjax && module.pjax.config.active) {
+                module.pjax.redirect(url);
+            } else {
+                document.location = url;
+            }
+            return;
+        }
+    };
+
     var finish = function (originalEvent) {
         if (originalEvent && object.isFunction(originalEvent.finish) && originalEvent.block !== 'manual') {
             originalEvent.finish();
@@ -278,6 +298,7 @@ humhub.module('client', function (module, require, $) {
 
     module.export({
         ajax: ajax,
+        actionPost: actionPost,
         post: post,
         get: get,
         html: html,

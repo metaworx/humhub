@@ -18,6 +18,9 @@ class FilePreview extends \humhub\widgets\JsWidget
     public $hideImageFileInfo = false;
     public $edit = false;
     public $visible = false;
+    
+    public $preventPopover = false;
+    public $popoverPosition = 'right';
 
     /**
      * Draws the Upload Button output.
@@ -37,18 +40,23 @@ class FilePreview extends \humhub\widgets\JsWidget
     public function getData()
     {
         return [
+            'prevent-popover' => $this->preventPopover,
+            'popover-position' => $this->popoverPosition,
             'file-edit' => $this->edit,
-            'file-hide-image-files' => $this->hideImageFileInfo
+            'hide-image-file-info' => $this->hideImageFileInfo
         ];
     }
 
     protected function getFileData()
     {
         $files = $this->getFiles();
+        
         $result = [];
 
         foreach ($files as $file) {
-            $result[] = FileHelper::getFileInfos($file);
+            if($file) {
+                $result[] = FileHelper::getFileInfos($file);
+            }
         }
 
         return $result;

@@ -56,6 +56,9 @@ class CoreJsConfig extends Widget
                     ],
                     'text' => [
                         'error.upload' => Yii::t('base', 'Some files could not be uploaded:'),
+                        'error.unknown' => Yii::$app->user->isAdmin() ?
+                                    Yii::t('base', 'An unknown error occured while uploading. Hint: check your upload_max_filesize and post_max_size php settings.')
+                                    : Yii::t('base', 'An unknown error occured while uploading.'),
                         'success.delete' => Yii::t('base', 'The file has been deleted.')
                     ]
                 ],
@@ -89,6 +92,7 @@ class CoreJsConfig extends Widget
                     'text' => [
                         'error.default' => Yii::t('base', 'An unexpected error occured. If this keeps happening, please contact a site administrator.'),
                         'success.saved' => Yii::t('base', 'Saved'),
+                        'saved' => Yii::t('base', 'Saved'),
                         'success.edit' => Yii::t('base', 'Saved'),
                         0 => Yii::t('base', 'An unexpected error occured. If this keeps happening, please contact a site administrator.'),
                         403 => Yii::t('base', 'You are not allowed to run this action.'),
@@ -120,7 +124,7 @@ class CoreJsConfig extends Widget
                     'modal' => [
                         'permalink' => [
                             'head' => Yii::t('ContentModule.widgets_views_permaLink', '<strong>Permalink</strong> to this post'),
-                            'info' => Yii::t('base', 'Copy to clipboard: Ctrl/Cmd+C'),
+                            'info' => Yii::t('base', 'Copy to clipboard'),
                             'buttonOpen' => Yii::t('base', 'Open'),
                             'buttonClose' => Yii::t('base', 'Close'),
                         ],
@@ -147,8 +151,8 @@ class CoreJsConfig extends Widget
                 ],
                 'space' => [
                     'text' => [
-                        'success.archived' => Yii::t('base', 'The space has be archived.'),
-                        'success.unarchived' => Yii::t('base', 'The space has be unarchived.'),
+                        'success.archived' => Yii::t('base', 'The space has been archived.'),
+                        'success.unarchived' => Yii::t('base', 'The space has been unarchived.'),
                     ]
                 ],
         ]);
