@@ -33,13 +33,18 @@ Added new user status (User::SOFT_DELETED). You can find more information here: 
 Moved all form and field related widgets from `humhub\widgets` to `humhub\modules\ui\form\widgets` namespace.
 There is a compatibility layer for the 1.3 release.
 
+### Social Activities (Notification & Activities)
+
+- Added new 'requireOriginator' flag with default to true
+- Added new 'requireSoruce' flag with default to true
+
 ### Deprecations
 
  - `humhub\components\Theme.php` -> `humhub\modules\ui\view\components\Theme`
  - `humhub\components\View` -> `humhub\modules\ui\view\components\View`
  - `humhub\libs\ThemeHelper` -> `humhub\modules\ui\view\components\ThemeHelper`
- - `humhub\modules\content\widgets\richtext\HumHubRichText` -> Compatibility class for legacy richtext was replaced with prosemirror richtext.
- - `humhub\modules\content\widgets\richtext\HumHubRichTextEditor` -> Compatibility class for legacy richtext was replaced with prosemirror richtext editor.
+ - `humhub\modules\content\widgets\richtext\HumHubRichText` -> Compatibility class for the legacy rich-text, which was replaced with prosemirror richtext.
+ - `humhub\modules\content\widgets\richtext\HumHubRichTextEditor` -> Compatibility class for the legacy rich-text, which was replaced with prosemirror richtext editor.
  - `humhub\widgets\RichText` -> `humhub\modules\content\widgets\richtext\RichText`
  - `humhub\widgets\RichTextField` -> `humhub\modules\content\widgets\richtext\RichTextField`
  - `humhub\modules\user\models\Mentioning::parse()` -> `humhub\modules\content\widgets\richtext\RichText::processText()`
