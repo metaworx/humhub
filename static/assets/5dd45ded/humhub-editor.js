@@ -13521,6 +13521,8 @@
                             var $item = $(item.dom);
                             if(!updateResult) {
                                 $item.hide();
+                            } else {
+                                $item.show();
                             }
 
                             if((i === this$1.content.items.length - 1)) {
@@ -14106,19 +14108,6 @@
 
             this.menu.appendChild(dom);
             this.update();
-
-            // TODO: move to menubar module
-            /*if(this.context.editor.$.is('.focusMenu')) {
-                $(this.menu).hide().addClass('menu-hidden');
-
-                $(this.context.editor.$).find('.ProseMirror').on('focus', () => {
-                    $(this.menu).removeClass('menu-hidden').addClass('menu-visible').show();
-                }).on('blur', () => {
-                    if(!$(this.context.editor.$).is('.fullscreen')) {
-                        $(this.menu).removeClass('menu-visible').addClass('menu-hidden').hide();
-                    }
-                });
-            }*/
 
             if (options.floating && !isIOS()) {
                 this.updateFloat();
@@ -44884,6 +44873,14 @@ var full$1 = Object.freeze({
                     return;
                 }
 
+                //if(val.length < 2) {
+                    // TODO add this in next major version without clearsearch
+                    /**$('[data-emoji-category="search"]').find('ul')
+                        .empty()
+                        .append('<li>Test</li>'); **/
+                    //return;
+              //  }
+
                 var currentlyActive = that.getActiveCategoryMenuItem().attr('data-emoji-nav-item');
                 if(currentlyActive !== 'search') {
                     that.lastActiveCategory = currentlyActive;
@@ -44925,12 +44922,11 @@ var full$1 = Object.freeze({
         EmojiChooser.prototype.updateSearch = function updateSearch (searchStr) {
             this.$.find('[data-emoji-nav-item="search"]').show();
             var result = [];
-            var length = searchStr.length;
             this.categoryOrder.forEach(function (categoryName, index) {
                 $.each(getByCategory(categoryName), function (index, emoji) {
                     if(emoji && emoji.keywords) {
                         $.each(emoji.keywords, function (index, keyword) {
-                            if(length < 3) {
+                            if(searchStr.length < 3) {
                                 if(keyword.lastIndexOf(searchStr, 0) === 0) {
                                     result.push(emoji);
                                     return false;
@@ -61409,81 +61405,12 @@ var entities$8 = Object.freeze({
          *
          */
 
-        var SELECTOR_DEFAULT = '.ProseMirror-menu-linkItem, .helper-group, .format-group, .insert-dropdown, .ProseMirror-menu-insertTable, .ProseMirror-menu-fullScreen';
-
-        var cache = {};
-
-        function resizeNav$2(context) {
-
-            context.event.on('clear', function() {
-                cache = {};
-            });
-
-            humhub.event.on('humhub:ready', function() {
-                cache = {};
-            });
-
-            return new MenuItem({
-                id: 'resizeNav',
-                title: "More",
-                sortOrder: 400,
-                run: function() {
-                    var $nodes = getNodes(context);
-                    if(!context.editor.$.find('.helper-group').is(':visible')) {
-                        $nodes.fadeIn();
-                        this.switchIcon(icons.angleDoubleLeft);
-                        $(this.dom).data('state', true);
-                    } else {
-                        $nodes.hide();
-                        this.switchIcon(icons.angleDoubleRight);
-                        $(this.dom).data('state', false);
-                    }
-                },
-                icon: icons.angleDoubleRight
-            });
-        }
-
-        function getNodes(context) {
-            if(!cache[context.id]) {
-                cache[context.id] = context.editor.$.find(getSelector(context));
-            }
-
-            return cache[context.id];
-        }
-
-        function getSelector(context) {
-            return context.getPluginOption('resizeNav', 'selector', SELECTOR_DEFAULT);
-        }
-
-        function menu$18(context) {
-            return [
-                {
-                    id: 'resizeNav',
-                    group: 'resize',
-                    item: resizeNav$2(context)
-                } ]
-        }
-
         /*
          * @link https://www.humhub.org/
          * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
          * @license https://www.humhub.com/licences
          *
          */
-
-        var resizeNav = {
-            id: 'resizeNav',
-            init: function init(context) {
-                context.event.on('afterMenuBarInit', function (evt, instance) {
-                    getNodes(context).hide();
-                }).on('afterMenuBarUpdate', function (evt, instance) {
-                    if(!$(instance.menu).find('.ProseMirror-menu-resizeNav').data('state')) {
-                        getNodes(context).hide();
-                    }
-                });
-            },
-            menu: function (context) { return menu$18(context); }
-        };
 
         /*
          * @link https://www.humhub.org/
@@ -61811,7 +61738,7 @@ var entities$8 = Object.freeze({
         registerPlugin(placeholder, 'markdown');
         registerPlugin(anchors);
         registerPlugin(fullscreen, 'markdown');
-        registerPlugin(resizeNav, 'markdown');
+        //registerPlugin(resizeNav, 'markdown');
         registerPlugin(maxHeight, 'markdown');
         registerPlugin(mention$2, 'markdown');
 

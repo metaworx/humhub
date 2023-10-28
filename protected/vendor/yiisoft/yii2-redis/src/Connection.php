@@ -14,17 +14,17 @@ use yii\helpers\Inflector;
 use yii\helpers\VarDumper;
 
 /**
- * The redis connection class is used to establish a connection to a [redis](http://redis.io/) server.
+ * The redis connection class is used to establish a connection to a [redis](https://redis.io/) server.
  *
  * By default it assumes there is a redis server running on localhost at port 6379 and uses the database number 0.
  *
  * It is possible to connect to a redis server using [[hostname]] and [[port]] or using a [[unixSocket]].
  *
- * It also supports [the AUTH command](http://redis.io/commands/auth) of redis.
+ * It also supports [the AUTH command](https://redis.io/commands/auth) of redis.
  * When the server needs authentication, you can set the [[password]] property to
  * authenticate with the server after connect.
  *
- * The execution of [redis commands](http://redis.io/commands) is possible with via [[executeCommand()]].
+ * The execution of [redis commands](https://redis.io/commands) is possible with via [[executeCommand()]].
  *
  * @method mixed append($key, $value) Append a value to a key. <https://redis.io/commands/append>
  * @method mixed auth($password) Authenticate to the server. <https://redis.io/commands/auth>
@@ -209,7 +209,7 @@ use yii\helpers\VarDumper;
  * @method mixed zrange($key, $start, $stop, $WITHSCORES = null) Return a range of members in a sorted set, by index. <https://redis.io/commands/zrange>
  * @method mixed zrangebylex($key, $min, $max, $LIMIT = null, $offset = null, $count = null) Return a range of members in a sorted set, by lexicographical range. <https://redis.io/commands/zrangebylex>
  * @method mixed zrevrangebylex($key, $max, $min, $LIMIT = null, $offset = null, $count = null) Return a range of members in a sorted set, by lexicographical range, ordered from higher to lower strings.. <https://redis.io/commands/zrevrangebylex>
- * @method mixed zrangebyscore($key, $min, $max, $WITHSCORES = null, $LIMIT = null, $offset = null, $count = null) Return a range of members in a sorted set, by score. <https://redis.io/commands/zrangebyscore>
+ * @method mixed zrangebyscore($key, $min, $max, ...$options) Return a range of members in a sorted set, by score. <https://redis.io/commands/zrangebyscore>
  * @method mixed zrank($key, $member) Determine the index of a member in a sorted set. <https://redis.io/commands/zrank>
  * @method mixed zrem($key, ...$members) Remove one or more members from a sorted set. <https://redis.io/commands/zrem>
  * @method mixed zremrangebylex($key, $min, $max) Remove all members in a sorted set between the given lexicographical range. <https://redis.io/commands/zremrangebylex>
@@ -265,7 +265,7 @@ class Connection extends Component
     public $unixSocket;
     /**
      * @var string the password for establishing DB connection. Defaults to null meaning no AUTH command is sent.
-     * See http://redis.io/commands/auth
+     * See https://redis.io/commands/auth
      */
     public $password;
     /**
@@ -282,7 +282,12 @@ class Connection extends Component
      */
     public $dataTimeout;
     /**
-     * @var integer Bitmask field which may be set to any combination of connection flags passed to [stream_socket_client()](http://php.net/manual/en/function.stream-socket-client.php).
+     * @var boolean Send sockets over SSL protocol. Default state is false.
+     * @since 2.0.12
+     */
+    public $useSSL = false;
+    /**
+     * @var integer Bitmask field which may be set to any combination of connection flags passed to [stream_socket_client()](https://www.php.net/manual/en/function.stream-socket-client.php).
      * Currently the select of connection flags is limited to `STREAM_CLIENT_CONNECT` (default), `STREAM_CLIENT_ASYNC_CONNECT` and `STREAM_CLIENT_PERSISTENT`.
      *
      * > Warning: `STREAM_CLIENT_PERSISTENT` will make PHP reuse connections to the same server. If you are using multiple
@@ -290,14 +295,14 @@ class Connection extends Component
      * > get executed on the wrong database. `STREAM_CLIENT_PERSISTENT` is only safe to use if you use only one database.
      * >
      * > You may still use persistent connections in this case when disambiguating ports as described
-     * > in [a comment on the PHP manual](http://php.net/manual/en/function.stream-socket-client.php#105393)
+     * > in [a comment on the PHP manual](https://www.php.net/manual/en/function.stream-socket-client.php#105393)
      * > e.g. on the connection used for session storage, specify the port as:
      * >
      * > ```php
      * > 'port' => '6379/session'
      * > ```
      *
-     * @see http://php.net/manual/en/function.stream-socket-client.php
+     * @see https://www.php.net/manual/en/function.stream-socket-client.php
      * @since 2.0.5
      */
     public $socketClientFlags = STREAM_CLIENT_CONNECT;
@@ -317,7 +322,7 @@ class Connection extends Component
     public $retryInterval = 0;
     /**
      * @var array List of available redis commands.
-     * @see http://redis.io/commands
+     * @see https://redis.io/commands
      */
     public $redisCommands = [
         'APPEND', // Append a value to a key
@@ -566,7 +571,7 @@ class Connection extends Component
      */
     public function getIsActive()
     {
-        return ArrayHelper::getValue($this->_pool, "$this->hostname:$this->port") !== false;
+        return ArrayHelper::getValue($this->_pool, "$this->hostname:$this->port", false) !== false;
     }
 
     /**
@@ -586,7 +591,7 @@ class Connection extends Component
             $this->connectionString,
             $errorNumber,
             $errorDescription,
-            $this->connectionTimeout ? $this->connectionTimeout : ini_get('default_socket_timeout'),
+            $this->connectionTimeout ?: ini_get('default_socket_timeout'),
             $this->socketClientFlags
         );
 
@@ -595,6 +600,9 @@ class Connection extends Component
 
             if ($this->dataTimeout !== null) {
                 stream_set_timeout($socket, $timeout = (int) $this->dataTimeout, (int) (($this->dataTimeout - $timeout) * 1000000));
+            }
+            if ($this->useSSL) {
+                stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
             }
             if ($this->password !== null) {
                 $this->executeCommand('AUTH', [$this->password]);
@@ -673,14 +681,14 @@ class Connection extends Component
         $redisCommand = strtoupper(Inflector::camel2words($name, false));
         if (in_array($redisCommand, $this->redisCommands)) {
             return $this->executeCommand($redisCommand, $params);
-        } else {
-            return parent::__call($name, $params);
         }
+
+        return parent::__call($name, $params);
     }
 
     /**
      * Executes a redis command.
-     * For a list of available commands and their parameters see http://redis.io/commands.
+     * For a list of available commands and their parameters see https://redis.io/commands.
      *
      * The params array should contain the params separated by white space, e.g. to execute
      * `SET mykey somevalue NX` call the following:
@@ -701,26 +709,19 @@ class Connection extends Component
      * - `string` or `null` for commands that return "bulk reply".
      * - `array` for commands that return "Multi-bulk replies".
      *
-     * See [redis protocol description](http://redis.io/topics/protocol)
+     * See [redis protocol description](https://redis.io/topics/protocol)
      * for details on the mentioned reply types.
-     * @throws Exception for commands that return [error reply](http://redis.io/topics/protocol#error-reply).
+     * @throws Exception for commands that return [error reply](https://redis.io/topics/protocol#error-reply).
      */
     public function executeCommand($name, $params = [])
     {
         $this->open();
 
         $params = array_merge(explode(' ', $name), $params);
-        $command = '';
-        $paramsCount = 0;
+        $command = '*' . count($params) . "\r\n";
         foreach ($params as $arg) {
-            if ($arg === null) {
-                continue;
-            }
-
-            $paramsCount++;
             $command .= '$' . mb_strlen($arg, '8bit') . "\r\n" . $arg . "\r\n";
         }
-        $command = '*' . $paramsCount . "\r\n" . $command;
 
         \Yii::trace("Executing Redis Command: {$name}", __METHOD__);
         if ($this->retries > 0) {
@@ -782,9 +783,9 @@ class Connection extends Component
             case '+': // Status reply
                 if ($line === 'OK' || $line === 'PONG') {
                     return true;
-                } else {
-                    return $line;
                 }
+
+                return $line;
             case '-': // Error reply
 
                 if ($this->isRedirect($line)) {
