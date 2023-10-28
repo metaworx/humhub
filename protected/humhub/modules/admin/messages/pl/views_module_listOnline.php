@@ -2,7 +2,6 @@
 return array (
   '<strong>Modules</strong> directory' => '<strong>Katalog</strong> modułów',
   'Buy (%price%)' => 'Kup (%price%)',
-  'Disclaimer' => 'Klauzula poufności',
   'Install' => 'Zainstaluj',
   'Installing module...' => 'Instaluję moduł...',
   'Latest compatible version:' => 'Ostatnia kompatybilna wersja:',
@@ -10,4 +9,5 @@ return array (
   'Licence Key:' => 'Klucz licencyjny:',
   'More info' => 'Więcej informacji',
   'No compatible module version found!' => 'Nie znaleziono kompatybilnej wersji modułu!',
+  'Third-party' => 'Inni dostawcy',
 );
