@@ -15047,6 +15047,10 @@
       var view = context.editor.view;
       var pos = findLoader(context, id);
 
+      // Focus the editor in order to synchronized changes into hidden textarea
+      // for case when before file uploading the editor was not focused
+      view.focus();
+
       // If the content around the placeholder has been deleted, drop the image
       if (pos === null) {
           return;
