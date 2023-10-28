@@ -8,19 +8,23 @@
 
 namespace humhub\assets;
 
-use humhub\components\assets\WebStaticAssetBundle;
+use yii\web\AssetBundle;
 
 /**
- * jQuery-nicescroll
+ * select2
  *
- * @author luke
+ * @author buddha
  */
-class JqueryNiceScrollAsset extends WebStaticAssetBundle
+class Select2StyleAsset extends AssetBundle
 {
 
     /**
      * @inheritdoc
      */
-    public $js = ['js/jquery.nicescroll.min.js'];
+    public $sourcePath = '@npm/select2/dist/css';
 
+    /**
+     * @inheritdoc
+     */
+    public $css = ['select2.min.css'];
 }

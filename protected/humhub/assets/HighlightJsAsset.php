@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
@@ -21,5 +22,7 @@ class HighlightJsAsset extends WebStaticAssetBundle
     /**
      * @inheritdoc
      */
-    public $css = ['js/highlight.js/styles/github.css'];
+    public $depends = [
+        HighlightJsStyleAsset::class
+    ];
 }

@@ -2,6 +2,19 @@ HumHub Change Log
 =================
 
 
+1.5.0 (April 15, 2020)
+----------------------
+
+- Fix #3976: User profile stream could not be initialized
+- Fix #3977 Reverted nicescroll version to 3.6.6 due to mobile scroll issues
+- Chg: Only use nicescroll on space chooser, notifications, and activity stream on large devices
+- Chg: Replaced `humhub.ui.view.isNormal()` with  `humhub.ui.view.isLarge()`
+- Fix #3973: Profile Categories Not Editable
+- Fix #3925: "Back to stream" button visible after pin to top in stream
+- Chg: Removed all style assets from CoreBundleAssets
+- Fix #3991: Archive content triggers "New updates available" stream badge
+
+
 1.5.0-beta.1 (April 6, 2020)
 ----------------------------
 
@@ -61,6 +74,7 @@ HumHub Change Log
 ------------------
 - Fix #3945: Default object-src policy prevents loading pdf on safari
 - Fix #3963: Richtext/Markdown links not highlighted by default
+- Fix #3986: Cannot use yii\helpers\Html as Html because the name is already in use in `humhub\libs\ProfileBannerImage`
 
 
 1.4.4 (March 24, 2020)
