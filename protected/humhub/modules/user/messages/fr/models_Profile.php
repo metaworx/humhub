@@ -27,10 +27,9 @@ return array (
   'Title' => 'Civilité',
   'Twitter URL' => 'Lien Twitter',
   'Url' => 'Lien',
-  'User' => 'Nom d\'utilisateur',
   'Vimeo URL' => 'Lien Vimeo',
   'XMPP Jabber Address' => 'Adresse XMPP/Jabber',
   'Xing URL' => 'Lien Xing',
-  'Youtube URL' => 'Lien YouTube',
+  'YouTube URL' => 'URL YouTube',
   'Zip' => 'Code postal',
 );

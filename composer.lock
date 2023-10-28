@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "508b673b72f205a5e838b88cd1f59ca5",
+    "hash": "04754278b8583cec15c1c5cd8c92a76c",
     "packages": [
         {
             "name": "bower-asset/At.js",
@@ -156,16 +156,16 @@
         },
         {
             "name": "bower-asset/blueimp-canvas-to-blob",
-            "version": "v3.6.0",
+            "version": "v3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/JavaScript-Canvas-to-Blob.git",
-                "reference": "39b96c11e60bd6be833866b1b5d92994fce1718c"
+                "reference": "10f6200baea6c7818f898a182760690d6d2c1cde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/39b96c11e60bd6be833866b1b5d92994fce1718c",
-                "reference": "39b96c11e60bd6be833866b1b5d92994fce1718c",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/10f6200baea6c7818f898a182760690d6d2c1cde",
+                "reference": "10f6200baea6c7818f898a182760690d6d2c1cde",
                 "shasum": ""
             },
             "type": "bower-asset-library"
@@ -235,32 +235,32 @@
         },
         {
             "name": "bower-asset/blueimp-load-image",
-            "version": "v2.10.0",
+            "version": "v2.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
-                "reference": "a9eb2ab1078b2e7d45eb215e1d4ff54134f709bf"
+                "reference": "7135455875aa7dff64626f7205665aaf802a0088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/a9eb2ab1078b2e7d45eb215e1d4ff54134f709bf",
-                "reference": "a9eb2ab1078b2e7d45eb215e1d4ff54134f709bf",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/7135455875aa7dff64626f7205665aaf802a0088",
+                "reference": "7135455875aa7dff64626f7205665aaf802a0088",
                 "shasum": ""
             },
             "type": "bower-asset-library"
         },
         {
             "name": "bower-asset/blueimp-tmpl",
-            "version": "v3.7.0",
+            "version": "v3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blueimp/JavaScript-Templates.git",
-                "reference": "511e54a03c325bc99a6a58616e975e4a2b15b0d3"
+                "reference": "dc7631396cd541db5644aa2c651e342c68511aad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/511e54a03c325bc99a6a58616e975e4a2b15b0d3",
-                "reference": "511e54a03c325bc99a6a58616e975e4a2b15b0d3",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/dc7631396cd541db5644aa2c651e342c68511aad",
+                "reference": "dc7631396cd541db5644aa2c651e342c68511aad",
                 "shasum": ""
             },
             "type": "bower-asset-library"
@@ -1179,16 +1179,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.5",
+            "version": "v5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "cd142238a339459b10da3d8234220963f392540c"
+                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/cd142238a339459b10da3d8234220963f392540c",
-                "reference": "cd142238a339459b10da3d8234220963f392540c",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
                 "shasum": ""
             },
             "require": {
@@ -1229,7 +1229,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-12-29 10:02:40"
+            "time": "2017-02-13 07:52:53"
         },
         {
             "name": "xj/yii2-jplayer-widget",
@@ -2668,20 +2668,20 @@
         },
         {
             "name": "yiisoft/yii2-debug",
-            "version": "2.0.7",
+            "version": "2.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-debug.git",
-                "reference": "a74a2433ad1dfda30a253a92f6db52c131807432"
+                "reference": "647be6c9d48dc2f3c2e2f33b9eba0a4ca78abde9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/a74a2433ad1dfda30a253a92f6db52c131807432",
-                "reference": "a74a2433ad1dfda30a253a92f6db52c131807432",
+                "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/647be6c9d48dc2f3c2e2f33b9eba0a4ca78abde9",
+                "reference": "647be6c9d48dc2f3c2e2f33b9eba0a4ca78abde9",
                 "shasum": ""
             },
             "require": {
-                "yiisoft/yii2": "~2.0.4",
+                "yiisoft/yii2": "~2.0.11",
                 "yiisoft/yii2-bootstrap": "~2.0.0"
             },
             "type": "yii2-extension",
@@ -2711,7 +2711,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2016-11-24 09:42:29"
+            "time": "2017-02-21 10:30:50"
         },
         {
             "name": "yiisoft/yii2-faker",

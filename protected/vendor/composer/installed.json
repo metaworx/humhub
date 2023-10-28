@@ -151,6 +151,61 @@
         "installation-source": "dist"
     },
     {
+        "name": "bower-asset/jquery.inputmask",
+        "version": "3.3.4",
+        "version_normalized": "3.3.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/RobinHerbots/Inputmask.git",
+            "reference": "8a882bc471ba4077c4f8ecbe3d9d61c7558f3ef2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/RobinHerbots/Inputmask/zipball/8a882bc471ba4077c4f8ecbe3d9d61c7558f3ef2",
+            "reference": "8a882bc471ba4077c4f8ecbe3d9d61c7558f3ef2",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jquery": ">=1.7"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "./dist/inputmask/inputmask.dependencyLib",
+                "./dist/inputmask/inputmask",
+                "./dist/inputmask/inputmask.extensions",
+                "./dist/inputmask/inputmask.date.extensions",
+                "./dist/inputmask/inputmask.numeric.extensions",
+                "./dist/inputmask/inputmask.phone.extensions",
+                "./dist/inputmask/inputmask.regex.extensions",
+                "./dist/inputmask/jquery.inputmask"
+            ],
+            "bower-asset-ignore": [
+                "**/*",
+                "!dist/*",
+                "!dist/inputmask/*",
+                "!dist/min/*",
+                "!dist/min/inputmask/*",
+                "!extra/bindings/*",
+                "!extra/dependencyLibs/*",
+                "!extra/phone-codes/*"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "http://opensource.org/licenses/mit-license.php"
+        ],
+        "description": "jquery.inputmask is a jquery plugin which create an input mask.",
+        "keywords": [
+            "form",
+            "input",
+            "inputmask",
+            "jquery",
+            "mask",
+            "plugins"
+        ]
+    },
+    {
         "name": "cebe/markdown",
         "version": "1.0.2",
         "version_normalized": "1.0.2.0",
@@ -256,61 +311,6 @@
         "homepage": "http://htmlpurifier.org/",
         "keywords": [
             "html"
-        ]
-    },
-    {
-        "name": "bower-asset/jquery.inputmask",
-        "version": "3.3.4",
-        "version_normalized": "3.3.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/RobinHerbots/Inputmask.git",
-            "reference": "8a882bc471ba4077c4f8ecbe3d9d61c7558f3ef2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/RobinHerbots/Inputmask/zipball/8a882bc471ba4077c4f8ecbe3d9d61c7558f3ef2",
-            "reference": "8a882bc471ba4077c4f8ecbe3d9d61c7558f3ef2",
-            "shasum": ""
-        },
-        "require": {
-            "bower-asset/jquery": ">=1.7"
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": [
-                "./dist/inputmask/inputmask.dependencyLib",
-                "./dist/inputmask/inputmask",
-                "./dist/inputmask/inputmask.extensions",
-                "./dist/inputmask/inputmask.date.extensions",
-                "./dist/inputmask/inputmask.numeric.extensions",
-                "./dist/inputmask/inputmask.phone.extensions",
-                "./dist/inputmask/inputmask.regex.extensions",
-                "./dist/inputmask/jquery.inputmask"
-            ],
-            "bower-asset-ignore": [
-                "**/*",
-                "!dist/*",
-                "!dist/inputmask/*",
-                "!dist/min/*",
-                "!dist/min/inputmask/*",
-                "!extra/bindings/*",
-                "!extra/dependencyLibs/*",
-                "!extra/phone-codes/*"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "http://opensource.org/licenses/mit-license.php"
-        ],
-        "description": "jquery.inputmask is a jquery plugin which create an input mask.",
-        "keywords": [
-            "form",
-            "input",
-            "inputmask",
-            "jquery",
-            "mask",
-            "plugins"
         ]
     },
     {
@@ -770,17 +770,17 @@
     },
     {
         "name": "swiftmailer/swiftmailer",
-        "version": "v5.4.5",
-        "version_normalized": "5.4.5.0",
+        "version": "v5.4.6",
+        "version_normalized": "5.4.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/swiftmailer/swiftmailer.git",
-            "reference": "cd142238a339459b10da3d8234220963f392540c"
+            "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/cd142238a339459b10da3d8234220963f392540c",
-            "reference": "cd142238a339459b10da3d8234220963f392540c",
+            "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+            "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
             "shasum": ""
         },
         "require": {
@@ -790,7 +790,7 @@
             "mockery/mockery": "~0.9.1",
             "symfony/phpunit-bridge": "~3.2"
         },
-        "time": "2016-12-29 10:02:40",
+        "time": "2017-02-13 07:52:53",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1710,17 +1710,17 @@
     },
     {
         "name": "bower-asset/blueimp-canvas-to-blob",
-        "version": "v3.6.0",
-        "version_normalized": "3.6.0.0",
+        "version": "v3.7.0",
+        "version_normalized": "3.7.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/blueimp/JavaScript-Canvas-to-Blob.git",
-            "reference": "39b96c11e60bd6be833866b1b5d92994fce1718c"
+            "reference": "10f6200baea6c7818f898a182760690d6d2c1cde"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/39b96c11e60bd6be833866b1b5d92994fce1718c",
-            "reference": "39b96c11e60bd6be833866b1b5d92994fce1718c",
+            "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/10f6200baea6c7818f898a182760690d6d2c1cde",
+            "reference": "10f6200baea6c7818f898a182760690d6d2c1cde",
             "shasum": ""
         },
         "type": "bower-asset-library",
@@ -1728,17 +1728,17 @@
     },
     {
         "name": "bower-asset/blueimp-load-image",
-        "version": "v2.10.0",
-        "version_normalized": "2.10.0.0",
+        "version": "v2.12.1",
+        "version_normalized": "2.12.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
-            "reference": "a9eb2ab1078b2e7d45eb215e1d4ff54134f709bf"
+            "reference": "7135455875aa7dff64626f7205665aaf802a0088"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/a9eb2ab1078b2e7d45eb215e1d4ff54134f709bf",
-            "reference": "a9eb2ab1078b2e7d45eb215e1d4ff54134f709bf",
+            "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/7135455875aa7dff64626f7205665aaf802a0088",
+            "reference": "7135455875aa7dff64626f7205665aaf802a0088",
             "shasum": ""
         },
         "type": "bower-asset-library",
@@ -1746,17 +1746,17 @@
     },
     {
         "name": "bower-asset/blueimp-tmpl",
-        "version": "v3.7.0",
-        "version_normalized": "3.7.0.0",
+        "version": "v3.8.0",
+        "version_normalized": "3.8.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/blueimp/JavaScript-Templates.git",
-            "reference": "511e54a03c325bc99a6a58616e975e4a2b15b0d3"
+            "reference": "dc7631396cd541db5644aa2c651e342c68511aad"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/511e54a03c325bc99a6a58616e975e4a2b15b0d3",
-            "reference": "511e54a03c325bc99a6a58616e975e4a2b15b0d3",
+            "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/dc7631396cd541db5644aa2c651e342c68511aad",
+            "reference": "dc7631396cd541db5644aa2c651e342c68511aad",
             "shasum": ""
         },
         "type": "bower-asset-library",
@@ -2218,24 +2218,24 @@
     },
     {
         "name": "yiisoft/yii2-debug",
-        "version": "2.0.7",
-        "version_normalized": "2.0.7.0",
+        "version": "2.0.9",
+        "version_normalized": "2.0.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/yiisoft/yii2-debug.git",
-            "reference": "a74a2433ad1dfda30a253a92f6db52c131807432"
+            "reference": "647be6c9d48dc2f3c2e2f33b9eba0a4ca78abde9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/a74a2433ad1dfda30a253a92f6db52c131807432",
-            "reference": "a74a2433ad1dfda30a253a92f6db52c131807432",
+            "url": "https://api.github.com/repos/yiisoft/yii2-debug/zipball/647be6c9d48dc2f3c2e2f33b9eba0a4ca78abde9",
+            "reference": "647be6c9d48dc2f3c2e2f33b9eba0a4ca78abde9",
             "shasum": ""
         },
         "require": {
-            "yiisoft/yii2": "~2.0.4",
+            "yiisoft/yii2": "~2.0.11",
             "yiisoft/yii2-bootstrap": "~2.0.0"
         },
-        "time": "2016-11-24 09:42:29",
+        "time": "2017-02-21 10:30:50",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {

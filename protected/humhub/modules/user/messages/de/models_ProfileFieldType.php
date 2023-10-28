@@ -1,6 +1,7 @@
 <?php
 return array (
   'Birthday' => 'Geburtstag',
+  'Checkbox' => 'Markierungsfeld',
   'Country' => 'Land',
   'Date' => 'Datum',
   'Datetime' => 'Datum/Uhrzeit',

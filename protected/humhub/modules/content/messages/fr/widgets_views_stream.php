@@ -15,5 +15,11 @@ return array (
   'Posts only' => 'Uniquement les publications',
   'Posts with links' => 'Publications avec liens',
   'Sorting' => 'Tri',
+  'The content has been archived.' => 'Le contenu a été archivé.',
+  'The content has been deleted.' => 'Le contenu a été supprimé.',
+  'The content has been pinned.' => 'Le contenu a été épinglé.',
+  'The content has been unarchived.' => 'Le contenu a été désarchivé.',
+  'The content has been unpinned.' => 'Le contenu a été supprimé.',
   'Where I´m involved' => 'Où je suis impliqué',
+  'Your last edit state has been saved!' => 'Votre dernier état d\'édition a été enregistré!',
 );

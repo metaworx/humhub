@@ -1,6 +1,5 @@
 <?php
 return array (
-  '<strong>Security</strong> settings' => '<strong>Sicherheitseinstellungen</strong>',
   'Basic Settings' => 'Grundlegende Einstellungen',
   'Change Email' => 'E-Mail ändern',
   'Change Password' => 'Passwort ändern',
@@ -8,6 +7,7 @@ return array (
   'Connect account' => 'Account verbinden',
   'Connected Accounts' => 'Verbundene Accounts ',
   'Connected accounts' => 'Verbundene Accounts ',
+  'Current Password' => 'Derzeitiges Passwort',
   'Currently in use' => 'Zurzeit in Benutzung',
   'Delete' => 'Löschen',
   'Delete Account' => 'Account löschen',
