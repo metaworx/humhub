@@ -1,6 +1,40 @@
 HumHub Change Log
 =================
 
+1.2.0 (in developement)
+--------------------------------
+
+
+1.2.0-beta.4 (March 28, 2017)
+--------------------------------
+- Fix: Notification count '0' visible after click on notification link
+- Fix: Default space permissions not adopted
+- Fix: Use of $permission->getId() instead of $permission->id in PermissionManager (allow dynamic permission ids)
+- Fix #2393: Markdown h4,h5,h6 broken
+- Fix #2389: calculate max upload file size on PHP 7.1 (githubjeka)
+- Fix: LDAP - Lost authclient ldap class configuration on user update
+- Fix #2400: Space ownership transfer form shows wrong users
+- Fix: Enable user approval without available registration groups or default group
+- Fix: Activate 'User' navigation in Admin Menu "Administration -> User -> Settings"
+- Enh: Improved administration user deletion view
+- Enh: Added 'containerLink' HTML Helper method
+- Enh: WallEntry layout layout improvements
+- Fix: Default user & space module configuration lost after foreign key migration
+- Fix: Respect pinned post when inserting a a new stream entry
+- Fix: Show comments in modal not working
+- Fix: #2374 Comment input not focused on comment link click 
+- Enh: Toggle comment box
+- Enh: Added global copyToClipboard
+- Enh: Added "weekly" mail summary interval
+- Fix: Invalid temp.css file
+- Fix: Default stream sort setting not applied
+- Enh: Show different login message, when registration is disabled
+- Fix: Norwegian translation code for Yii messages
+- Fix: Also allow comment editing by admins if content 'adminCanEditAllContent' is enabled
+- Enh: Added Make Private/ Make Public link to wall entry controls
+- Enh #2392: Added Latvian language
+- Fix: Hide image file info setting
+- Fix #2297: Failed to open stream: No such file or directory when attaching files in UploadAction
 
 1.2.0-beta.3 (March 20, 2017)
 --------------------------------
@@ -98,7 +132,6 @@ HumHub Change Log
 - Enh: Added console email test command
 - Enh: Added stream module defaultStreamSuppressQueryIgnore to ease overwrites
 - Enh: Added 'archived' badge to archived spaces in directory
-
 
 1.2.0-beta.2 (February 24, 2017)
 --------------------------------

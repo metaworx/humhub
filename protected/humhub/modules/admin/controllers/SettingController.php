@@ -2,13 +2,14 @@
 
 /**
  * @link https://www.humhub.org/
- * @copyright Copyright (c) 2016 HumHub GmbH & Co. KG
+ * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
  */
 
 namespace humhub\modules\admin\controllers;
 
 use Yii;
+use humhub\libs\Helpers;
 use humhub\libs\ThemeHelper;
 use humhub\models\UrlOembed;
 use humhub\modules\admin\components\Controller;
@@ -49,6 +50,7 @@ class SettingController extends Controller
             'self-test' => Yii::t('AdminModule.base', 'Self test'),
         ]);
         $this->subLayout = '@admin/views/layouts/setting';
+
         return parent::init();
     }
 
@@ -78,7 +80,9 @@ class SettingController extends Controller
             return $this->redirect(['/admin/setting/basic']);
         }
 
-        return $this->render('basic', array('model' => $form));
+        return $this->render('basic', [
+            'model' => $form
+        ]);
     }
 
     /**
@@ -93,7 +97,7 @@ class SettingController extends Controller
             $image->delete();
         }
 
-        \Yii::$app->response->format = 'json';
+        Yii::$app->response->format = 'json';
         return [];
     }
 
@@ -110,7 +114,10 @@ class SettingController extends Controller
             return $this->redirect(['/admin/setting/caching']);
         }
 
-        return $this->render('caching', array('model' => $form, 'cacheTypes' => $form->getTypes()));
+        return $this->render('caching', [
+            'model' => $form,
+            'cacheTypes' => $form->getTypes()
+        ]);
     }
 
     /**
@@ -121,10 +128,14 @@ class SettingController extends Controller
         $form = new \humhub\modules\admin\models\forms\StatisticSettingsForm;
         if ($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             $this->view->saved();
-            return $this->redirect(['/admin/setting/statistic']);
+            return $this->redirect([
+                '/admin/setting/statistic'
+            ]);
         }
 
-        return $this->render('statistic', array('model' => $form));
+        return $this->render('statistic', [
+            'model' => $form
+        ]);
     }
 
     /**
@@ -137,7 +148,9 @@ class SettingController extends Controller
             $this->view->saved();
         }
 
-        return $this->render('notification', ['model' => $form]);
+        return $this->render('notification', [
+            'model' => $form
+        ]);
     }
 
     /**
@@ -148,13 +161,27 @@ class SettingController extends Controller
         $form = new \humhub\modules\admin\models\forms\MailingSettingsForm;
         if ($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             $this->view->saved();
-            return $this->redirect(['/admin/setting/mailing-server']);
+            return $this->redirect([
+                '/admin/setting/mailing-server'
+            ]);
         }
 
-        $encryptionTypes = array('' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS');
-        $transportTypes = array('file' => 'File (Use for testing/development)', 'php' => 'PHP', 'smtp' => 'SMTP');
+        $encryptionTypes = [
+            '' => 'None',
+            'ssl' => 'SSL',
+            'tls' => 'TLS'
+        ];
+        $transportTypes = [
+            'file' => 'File (Use for testing/development)',
+            'php' => 'PHP',
+            'smtp' => 'SMTP'
+        ];
 
-        return $this->render('mailing_server', array('model' => $form, 'encryptionTypes' => $encryptionTypes, 'transportTypes' => $transportTypes));
+        return $this->render('mailing_server', [
+            'model' => $form,
+            'encryptionTypes' => $encryptionTypes,
+            'transportTypes' => $transportTypes
+        ]);
     }
 
     public function actionDesign()
@@ -162,7 +189,9 @@ class SettingController extends Controller
         $form = new \humhub\modules\admin\models\forms\DesignSettingsForm;
         if ($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             $this->view->saved();
-            return $this->redirect(['/admin/setting/design']);
+            return $this->redirect([
+                '/admin/setting/design'
+            ]);
         }
 
         $themes = [];
@@ -170,7 +199,11 @@ class SettingController extends Controller
             $themes[$theme->name] = $theme->name;
         }
 
-        return $this->render('design', array('model' => $form, 'themes' => $themes, 'logo' => new \humhub\libs\LogoImage()));
+        return $this->render('design', [
+            'model' => $form,
+            'themes' => $themes,
+            'logo' => new \humhub\libs\LogoImage()
+        ]);
     }
 
     /**
@@ -181,14 +214,16 @@ class SettingController extends Controller
         $form = new \humhub\modules\admin\models\forms\FileSettingsForm;
         if ($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             $this->view->saved();
-            return $this->redirect(['/admin/setting/file']);
+            return $this->redirect([
+                '/admin/setting/file'
+            ]);
         }
 
         // Determine PHP Upload Max FileSize
-        $maxUploadSize = \humhub\libs\Helpers::GetBytesOfPHPIniValue(ini_get('upload_max_filesize'));
+        $maxUploadSize = Helpers::getBytesOfIniValue(ini_get('upload_max_filesize'));
         $fileSizeKey = 'upload_max_filesize';
-        if ($maxUploadSize > \humhub\libs\Helpers::GetBytesOfPHPIniValue(ini_get('post_max_size'))) {
-            $maxUploadSize = \humhub\libs\Helpers::GetBytesOfPHPIniValue(ini_get('post_max_size'));
+        if ($maxUploadSize > Helpers::getBytesOfIniValue(ini_get('post_max_size'))) {
+            $maxUploadSize = Helpers::getBytesOfIniValue(ini_get('post_max_size'));
             $fileSizeKey = 'post_max_size';
         }
 
@@ -196,15 +231,20 @@ class SettingController extends Controller
         $maxUploadSizeText = "(" . $fileSizeKey . "): " . $maxUploadSize;
 
         // Determine currently used ImageLibary
-        $currentImageLibary = 'GD';
+        $currentImageLibrary = 'GD';
         if (Yii::$app->getModule('file')->settings->get('imageMagickPath')) {
-            $currentImageLibary = 'ImageMagick';
+            $currentImageLibrary = 'ImageMagick';
         }
 
-        return $this->render('file', ['model' => $form,
-                    'maxUploadSize' => $maxUploadSize,
-                    'maxUploadSizeText' => $maxUploadSizeText,
-                    'currentImageLibary' => $currentImageLibary]);
+        return $this->render(
+            'file',
+            [
+                'model' => $form,
+                'maxUploadSize' => $maxUploadSize,
+                'maxUploadSizeText' => $maxUploadSizeText,
+                'currentImageLibrary' => $currentImageLibrary,
+            ]
+        );
     }
 
     /**
@@ -220,7 +260,7 @@ class SettingController extends Controller
             return $this->redirect(['/admin/setting/proxy']);
         }
 
-        return $this->render('proxy', array('model' => $form));
+        return $this->render('proxy', ['model' => $form]);
     }
 
     /**
@@ -229,7 +269,10 @@ class SettingController extends Controller
     public function actionOembed()
     {
         $providers = UrlOembed::getProviders();
-        return $this->render('oembed', array('providers' => $providers));
+        return $this->render('oembed',
+        [
+            'providers' => $providers
+        ]);
     }
 
     public function actionLogs()
@@ -254,15 +297,17 @@ class SettingController extends Controller
             $timeAgo = strtotime($form->logsDateLimit);
             Log::deleteAll(['<', 'log_time', $timeAgo]);
             Yii::$app->getSession()->setFlash('data-saved', Yii::t('AdminModule.controllers_SettingController', 'Saved'));
-            return $this->redirect(['/admin/setting/logs']);
+            return $this->redirect([
+                '/admin/setting/logs'
+            ]);
         }
 
-        return $this->render('logs', array(
-                    'logsCount' => $logsCount,
-                    'model' => $form,
-                    'limitAgeOptions' => $limitAgeOptions,
-                    'dating' => $dating
-        ));
+        return $this->render('logs', [
+            'logsCount' => $logsCount,
+            'model' => $form,
+            'limitAgeOptions' => $limitAgeOptions,
+            'dating' => $dating
+        ]);
     }
 
     /**
@@ -287,10 +332,17 @@ class SettingController extends Controller
             $providers[$form->prefix] = $form->endpoint;
             UrlOembed::setProviders($providers);
 
-            return $this->redirect(['/admin/setting/oembed']);
+            return $this->redirect(
+            [
+                '/admin/setting/oembed'
+            ]);
         }
 
-        return $this->render('oembed_edit', array('model' => $form, 'prefix' => $prefix));
+        return $this->render('oembed_edit',
+        [
+            'model' => $form,
+            'prefix' => $prefix
+        ]);
     }
 
     /**
@@ -306,12 +358,17 @@ class SettingController extends Controller
             unset($providers[$prefix]);
             UrlOembed::setProviders($providers);
         }
-        return $this->redirect(['/admin/setting/oembed']);
+        return $this->redirect([
+            '/admin/setting/oembed'
+        ]);
     }
 
     public function actionAdvanced()
     {
-        return $this->redirect(['caching']);
+        return $this->redirect(
+        [
+            'caching'
+        ]);
     }
 
 }

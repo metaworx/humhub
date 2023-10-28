@@ -2,11 +2,13 @@
 
 /**
  * @link https://www.humhub.org/
- * @copyright Copyright (c) 2016 HumHub GmbH & Co. KG
+ * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
  */
 
 namespace humhub\libs;
+
+use yii\base\InvalidParamException;
 
 /**
  * This class contains a lot of html helpers for the views
@@ -24,7 +26,6 @@ class Helpers
      * */
     public static function truncateText($text, $length)
     {
-
         $length = abs((int) $length);
         if (strlen($text) > $length) {
             $text = preg_replace("/^(.{1,$length})(\s.*|$)/s", '\\1...', $text);
@@ -140,9 +141,18 @@ class Helpers
      *
      * @param string $valueString
      * @return int bytes
+     * @throws InvalidParamException
      */
     public static function getBytesOfIniValue($valueString)
     {
+        if ($valueString === null || $valueString === "") {
+            return 0;
+        }
+
+        if ($valueString === false) {
+           throw new InvalidParamException('Your configuration option of ini_get function does not exist.');
+        }
+
         switch (substr($valueString, -1))
         {
             case 'M': case 'm': return (int)$valueString * 1048576;

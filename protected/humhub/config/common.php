@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @link https://www.humhub.org/
+ * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
+ * @license https://www.humhub.com/licences
+ */
+
 Yii::setAlias('@webroot', realpath(__DIR__ . '/../../../'));
 Yii::setAlias('@app', '@webroot/protected');
 Yii::setAlias('@humhub', '@app/humhub');
@@ -7,7 +13,7 @@ Yii::setAlias('@config', '@app/config');
 
 $config = [
     'name' => 'HumHub',
-    'version' => '1.2.0-beta.3',
+    'version' => '1.2.0-beta.4',
     'basePath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR,
     'bootstrap' => ['log', 'humhub\components\bootstrap\ModuleAutoLoader', 'queue'],
     'sourceLanguage' => 'en',
@@ -19,14 +25,13 @@ $config = [
             'class' => 'humhub\modules\notification\components\NotificationManager',
             'targets' => [
                 [
-                    'class' => 'humhub\modules\notification\components\WebNotificationTarget',
-                    'renderer' => ['class' => 'humhub\modules\notification\components\WebTargetRenderer']
+                    'class' => 'humhub\modules\notification\targets\WebTarget',
+                    'renderer' => ['class' => 'humhub\modules\notification\renderer\WebRenderer']
                 ],
                 [
-                    'class' => 'humhub\modules\notification\components\MailNotificationTarget',
-                    'renderer' => ['class' => 'humhub\modules\notification\components\MailTargetRenderer']
+                    'class' => 'humhub\modules\notification\targets\MailTarget',
+                    'renderer' => ['class' => 'humhub\modules\notification\renderer\MailRenderer']
                 ],
-            //['class' => '\humhub\modules\notification\components\MobileNotificationTarget']
             ]
         ],
         'log' => [
@@ -177,6 +182,7 @@ $config = [
             'id' => 'Bahasa Indonesia',
             'lt' => 'lietuvių kalba',
             'ht' => 'Kreyòl ayisyen',
+            'lv' => 'Latvijas',
         ],
         'ldap' => [
             // LDAP date field formats
@@ -210,7 +216,7 @@ $config = [
             'zendLucenceDataDir' => '@runtime/searchdb',
         ],
         'curl' => [
-            // Check SSL certificates on CURL requests
+            // Check SSL certificates on cURL requests
             'validateSsl' => true,
         ],
         // Allowed languages limitation (optional)
