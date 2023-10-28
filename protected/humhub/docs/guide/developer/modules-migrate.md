@@ -1,7 +1,20 @@
 Module Migration Guide
 ======================
 
-Here you will learn how you can adapt existing modules to working fine with actually versions.
+This guide provides useful information about migrating your custom modules in order to keep them compatible with new HumHub versions.
+You should keep your modules up-to-date by removing deprecations and align code breaking changes of the platform and ideally test your
+modules against new HumHub version. Also keep in mind to align the `minVersion` of your module when using new features.
+
+You can execute code for specific versions by using the `version_compare` function as:
+
+```php
+if (version_compare(Yii::$app->version, '1.3', '>')) {
+    // Use some 1.3+ features here
+} else {
+     // Compatibility code for older versions
+}
+```
+
 
 Migrate from 1.2 to 1.3
 -----------------------
@@ -14,10 +27,6 @@ for more information.
 ### ContentContainer Controller
 
 The base controller attributes `autoCheckContainerAccess` and `hideSidebar` are not longer available.
-
-### Removed Deprecated 
-
-- formatterApp Application Component (Yii::$app->formatterApp)
 
 ### Queuing 
 
@@ -40,6 +49,12 @@ There is a compatibility layer for the 1.3 release.
 
 ### Deprecations
 
+#### Removed Deprecated 
+
+ - formatterApp Application Component (Yii::$app->formatterApp)
+ 
+#### New Deprecations
+
  - `humhub\components\Theme.php` -> `humhub\modules\ui\view\components\Theme`
  - `humhub\components\View` -> `humhub\modules\ui\view\components\View`
  - `humhub\libs\ThemeHelper` -> `humhub\modules\ui\view\components\ThemeHelper`
@@ -49,8 +64,7 @@ There is a compatibility layer for the 1.3 release.
  - `humhub\widgets\RichTextField` -> `humhub\modules\content\widgets\richtext\RichTextField`
  - `humhub\modules\user\models\Mentioning::parse()` -> `humhub\modules\content\widgets\richtext\RichText::processText()`
  
-  
-##### We moved most of the `humhub\widgets` into the new `ui` core module as:
+We moved most of the `humhub\widgets` into the new `ui` core module as:
 
  - `humhub\widgets\ActiveField`
  - `humhub\widgets\ActiveForm`
@@ -65,7 +79,6 @@ There is a compatibility layer for the 1.3 release.
  - `humhub\widgets\MultiSelectField`
  - `humhub\widgets\TimePicker`
 
-
 Migrate from 1.1 to 1.2
 -----------------------
 
@@ -73,8 +86,6 @@ Migrate from 1.1 to 1.2
 
 The models WallEntry and Wall were removed. So all corresponding methods like getFirstWallEntryId() are not longer available.
 The stream handling is now handled directly by the Content model. Also all stream classes (widgets, actions) are moved into the humhub\modules\stream package.
-
-
 
 ### File module changes
 
