@@ -63,7 +63,7 @@ class DbDateValidator extends DateValidator
     public function validateAttribute($model, $attribute)
     {
         // If the date is already in system format, we do not need any further translation or parsing
-        if(DateHelper::isInDbFormat($model->$attribute)) {
+        if(DateHelper::isInDbFormat($model->$attribute, $this->isDateOnly())) {
             return;
         }
 
@@ -83,7 +83,7 @@ class DbDateValidator extends DateValidator
             $date->setTimestamp($timestamp);
 
             if ($timeValue) {
-                // Convert timestamp to apps timeZone
+                // Convert timestamp to apps timezone
                 $date->setTimezone(DateHelper::getSystemTimeZone());
             }
 
@@ -99,7 +99,7 @@ class DbDateValidator extends DateValidator
      * Parses a date and a time value if timeAttribute is specified.
      *
      * @param string $value
-     * @return int timestamp in utc
+     * @return int|false timestamp in system timezone
      * @throws \Exception
      */
     protected function parseDateTimeValue($value, $timeValue = null)
@@ -111,7 +111,7 @@ class DbDateValidator extends DateValidator
 
         $timestamp = $this->parseDateValue($value);
 
-        if ($this->hasTime() && !empty($timeValue)) {
+        if ($timestamp !== false && $this->hasTime() && !empty($timeValue)) {
             $timestamp += $this->parseTimeValue($timeValue);
             $timestamp = $this->fixTimestampTimeZone($timestamp, $this->timeZone);
         }
@@ -126,7 +126,15 @@ class DbDateValidator extends DateValidator
      */
     protected function hasTime()
     {
-        return ($this->timeAttribute != "");
+        return !empty($this->timeAttribute);
+    }
+
+    /**
+     * @return bool checks if the validator should validate date only fields
+     */
+    protected function isDateOnly()
+    {
+        return !$this->hasTime();
     }
 
     /**
@@ -147,8 +155,10 @@ class DbDateValidator extends DateValidator
     /**
      * Parses a date and optionally a time if timeAttribute is specified.
      *
+     * Returns false in case the value could not be parsed.
+     *
      * @param string $value
-     * @return int timestamp in utc
+     * @return int|false
      * @throws \Exception
      */
     public static function parseDateTime($value, $timeValue = null)

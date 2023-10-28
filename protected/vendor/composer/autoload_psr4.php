@@ -29,6 +29,8 @@ return array(
     'yii\\authclient\\' => array($vendorDir . '/yiisoft/yii2-authclient/src'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'xj\\jplayer\\' => array($vendorDir . '/xj/yii2-jplayer-widget'),
+    'voku\\tests\\' => array($vendorDir . '/voku/portable-ascii/tests'),
+    'voku\\' => array($vendorDir . '/voku/stop-words/src/voku', $vendorDir . '/voku/portable-ascii/src/voku'),
     'raoul2000\\jcrop\\' => array($vendorDir . '/raoul2000/yii2-jcrop-widget'),
     'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets/src'),

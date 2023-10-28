@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit565f6000dbb6d2b1f88914921c96943a
+class ComposerStaticInit4e51e69e1e15ef04ee01e0f00d84a9fd
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -106,6 +106,11 @@ class ComposerStaticInit565f6000dbb6d2b1f88914921c96943a
         'x' => 
         array (
             'xj\\jplayer\\' => 11,
+        ),
+        'v' => 
+        array (
+            'voku\\tests\\' => 11,
+            'voku\\' => 5,
         ),
         'r' => 
         array (
@@ -313,6 +318,15 @@ class ComposerStaticInit565f6000dbb6d2b1f88914921c96943a
         'xj\\jplayer\\' => 
         array (
             0 => __DIR__ . '/..' . '/xj/yii2-jplayer-widget',
+        ),
+        'voku\\tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/voku/portable-ascii/tests',
+        ),
+        'voku\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/voku/stop-words/src/voku',
+            1 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
         ),
         'raoul2000\\jcrop\\' => 
         array (
@@ -1195,10 +1209,10 @@ class ComposerStaticInit565f6000dbb6d2b1f88914921c96943a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit565f6000dbb6d2b1f88914921c96943a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit565f6000dbb6d2b1f88914921c96943a::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit565f6000dbb6d2b1f88914921c96943a::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit565f6000dbb6d2b1f88914921c96943a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4e51e69e1e15ef04ee01e0f00d84a9fd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4e51e69e1e15ef04ee01e0f00d84a9fd::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4e51e69e1e15ef04ee01e0f00d84a9fd::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit4e51e69e1e15ef04ee01e0f00d84a9fd::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -19,7 +19,7 @@ Yii::$classMap['Zend\Stdlib\ArrayObject'] = '@humhub/compat/ArrayObject.php';
 
 $config = [
     'name' => 'HumHub',
-    'version' => '1.4.0-beta.2',
+    'version' => '1.4.0',
     'basePath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR,
     'bootstrap' => ['log', 'humhub\components\bootstrap\ModuleAutoLoader', 'queue', 'humhub\modules\ui\view\bootstrap\ThemeLoader'],
     'sourceLanguage' => 'en',
@@ -34,17 +34,13 @@ $config = [
         'notification' => [
             'class' => \humhub\modules\notification\components\NotificationManager::class,
             'targets' => [
-                [
-                    'class' => \humhub\modules\notification\targets\WebTarget::class,
+                \humhub\modules\notification\targets\WebTarget::class => [
                     'renderer' => ['class' => \humhub\modules\notification\renderer\WebRenderer::class]
                 ],
-                [
-                    'class' => \humhub\modules\notification\targets\MailTarget::class,
+                \humhub\modules\notification\targets\MailTarget::class => [
                     'renderer' => ['class' => \humhub\modules\notification\renderer\MailRenderer::class]
                 ],
-                [
-                    'class' => \humhub\modules\notification\targets\MobileTarget::class
-                ],
+                \humhub\modules\notification\targets\MobileTarget::class => []
             ]
         ],
         'log' => [
