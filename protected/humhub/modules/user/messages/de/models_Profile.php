@@ -27,10 +27,9 @@ return array (
   'Title' => 'Titel',
   'Twitter URL' => 'Twitter-URL',
   'Url' => 'URL',
-  'User' => 'Benutzer',
   'Vimeo URL' => 'Vimeo-URL',
   'XMPP Jabber Address' => 'XMPP Jabber-Addresse',
   'Xing URL' => 'Xing-URL',
-  'Youtube URL' => 'YouTube-URL',
+  'YouTube URL' => 'YouTube URL',
   'Zip' => 'PLZ',
 );

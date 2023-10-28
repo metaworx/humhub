@@ -5,5 +5,7 @@ return array (
   '{displayName} declined your invite for the space {spaceName}' => '{displayName} hat deine Einladung für den {spaceName} abgelehnt',
   '{displayName} declined your membership request for the space {spaceName}' => '{displayName} hat deine Mitgliedschafts-Anfrage für den {spaceName} abgelehnt',
   '{displayName} invited you to the space {spaceName}' => '{displayName} hat dich zu dem Space {spaceName} eingeladen',
+  '{displayName} just invited you to the space {spaceName}' => '{displayName} hat dich in den Space {spaceName} eingeladen
+',
   '{displayName} requests membership for the space {spaceName}' => '{displayName} bittet um Mitgliedschaft in dem Space {spaceName}',
 );

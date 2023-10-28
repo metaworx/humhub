@@ -10,6 +10,7 @@ namespace humhub\modules\space\widgets;
 
 use Yii;
 use yii\bootstrap\Html;
+use humhub\modules\space\models\Space;
 
 /**
  * UserFollowButton
@@ -79,7 +80,7 @@ class FollowButton extends \yii\base\Widget
      */
     public function run()
     {
-        if (Yii::$app->user->isGuest || $this->space->isMember()) {
+        if (Yii::$app->user->isGuest || $this->space->isMember() || $this->space->visibility == Space::VISIBILITY_NONE) {
             return;
         }
 
@@ -109,8 +110,6 @@ class FollowButton extends \yii\base\Widget
         // Add Action Url
         $this->followOptions['data-ui-loader'] = '';
         $this->unfollowOptions['data-ui-loader'] = '';
-
-        \humhub\modules\content\assets\ContentContainerAsset::register($this->view);
 
         return Html::a($this->unfollowLabel, '#', $this->unfollowOptions) .
                 Html::a($this->followLabel, '#', $this->followOptions);
