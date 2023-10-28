@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'humhub/humhub',
-        'pretty_version' => 'v1.14.0-beta.1',
-        'version' => '1.14.0.0-beta1',
-        'reference' => '6b7006388b5ec7fb20144c7706f96efcbc6a722a',
+        'pretty_version' => 'v1.14.0-beta.2',
+        'version' => '1.14.0.0-beta2',
+        'reference' => 'ae9ca61eac7a9cd5a6dbf94b21b72748fc8ced12',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
@@ -317,9 +317,9 @@
             'dev_requirement' => true,
         ),
         'humhub/humhub' => array(
-            'pretty_version' => 'v1.14.0-beta.1',
-            'version' => '1.14.0.0-beta1',
-            'reference' => '6b7006388b5ec7fb20144c7706f96efcbc6a722a',
+            'pretty_version' => 'v1.14.0-beta.2',
+            'version' => '1.14.0.0-beta2',
+            'reference' => 'ae9ca61eac7a9cd5a6dbf94b21b72748fc8ced12',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),
