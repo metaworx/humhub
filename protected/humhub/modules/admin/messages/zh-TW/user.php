@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Cancel' => '取消',
     'Message' => '訊息',
     'Save' => '儲存',
     'User not found!' => '找不到此用戶',
@@ -39,9 +40,10 @@ return [
     'Are you really sure? The selected users will be deleted and notified by e-mail.' => '',
     'Are you really sure? Users who are not assigned to another group are automatically assigned to the default group.' => '',
     'Are you sure that you want to delete following user?' => '',
-    'Cancel' => '',
     'Click here to review' => '',
     'Confirm user deletion' => '',
+    'Could not approve the user!' => '',
+    'Could not decline the user!' => '',
     'Could not load category.' => '',
     'Create new group' => '',
     'Create new profile category' => '',
@@ -65,6 +67,7 @@ return [
     'Delete invitation' => '',
     'Delete invitation?' => '',
     'Delete spaces which are owned by this user' => '',
+    'Deleted' => '',
     'Deleted invitation' => '',
     'Deleted users' => '',
     'Disable' => '',
@@ -111,6 +114,7 @@ Kind Regards
     'Information 1' => '',
     'Information 2' => '',
     'Information 3' => '',
+    'Invisible' => '',
     'Invite not found!' => '',
     'Last login' => '',
     'Last name' => '',

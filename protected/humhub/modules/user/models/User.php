@@ -81,6 +81,7 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
      */
     const VISIBILITY_REGISTERED_ONLY = 1; // Only for registered members
     const VISIBILITY_ALL = 2; // Visible for all (also guests)
+    const VISIBILITY_HIDDEN = 3; // Invisible
 
     /**
      * User Groups
@@ -147,7 +148,7 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
         /* @var $userModule Module */
         $userModule = Yii::$app->getModule('user');
 
-        return [
+        $rules = [
             [['username', 'email'], 'trim'],
             [['username'], 'required'],
             [['username'], 'unique'],
@@ -156,7 +157,9 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
             [['username'], 'match', 'pattern' => $userModule->validUsernameRegexp, 'message' => Yii::t('UserModule.base', 'Username contains invalid characters.'), 'enableClientValidation' => false, 'when' => function ($model, $attribute) {
                 return $model->getAttribute($attribute) !== $model->getOldAttribute($attribute);
             }],
-            [['status', 'created_by', 'updated_by', 'visibility'], 'integer'],
+            [['created_by', 'updated_by'], 'integer'],
+            [['status'], 'in', 'range' => array_keys(self::getStatusOptions())],
+            [['visibility'], 'in', 'range' => array_keys(self::getVisibilityOptions()), 'on' => Profile::SCENARIO_EDIT_ADMIN],
             [['tagsField', 'blockedUsersField'], 'safe'],
             [['guid'], 'string', 'max' => 45],
             [['time_zone'], 'validateTimeZone'],
@@ -170,8 +173,9 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
             [['username'], 'validateForbiddenUsername', 'on' => [self::SCENARIO_REGISTRATION]],
         ];
 
-        if ($this->isEmailRequired())  // HForm does not support 'required' in combination with 'when'.
+        if ($this->isEmailRequired()) { // HForm does not support 'required' in combination with 'when'.
             $rules[] = [['email'], 'required'];
+        }
 
         return $rules;
     }
@@ -268,7 +272,7 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
     {
         $scenarios = parent::scenarios();
         $scenarios[static::SCENARIO_LOGIN] = ['username', 'password'];
-        $scenarios[static::SCENARIO_EDIT_ADMIN] = ['username', 'email', 'status', 'language', 'tagsField'];
+        $scenarios[static::SCENARIO_EDIT_ADMIN] = ['username', 'email', 'status', 'visibility', 'language', 'tagsField'];
         $scenarios[static::SCENARIO_EDIT_ACCOUNT_SETTINGS] = ['language', 'visibility', 'time_zone', 'tagsField', 'blockedUsersField'];
         $scenarios[static::SCENARIO_REGISTRATION_EMAIL] = ['username', 'email', 'time_zone'];
         $scenarios[static::SCENARIO_REGISTRATION] = ['username', 'time_zone'];
@@ -445,7 +449,7 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
     {
         $event = new UserEvent(['user' => $this, 'result' => ['isVisible' => true]]);
         $this->trigger(self::EVENT_CHECK_VISIBILITY, $event);
-        if ($event->result['isVisible'] && $this->isActive()) {
+        if ($event->result['isVisible'] && $this->isActive() && $this->visibility !== self::VISIBILITY_HIDDEN) {
             return true;
         }
 
@@ -533,9 +537,10 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
             }
 
             if (AuthHelper::isGuestAccessEnabled()) {
-                // Set users profile default visibility to all
-                if (Yii::$app->getModule('user')->settings->get('auth.defaultUserProfileVisibility') == User::VISIBILITY_ALL) {
-                    $this->visibility = User::VISIBILITY_ALL;
+                // Set user profile default visibility
+                $defaultUserProfileVisibility = Yii::$app->getModule('user')->settings->get('auth.defaultUserProfileVisibility');
+                if (array_key_exists($defaultUserProfileVisibility, User::getVisibilityOptions())) {
+                    $this->visibility = $defaultUserProfileVisibility;
                 }
             }
 
@@ -568,12 +573,20 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
         $this->updateSearch();
 
         if ($insert) {
-            if ($this->status == User::STATUS_ENABLED) {
-                $this->setUpApproved();
-            } else {
+            if ($this->status == User::STATUS_NEED_APPROVAL) {
                 Group::notifyAdminsForUserApproval($this);
             }
             $this->profile->user_id = $this->id;
+        }
+
+        // When insert an "::STATUS_ENABLED" user or update a user from status "::STATUS_NEED_APPROVAL" to "::STATUS_ENABLED"
+        if ($this->status == User::STATUS_ENABLED &&
+            (
+                $insert ||
+                (isset($changedAttributes['status']) && $changedAttributes['status'] == User::STATUS_NEED_APPROVAL)
+            )
+        ) {
+            $this->setUpApproved();
         }
 
         if (Yii::$app->user->id == $this->id) {
@@ -604,7 +617,7 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
         }
     }
 
-    public function setUpApproved()
+    private function setUpApproved()
     {
         $userInvite = Invite::findOne(['email' => $this->email]);
 
@@ -624,6 +637,14 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
         // Auto Add User to the default spaces
         foreach (Space::findAll(['auto_add_new_members' => 1]) as $space) {
             $space->addMember($this->id);
+        }
+
+        /* @var $userModule Module */
+        $userModule = Yii::$app->getModule('user');
+
+        // Add User to the default group if no yet
+        if (!$this->hasGroup() && ($defaultGroup = $userModule->getDefaultGroup())) {
+            $defaultGroup->addUser($this);
         }
     }
 
@@ -672,8 +693,10 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
             return call_user_func($module->displayNameSubCallback, $this);
         }
 
-        if ($this->profile !== null && $this->profile->hasAttribute('title')) {
-            return $this->profile->title;
+        $attributeName = Yii::$app->settings->get('displayNameSubFormat');
+
+        if ($this->profile !== null && $this->profile->hasAttribute($attributeName)) {
+            return $this->profile->getAttribute($attributeName);
         }
 
         return '';
@@ -933,6 +956,38 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
         } else {
             $this->getSettings()->delete('mustChangePassword');
         }
+    }
+
+    public static function getStatusOptions(bool $withDeleted = true): array
+    {
+        $options = [
+            self::STATUS_ENABLED => Yii::t('AdminModule.user', 'Enabled'),
+            self::STATUS_DISABLED => Yii::t('AdminModule.user', 'Disabled'),
+            self::STATUS_NEED_APPROVAL => Yii::t('AdminModule.user', 'Unapproved'),
+        ];
+
+        if ($withDeleted) {
+            $options[self::STATUS_SOFT_DELETED] = Yii::t('AdminModule.user', 'Deleted');
+        }
+
+        return $options;
+    }
+
+    public static function getVisibilityOptions($allowHidden = true): array
+    {
+        $options = [
+            self::VISIBILITY_REGISTERED_ONLY => Yii::t('AdminModule.user', 'Visible for members only'),
+        ];
+
+        if (AuthHelper::isGuestAccessEnabled()) {
+            $options[self::VISIBILITY_ALL] = Yii::t('AdminModule.user', 'Visible for members+guests');
+        }
+
+        if ($allowHidden) {
+            $options[self::VISIBILITY_HIDDEN] = Yii::t('AdminModule.user', 'Invisible');
+        }
+
+        return $options;
     }
 
 }
