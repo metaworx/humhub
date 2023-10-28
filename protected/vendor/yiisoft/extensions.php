@@ -237,15 +237,6 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker/src',
     ),
   ),
-  'yiisoft/yii2-imagine' => 
-  array (
-    'name' => 'yiisoft/yii2-imagine',
-    'version' => '2.3.1.0',
-    'alias' => 
-    array (
-      '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine/src',
-    ),
-  ),
   'yiisoft/yii2-gii' => 
   array (
     'name' => 'yiisoft/yii2-gii',
@@ -255,13 +246,13 @@ return array (
       '@yii/gii' => $vendorDir . '/yiisoft/yii2-gii/src',
     ),
   ),
-  'yiisoft/yii2-jui' => 
+  'yiisoft/yii2-imagine' => 
   array (
-    'name' => 'yiisoft/yii2-jui',
-    'version' => '2.0.7.0',
+    'name' => 'yiisoft/yii2-imagine',
+    'version' => '2.3.1.0',
     'alias' => 
     array (
-      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+      '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine/src',
     ),
   ),
   'yiisoft/yii2-queue' => 
@@ -283,15 +274,6 @@ return array (
       '@yii/queue/amqp_interop' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/amqp_interop',
     ),
   ),
-  'yiisoft/yii2-redis' => 
-  array (
-    'name' => 'yiisoft/yii2-redis',
-    'version' => '2.0.18.0',
-    'alias' => 
-    array (
-      '@yii/redis' => $vendorDir . '/yiisoft/yii2-redis/src',
-    ),
-  ),
   'yiisoft/yii2-symfonymailer' => 
   array (
     'name' => 'yiisoft/yii2-symfonymailer',
@@ -299,6 +281,24 @@ return array (
     'alias' => 
     array (
       '@yii/symfonymailer' => $vendorDir . '/yiisoft/yii2-symfonymailer/src',
+    ),
+  ),
+  'yiisoft/yii2-jui' => 
+  array (
+    'name' => 'yiisoft/yii2-jui',
+    'version' => '2.0.7.0',
+    'alias' => 
+    array (
+      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
+  'yiisoft/yii2-redis' => 
+  array (
+    'name' => 'yiisoft/yii2-redis',
+    'version' => '2.0.18.0',
+    'alias' => 
+    array (
+      '@yii/redis' => $vendorDir . '/yiisoft/yii2-redis/src',
     ),
   ),
 );
