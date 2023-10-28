@@ -17,11 +17,16 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Homepage' => '',
+    'Administrators' => '',
+    'Default content visibility' => '',
+    'Members' => '',
+    'Moderators' => '',
+    'Users' => '',
     'Color' => 'Couleur',
     'Created At' => 'Créé le',
     'Created By' => 'Créé par',
     'Description' => 'Description',
+    'Homepage' => 'Page d\'accueil',
     'Join Policy' => 'Conditions d\'adhésion',
     'Name' => 'Nom',
     'Owner' => 'Propriétaire',
