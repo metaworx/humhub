@@ -8,6 +8,8 @@
 
 namespace humhub\modules\content\components;
 
+use humhub\modules\content\widgets\WallEntry;
+use humhub\widgets\Label;
 use Yii;
 use humhub\libs\BasePermission;
 use humhub\modules\content\permissions\ManageContent;
@@ -15,6 +17,7 @@ use yii\base\Exception;
 use humhub\components\ActiveRecord;
 use humhub\modules\content\models\Content;
 use humhub\modules\content\interfaces\ContentOwner;
+use yii\base\Widget;
 
 /**
  * ContentActiveRecord is the base ActiveRecord [[\yii\db\ActiveRecord]] for Content.
@@ -98,13 +101,15 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner
      * @param int $visibility
      * @param array $config
      */
-    public function __construct($contentContainer = [], $visibility = Content::VISIBILITY_PRIVATE, $config = [])
+    public function __construct($contentContainer = [], $visibility = null, $config = [])
     {
         if(is_array($contentContainer)) {
             parent::__construct($contentContainer);
         } else if($contentContainer instanceof ContentContainerActiveRecord) {
             $this->content->setContainer($contentContainer);
-            $this->content->visibility = $visibility;
+            if($visibility !== null) {
+                $this->content->visibility = $visibility;
+            }
             parent::__construct($config);
         } else {
             parent::__construct([]);
@@ -150,6 +155,52 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner
     public function getContentName()
     {
         return $this->className();
+    }
+
+    /**
+     * Can be used to define an icon for this content type.
+     * @return string
+     */
+    public function getIcon()
+    {
+        return null;
+    }
+
+    /**
+     * Returns either Label widget instances or strings.
+     *
+     * Subclasses should call `paren::getLabels()` as follows:
+     *
+     * ```php
+     * public function getLabels($labels = [], $includeContentName = true)
+     * {
+     *    return parent::getLabels([Label::info('someText')->sortOrder(5)]);
+     * }
+     * ```
+     *
+     * @param array $result
+     * @param bool $includeContentName
+     * @return Label[]|\string[] content labels used for example in wallentrywidget
+     */
+    public function getLabels($labels = [], $includeContentName = true)
+    {
+        if ($this->content->isPinned()) {
+            $labels[] = Label::danger(Yii::t('ContentModule.widgets_views_label', 'Pinned'))->sortOrder(100);
+        }
+
+        if($this->content->isArchived()) {
+            $labels[] = Label::warning(Yii::t('ContentModule.widgets_views_label', 'Archived'))->sortOrder(200);
+        }
+
+        if ($this->content->isPublic()) {
+            $labels[] = Label::info(Yii::t('ContentModule.widgets_views_label', 'Public'))->sortOrder(300);
+        }
+
+        if ($includeContentName) {
+            $labels[] = Label::defaultType($this->getContentName())->icon($this->getIcon())->sortOrder(400);
+        }
+
+        return Label::sort($labels);
     }
 
     /**
@@ -228,10 +279,14 @@ class ContentActiveRecord extends ActiveRecord implements ContentOwner
      */
     public function getWallEntryWidget()
     {
-        if ($this->wallEntryClass !== '') {
+        if (is_subclass_of($this->wallEntryClass, WallEntry::class) ) {
             $class = $this->wallEntryClass;
             $widget = new $class;
             $widget->contentObject = $this;
+            return $widget;
+        } else if(!empty($this->wallEntryClass)) {
+            $class = $this->wallEntryClass;
+            $widget = new $class;
             return $widget;
         }
 

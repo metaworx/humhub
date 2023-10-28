@@ -8,6 +8,8 @@
 
 namespace humhub\components;
 
+use humhub\components\access\ControllerAccess;
+use humhub\components\behaviors\AccessControl;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
@@ -48,12 +50,51 @@ class Controller extends \yii\web\Controller
     public $prependActionTitles = true;
 
     /**
+     * @var string defines the ControllerAccess class for this controller responsible for managing access rules
+     * @see self::getAccess()
+     */
+    protected $access = ControllerAccess::class;
+
+    /**
+     * Returns access rules for the standard access control behavior.
+     *
+     * @see AccessControl
+     * @return array the access permissions
+     */
+    protected function getAccessRules()
+    {
+        return [];
+    }
+
+    /**
+     * @return null|ControllerAccess returns an ControllerAccess instance
+     */
+    public function getAccess()
+    {
+        if(!$this->access) {
+            return null;
+        }
+
+        return Yii::createObject($this->access);
+    }
+
+    /**
      * @inheritdoc
      */
     public function init()
     {
         parent::init();
         $this->trigger(self::EVENT_INIT);
+    }
+
+    public function behaviors()
+    {
+        return [
+            'acl' => [
+                'class' => AccessControl::class,
+                'rules' => $this->getAccessRules()
+            ]
+        ];
     }
 
     /**

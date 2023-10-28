@@ -1,6 +1,7 @@
 <?php
 
 use tests\codeception\_pages\LoginPage;
+use yii\helpers\Url;
 
 /**
  * Inherited Methods
@@ -22,6 +23,8 @@ class AcceptanceTester extends \Codeception\Actor
 
     use _generated\AcceptanceTesterActions;
 
+    public $guestAccessAllowed = false;
+
     public function amAdmin($logout = false)
     {
         $this->amUser('Admin', 'test', $logout);
@@ -42,24 +45,75 @@ class AcceptanceTester extends \Codeception\Actor
         $this->amUser('User3', '123qwe', $logout);
     }
 
-    public function amOnSpace1()
+    public $spaces = [
+        '5396d499-20d6-4233-800b-c6c86e5fa34a',
+        '5396d499-20d6-4233-800b-c6c86e5fa34b',
+        '5396d499-20d6-4233-800b-c6c86e5fa34c',
+        '5396d499-20d6-4233-800b-c6c86e5fa34d',
+    ];
+
+    public function amOnSpace1($path = '/space/space', $params = [])
     {
-        $this->amOnPage('index-test.php?r=space/space&sguid=5396d499-20d6-4233-800b-c6c86e5fa34a');
+        $this->amOnSpace(1, $path, $params);
     }
 
-    public function amOnSpace2()
+    public function amOnSpace2($path = '/space/space', $params = [])
     {
-        $this->amOnPage('index-test.php?r=space/space&sguid=5396d499-20d6-4233-800b-c6c86e5fa34b');
+        $this->amOnSpace(2, $path, $params);
     }
 
-    public function amOnSpace3()
+    public function amOnSpace3($path = '/space/space', $params = [])
     {
-        $this->amOnPage('index-test.php?r=space/space&sguid=5396d499-20d6-4233-800b-c6c86e5fa34c');
+        $this->amOnSpace(3, $path, $params);
     }
 
-    public function amOnSpace4()
+    public function amOnSpace4($path = '/space/space', $params = [])
     {
-        $this->amOnPage('index-test.php?r=space/space&sguid=5396d499-20d6-4233-800b-c6c86e5fa34d');
+        $this->amOnSpace(4, $path, $params);
+    }
+
+    public function amOnSpace($guid, $path = '/space/space', $params = [])
+    {
+        if(!$path) {
+            $path = '/space/space';
+        }
+
+        if(is_int($guid)) {
+            $guid = $this->spaces[--$guid];
+        }
+
+        $params['sguid'] = $guid;
+        $params[0] = $path;
+
+        $this->amOnRoute($params);
+    }
+
+    public function dontSeeInDropDown($selector, $text) {
+        $this->click($selector);
+        $this->wait(1);
+        $this->dontSee($text, $selector);
+        $this->click($selector);
+    }
+
+    public function seeInDropDown($selector, $text) {
+        $this->click($selector);
+        $this->wait(1);
+        $this->see($text, $selector);
+        $this->click($selector);
+    }
+
+    public function allowGuestAccess() {
+        $this->amOnRoute(['/admin/authentication']);
+        $this->waitForElementVisible('.field-authenticationsettingsform-allowguestaccess');
+        $this->click('.field-authenticationsettingsform-allowguestaccess label');
+
+        $this->click('[type="submit"]');
+        $this->seeSuccess('Saved');
+        $this->guestAccessAllowed = true;
+    }
+
+    public function amOnRoute($route) {
+        $this->amOnPage(Url::to($route));
     }
 
     public function createPost($text)
@@ -87,7 +141,7 @@ class AcceptanceTester extends \Codeception\Actor
             $this->see($text, '#status-bar');
         }
 
-        $this->click('#status-bar .status-bar-close');
+        $this->jsClick('.status-bar-close');
         $this->waitForElementNotVisible('#status-bar');
     }
 
@@ -153,13 +207,26 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $this->clickAccountDropDown();
         $this->click('Logout');
-        $this->wait(5);
+        if(!$this->guestAccessAllowed) {
+            $this->waitForElementVisible('#login-form');
+        } else {
+            $this->waitForElementVisible('.btn-enter');
+        }
+    }
+
+    public function enableModule($guid, $moduleId)
+    {
+        $this->amOnSpace($guid, '/space/manage/module');
+        $this->seeElement('.enable-module-'.$moduleId);
+        $this->click('.enable-module-'.$moduleId);
+        $this->waitForElement('.disable-module-'.$moduleId);
+        $this->amOnSpace($guid);
     }
 
     public function clickAccountDropDown()
     {
         $this->jsClick('#account-dropdown-link');
-        $this->wait(2);
+        $this->waitForElementVisible('.account.open');
     }
 
     public function amOnDirectory()
@@ -187,16 +254,6 @@ class AcceptanceTester extends \Codeception\Actor
         $this->amOnPage('index-test.php?r=user/profile&uguid=01e50e0d-82cd-41fc-8b0c-552392f5839a');
     }
 
-    public function uploadFileTo($path = '\'index-test.php?r=file/file/upload', $files, $data = [])
-    {
-        $this->wantTo('Upload file');
-        $this->getModule('WebDriver')->webDriver->
-        $this->haveHttpHeader('Content-Type', 'multipart/form-data');
-        $this->sendPOST('/attachments/', $data, $files);
-        $this->deleteHeader('Content-Type');
-        //$this->
-    }
-
     public function seeInNotifications($text)
     {
         $this->click('.notifications .fa-bell');
@@ -217,7 +274,7 @@ class AcceptanceTester extends \Codeception\Actor
         $select2Input = $selector . ' ~ span input';
         $this->fillField($select2Input, $userName);
         $this->waitForElementVisible('.select2-container--open');
-        $this->wait(5);
+        $this->wait(3);
         $this->see($userName, '.select2-container--open');
         $this->pressKey($select2Input, WebDriverKeys::ENTER);
     }
@@ -261,4 +318,11 @@ class AcceptanceTester extends \Codeception\Actor
         $this->executeJS('window.scrollTo(0,0);');
     }
 
+    /**
+     * @return \Codeception\Scenario
+     */
+    /*protected function getScenario()
+    {
+        // TODO: Implement getScenario() method.
+    }*/
 }
