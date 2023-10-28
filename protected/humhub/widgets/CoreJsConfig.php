@@ -44,7 +44,10 @@ class CoreJsConfig extends Widget
                 ],
                 'client' => [
                     'baseUrl' => Yii::$app->settings->get('baseUrl'),
-                    'reloadableScripts' => CacheSettingsForm::getReloadableScriptUrls()
+                    'reloadableScripts' => CacheSettingsForm::getReloadableScriptUrls(),
+                    'text' => [
+                        'warn.onBeforeLoad' => Yii::t('base', "There are unsaved changes, do you really want to leave this page?")
+                    ]
                 ],
                 'file' => [
                     'upload' => [
@@ -82,6 +85,9 @@ class CoreJsConfig extends Widget
                         'info.title' => Yii::t('base', 'Info:'),
                         'error.title' => Yii::t('base', 'Error:')
                     ]
+                ],
+                'ui.view' => [
+                    'useDefaultSwipe' => Yii::$app->settings->get('useDefaultSwipeOnMobile', 0)
                 ],
                 'ui.richtext' => [
                     'emoji.url' => Yii::getAlias('@web-static/img/emoji/'),

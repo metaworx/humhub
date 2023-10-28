@@ -1,6 +1,35 @@
 HumHub Change Log (DEVELOP)
 =================
 
+1.4.0-beta.2
+------------
+
+- Fix #3703: Fixed user profile image dimension of mobile
+- Fix #3732: Reverted changes of default oembed style
+- Enh: Added link to changelog for module marketplaces updates
+- Fix #3674: Back button breaks layout on login page when guest access enabled
+- Enh: Added `safeCreateTable`, `safeDropTable`, `safeDropColumn`, `safeAddColumn` to `humhub\components\Migration`
+- Fixed `.layout-nav-container` padding issue
+- Fix #2605: User display name cropped in profile header
+- Fix #3729: Integrity check used deprecated methods
+- Enh #3697: Stay of module update page after updating a module
+- Fix #3692: Icon Upload Problems
+- Fix #3705: Don't render empty navigation/menu
+- Fix #3706: Space mentioning broken
+- Fix #3742: OAuth timeout doesn't respect configured timeout 
+- Enh: Added `DateHelper:getUserTimeZone()`, `DateHelper:getSystemTimeZone()`, `DateHelper:isInDbFormat()`
+- Fix #3711: Fullscreen Richtext menu broken on ios safari
+- Enh #3768: Add `Module::afterUpdate`, `Module::beforeUpdate` events to `humhub\components\Module`
+- Enh: Add `OnlineModuleManager::EVENT_BEFORE_UPDATE`, `OnlineModuleManager::EVENT_AFTER_UPDATE`
+- Fix: Double encoding of `&` in `Richtext::output()`
+- Enh: Added `SocialActivity::getContentPlainTextPreview()` mainly used in mail subjects
+- Enh: Added `data-ui-addition` way of definint ui additions
+- Enh: Added `data-ui-addition` way of defining ui additions
+- Enh #3771: Added `data-ui-addition="acknowledgeForm"` in order to prevent page changes without save/confirmation
+- Enh #3771: Added `humhub\modules\ui\form\widgets\ActiveForm:acknowledge` flag
+- Chng: Use of `BlueimpGalleryAsset` npm asset instead of static asset file
+- Enh: Updated richtext version to 1.0.18 see (https://github.com/humhub/humhub-prosemirror/blob/master/docs/CHANGELOG.md)
+- Enh: Added mobile swipe in order to show sidebar (needs to be activated `Administaration -> Settings -> Appearance`)
 
 1.4
 ---
@@ -84,3 +113,11 @@ HumHub Change Log (DEVELOP)
 - Enh: Updated to twemoji v12
 - Enh: Editable `['twemoji']['path']` config parameter
 - Enh: Added configuration option to hide/disable the Like module
+- Enh: Added link to changelog for module marketplaces updates
+- Fix #3674: Back button breaks layout on login page when guest access enabled
+- Enh: Added `safeCreateTable`, `safeDropTable`, `safeDropColumn`, `safeAddColumn` to `humhub\components\Migration`
+- Enh: Added support of upcoming HumHub Professional Edition in Marketplace module
+- Enh: Added module marketplace categories
+- Enh: Added isFluid LESS variable for automatic HTML container handling
+- Fix #2605: User display name cropped in profile header
+- Enh: Updated Yii to 2.0.30
