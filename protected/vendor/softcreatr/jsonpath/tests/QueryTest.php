@@ -808,7 +808,7 @@ class QueryTest extends TestCase
                 'dot_notation_with_key_named_length_on_array',
                 '$.length',
                 '[4,5,6]',
-                '[]'
+                '[3]'
             ],
             [ // data set #114
                 'dot_notation_with_key_named_null',
@@ -1234,7 +1234,7 @@ class QueryTest extends TestCase
                 'filter_expression_with_in_array_of_values',
                 '$[?(@.d in [2, 3])]',
                 '[{"d":1},{"d":2},{"d":1},{"d":3},{"d":4}]',
-                ''
+                '[{"d":2},{"d":3}]'
             ],
             [ // data set #181 - unknown consensus
                 'filter_expression_with_in_current_object',
@@ -1454,7 +1454,7 @@ class QueryTest extends TestCase
                 'script_expression',
                 '$[(@.length-1)]',
                 '["first","second","third","forth","fifth"]',
-                ''
+                'fifth'
             ],
             [ // data set #214
                 'union',

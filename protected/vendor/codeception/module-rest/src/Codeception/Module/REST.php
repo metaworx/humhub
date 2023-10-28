@@ -25,33 +25,45 @@ use JsonSchema\Constraints\Constraint as JsonContraint;
 /**
  * Module for testing REST WebService.
  *
- * This module can be used either with frameworks or PHPBrowser.
- * If a framework module is connected, the testing will occur in the application directly.
- * Otherwise, a PHPBrowser should be specified as a dependency to send requests and receive responses from a server.
+ * This module requires either [PhpBrowser](https://codeception.com/docs/modules/PhpBrowser)
+ * or a framework module (e.g. [Symfony](https://codeception.com/docs/modules/Symfony), [Laravel](https://codeception.com/docs/modules/Laravel5))
+ * to send the actual HTTP request.
  *
  * ## Configuration
  *
- * * url *optional* - the url of api
- * * shortDebugResponse *optional* - amount of chars to limit the api response length
- *
- * This module requires PHPBrowser or any of Framework modules enabled.
- *
- * In case you need to configure low-level HTTP fields, that's done on the PHPBrowser level.
- * Check the example below for details.
+ * * `url` *optional* - the url of api
+ * * `shortDebugResponse` *optional* - number of chars to limit the API response length
  *
  * ### Example
  *
- *     modules:
- *        enabled:
- *            - REST:
- *                depends: PhpBrowser
- *                url: &url 'http://serviceapp/api/v1/' # you only need the &url anchor for further PhpBrowser configs
- *                shortDebugResponse: 300 # only the first 300 chars of the response
- *        config:
- *            PhpBrowser:
- *                url: *url # repeats the URL from the REST module; not needed if you don't have further settings like below
- *                headers:
- *                    Content-Type: application/json
+ * ```yaml
+ * modules:
+ *    enabled:
+ *        - REST:
+ *            depends: PhpBrowser
+ *            url: 'https://example.com/api/v1/'
+ *            shortDebugResponse: 300 # only the first 300 characters of the response
+ * ```
+ *
+ * In case you need to configure low-level HTTP headers, that's done on the PhpBrowser level like so:
+ *
+ * ```yaml
+ * modules:
+ *    enabled:
+ *        - REST:
+ *            depends: PhpBrowser
+ *            url: &url 'https://example.com/api/v1/'
+ *    config:
+ *        PhpBrowser:
+ *            url: *url
+ *            headers:
+ *                Content-Type: application/json
+ * ```
+ *
+ * ## JSONPath
+ *
+ * [JSONPath](http://goessner.net/articles/JsonPath/) is the equivalent to XPath, for querying JSON data structures.
+ * Here's an [Online JSONPath Expressions Tester](http://jsonpath.curiousconcept.com/)
  *
  * ## Public Properties
  *
@@ -71,7 +83,7 @@ use JsonSchema\Constraints\Constraint as JsonContraint;
  */
 class REST extends CodeceptionModule implements DependsOnModule, PartedModule, API, ConflictsWithModule
 {
-    const QUERY_PARAMS_AWARE_METHODS = ['GET', 'HEAD'];
+    const QUERY_PARAMS_AWARE_METHODS = ['GET', 'HEAD', 'OPTIONS'];
 
     protected $config = [
         'url' => '',
@@ -388,7 +400,7 @@ EOF;
      * ?>
      * ```
      * @param array $additionalAWSConfig
-     * @throws ModuleException
+     * @throws ConfigurationException
      */
     public function amAWSAuthenticated($additionalAWSConfig = [])
     {
@@ -441,7 +453,7 @@ EOF;
      * ```
      *
      * @param $url
-     * @param array|\JsonSerializable $params
+     * @param array|string|\JsonSerializable $params
      * @param array $files A list of filenames or "mocks" of $_FILES (each entry being an array with the following
      *                     keys: name, type, error, size, tmp_name (pointing to the real file path). Each key works
      *                     as the "name" attribute of a file input field.
@@ -499,7 +511,7 @@ EOF;
      * Sends PUT request to given uri.
      *
      * @param $url
-     * @param array $params
+     * @param array|string|\JsonSerializable $params
      * @param array $files
      * @part json
      * @part xml
@@ -513,7 +525,7 @@ EOF;
      * Sends PATCH request to given uri.
      *
      * @param       $url
-     * @param array $params
+     * @param array|string|\JsonSerializable $params
      * @param array $files
      * @part json
      * @part xml
@@ -535,6 +547,21 @@ EOF;
     public function sendDelete($url, $params = [], $files = [])
     {
         $this->execute('DELETE', $url, $params, $files);
+    }
+
+    /**
+     * Sends a HTTP request.
+     *
+     * @param $method
+     * @param $url
+     * @param array|string|\JsonSerializable $params
+     * @param array $files
+     * @part json
+     * @part xml
+     */
+    public function send($method, $url, $params = [], $files = [])
+    {
+        $this->execute(strtoupper($method), $url, $params, $files);
     }
 
     /**
@@ -605,25 +632,34 @@ EOF;
         // allow full url to be requested
         if (!$url) {
             $url = $this->config['url'];
+        } elseif (!is_string($url)) {
+            throw new ModuleException(__CLASS__, 'URL must be string');
         } elseif (strpos($url, '://') === false && $this->config['url']) {
             $url = rtrim($this->config['url'], '/') . '/' . ltrim($url, '/');
         }
 
         $this->params = $parameters;
 
-        $parameters = $this->encodeApplicationJson($method, $parameters);
         $isQueryParamsAwareMethod = in_array($method, self::QUERY_PARAMS_AWARE_METHODS, true);
 
-        if (is_array($parameters) || $isQueryParamsAwareMethod) {
-            if (!empty($parameters) && $isQueryParamsAwareMethod) {
-                if (strpos($url, '?') !== false) {
-                    $url .= '&';
-                } else {
-                    $url .= '?';
-                }
-                $url .= http_build_query($parameters);
+        if ($isQueryParamsAwareMethod) {
+            if (!is_array($parameters)) {
+                throw new ModuleException(__CLASS__, $method . ' parameters must be passed in array format');
             }
+        } else {
+            $parameters = $this->encodeApplicationJson($method, $parameters);
+        }
+
+        if (is_array($parameters) || $isQueryParamsAwareMethod) {
             if ($isQueryParamsAwareMethod) {
+                if (!empty($parameters)) {
+                    if (strpos($url, '?') !== false) {
+                        $url .= '&';
+                    } else {
+                        $url .= '?';
+                    }
+                    $url .= http_build_query($parameters);
+                }
                 $this->debugSection("Request", "$method $url");
                 $files = [];
             } else {
@@ -680,7 +716,6 @@ EOF;
     {
         if (
             array_key_exists('Content-Type', $this->connectionModule->headers)
-            && !in_array($method, self::QUERY_PARAMS_AWARE_METHODS, true)
             && ($this->connectionModule->headers['Content-Type'] === 'application/json'
                 || preg_match('!^application/.+\+json$!', $this->connectionModule->headers['Content-Type'])
             )
@@ -693,6 +728,15 @@ EOF;
                 return json_encode($parameters);
             }
         }
+
+        if ($parameters instanceof \JsonSerializable) {
+            throw new ModuleException(__CLASS__, $method . ' parameters is JsonSerializable object, but Content-Type header is not set to application/json');
+        }
+
+        if (!is_string($parameters) && !is_array($parameters)) {
+            throw new ModuleException(__CLASS__, $method . ' parameters must be array, string or object implementing JsonSerializable interface');
+        }
+
         return $parameters;
     }
 
@@ -955,7 +999,6 @@ EOF;
      * @return string
      * @part json
      * @part xml
-     * @version 1.1
      */
     public function grabResponse()
     {
@@ -963,13 +1006,8 @@ EOF;
     }
 
     /**
-     * Returns data from the current JSON response using [JSONPath](http://goessner.net/articles/JsonPath/) as selector.
-     * JsonPath is XPath equivalent for querying Json structures.
-     * Try your JsonPath expressions [online](http://jsonpath.curiousconcept.com/).
+     * See [#jsonpath](#jsonpath) for general info on JSONPath.
      * Even for a single value an array is returned.
-     *
-     * This method **require [`flow/jsonpath` > 0.2](https://github.com/FlowCommunications/JSONPath/) library to be installed**.
-     *
      * Example:
      *
      * ``` php
@@ -984,7 +1022,6 @@ EOF;
      * @return array Array of matching items
      * @throws \Exception
      * @part json
-     * @version 2.0.9
      */
     public function grabDataFromResponseByJsonPath($jsonPath)
     {
@@ -1030,7 +1067,6 @@ EOF;
      * ```
      * @param string $xpath
      * @part json
-     * @version 2.0.9
      */
     public function seeResponseJsonMatchesXpath($xpath)
     {
@@ -1059,12 +1095,8 @@ EOF;
     }
 
     /**
-     * Checks if json structure in response matches [JsonPath](http://goessner.net/articles/JsonPath/).
-     * JsonPath is XPath equivalent for querying Json structures.
-     * Try your JsonPath expressions [online](http://jsonpath.curiousconcept.com/).
-     * This assertion allows you to check the structure of response json.
-     *
-     * This method **require [`flow/jsonpath` > 0.2](https://github.com/FlowCommunications/JSONPath/) library to be installed**.
+     * See [#jsonpath](#jsonpath) for general info on JSONPath.
+     * Checks if JSON structure in response matches JSONPath.
      *
      * ```json
      *   { "store": {
@@ -1101,7 +1133,6 @@ EOF;
      *
      * @param string $jsonPath
      * @part json
-     * @version 2.0.9
      */
     public function seeResponseJsonMatchesJsonPath($jsonPath)
     {
@@ -1113,7 +1144,8 @@ EOF;
     }
 
     /**
-     * Opposite to seeResponseJsonMatchesJsonPath
+     * See [#jsonpath](#jsonpath) for general info on JSONPath.
+     * Opposite to [`seeResponseJsonMatchesJsonPath()`](#seeResponseJsonMatchesJsonPath)
      *
      * @param string $jsonPath
      * @part json
@@ -1225,7 +1257,6 @@ EOF;
      * @param array $jsonType
      * @param string $jsonPath
      * @see JsonType
-     * @version 2.1.3
      */
     public function seeResponseMatchesJsonType(array $jsonType, $jsonPath = null)
     {
@@ -1241,12 +1272,11 @@ EOF;
      * Opposite to `seeResponseMatchesJsonType`.
      *
      * @part json
-     * @param $jsonType jsonType structure
-     * @param null $jsonPath optionally set specific path to structure with JsonPath
+     * @param array $jsonType JsonType structure
+     * @param string $jsonPath
      * @see seeResponseMatchesJsonType
-     * @version 2.1.3
      */
-    public function dontSeeResponseMatchesJsonType($jsonType, $jsonPath = null)
+    public function dontSeeResponseMatchesJsonType(array $jsonType, $jsonPath = null)
     {
         $jsonArray = new JsonArray($this->connectionModule->_getResponseContent());
         if ($jsonPath) {
@@ -1547,8 +1577,8 @@ EOF;
      * ?>
      * ```
      *
-     * @param $hash the hashed data response expected
-     * @param $algo the hash algorithm to use. Default md5.
+     * @param string $hash the hashed data response expected
+     * @param string $algo the hash algorithm to use. Default md5.
      * @part json
      * @part xml
      */
@@ -1568,8 +1598,8 @@ EOF;
      * ```
      * Opposite to `seeBinaryResponseEquals`
      *
-     * @param $hash the hashed data response expected
-     * @param $algo the hash algorithm to use. Default md5.
+     * @param string $hash the hashed data response expected
+     * @param string $algo the hash algorithm to use. Default md5.
      * @part json
      * @part xml
      */
