@@ -1,6 +1,46 @@
 HumHub Changelog
 ================
 
+1.15.0-beta.2 (October 5, 2023)
+-------------------------------
+- Enh #6594: Add field `file.metadata`
+- Enh #6593: Add field `file.sort_order`
+- Enh #6592: Add field `file.state`
+- Enh #6591: Add field `file.category`
+- Enh #6568: improve UUID validation and add `UUIDValidater`
+- Enh #6553: Support log assertions
+- Fix #6551: Migration's transaction with invalid savepoint
+- Fix #6549: Empty profile field type causing an unspecific error
+- Fix #6547: Invalid class name validated as valid and improve validation
+- Enh #6529: Add boolean return-type to `*safe*` methods in migrations
+- Fix #6516: Humhub test case would fail on skipped tests
+- Enh #6478: Add pseudo test class to allow population of DB with standard test data
+- Enh #6480: Convert assert* and db* methods to static, in line with general usage pattern
+- Enh #6505: Introduce Application interface; now also fire the `onInit` event when the web application has initialized
+- Fix #6502: Link notification for pending space approval to manage page
+- Fix #6472: Initialization of account profile field type "Markdown"
+- Fix #6471: Wording "Default Homepage" in Space Default Settings
+- Fix #6468: Module Administration - Marketplace Links broken without Pretty URLs
+- Enh #6469: Added Info text for Marketplace page
+- Fix #112: Reorder Table Rows
+- Fix #6476: Fix module disabling in queue
+- Enh #6469: Implement conditions for `fixed-settings` in config
+- Enh #68: Online Indicator Position
+- Fix #6492: Fix module form "Set as default"
+- Fix #6457: Regression with membership cache. Also move cache to `Membership::findMembership`.
+- Enh #6498: Implement option "disabled" for picker fields
+- Enh #6506: Allow event data from module config
+- Fix #6510: Fix online status position on people page
+- Fix #6526: Fix a disabled button after post a content record with state "Draft" or "Scheduled"
+- Fix #6537: Sort profile fields on People directory filters
+- Fix #6558: Avoid PHP 8.1+ deprecated null parameter on preg_replace in richtext converters
+- Fix #6544: Registration not possible with SSO and email invites if "New users can register" is disabled
+- Fix #6572: Posts count in space should be only for published content
+- Fix #3755: Fix default oembed styles for twitter posts
+- Fix #6582: Enabled `RuntimeCache` during tests
+- Fix #6583: Refresh modules available updates counter after updating of modules
+- Fix #6585: Exclude database views on self checking
+
 1.15.0-beta.1 (July 31, 2023)
 -----------------------------
 - Fix #6461: Test server support to serve web module's `/manifest.json`, `/sw.js`, & `/offline.pwa.html`
