@@ -61,6 +61,8 @@ return array (
   'Show more' => 'Mehr anzeigen',
   'Some files could not be uploaded:' => 'Einige Dateien konten nicht hochgeladen werden:',
   'Space not found!' => 'Space nicht gefunden!',
+  'Text could not be copied to clipboard' => 'Text konnte nicht in die Zwischenablage kopiert werden',
+  'Text has been copied to clipboard' => 'Text wurde in die Zwischenablage kopiert',
   'The date has to be in the past.' => 'Datum muss in der Vergangenheit liegen.',
   'The file has been deleted.' => 'Die Datei wurde gelöscht.',
   'The requested resource could not be found.' => 'Die angeforderte Ressource konnte nicht gefunden werden.',

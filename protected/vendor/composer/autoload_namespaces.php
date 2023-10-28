@@ -11,11 +11,11 @@ return array(
     'URLify' => array($vendorDir . '/jbroadway/urlify'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PHPParser' => array($vendorDir . '/nikic/php-parser/lib'),
-    'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'MikeVanRiel' => array($vendorDir . '/mikevanriel/text-to-latex/src', $vendorDir . '/mikevanriel/text-to-latex/tests/unit'),
     'Imagine' => array($vendorDir . '/imagine/imagine/lib'),
     'Highlight\\' => array($vendorDir . '/scrivo/highlight.php'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
+    'Codeception\\' => array($vendorDir . '/codeception/specify/src'),
     'Behat\\Gherkin' => array($vendorDir . '/behat/gherkin/src'),
 );

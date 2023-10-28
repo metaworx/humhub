@@ -40,6 +40,6 @@ return array (
   'You\'re not registered.' => 'Niste registrirani.',
   'Your account is disabled!' => 'Vaš račun je onemogućen!',
   'Your account is not approved yet!' => 'Vaš račun još nije odobren!',
-  'Your new password must not equal your current password!' => 'Vaša nova lozinka ne može biti ista kao trenutačna lozinka!',
+  'Your new password must not be equal your current password!' => 'Vaša nova lozinka mora biti različita od trenutne lozinke!',
   'or' => 'ili',
 );

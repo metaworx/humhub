@@ -60,6 +60,8 @@ return array (
   'Show more' => 'Mostrar mais',
   'Some files could not be uploaded:' => 'Alguns arquivos não puderam ser carregados:',
   'Space not found!' => 'Espaço não encontrado!',
+  'Text could not be copied to clipboard' => 'O texto não pode ser copiado para a memória',
+  'Text has been copied to clipboard' => 'O texto foi copiado para a memória',
   'The date has to be in the past.' => 'A data tem de ser no passado.',
   'The file has been deleted.' => 'O arquivo foi deletado.',
   'The requested resource could not be found.' => 'O recurso solicitado não pôde ser encontrado.',

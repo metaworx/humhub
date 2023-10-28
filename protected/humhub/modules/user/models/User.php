@@ -16,6 +16,7 @@ use humhub\modules\user\events\UserEvent;
 use humhub\modules\friendship\models\Friendship;
 use humhub\modules\space\models\Space;
 use humhub\modules\content\models\Content;
+use humhub\modules\space\models\Membership;
 
 /**
  * This is the model class for table "user".
@@ -107,7 +108,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
             [['language'], 'string', 'max' => 5],
             [['email'], 'unique'],
             [['email'], 'email'],
-            [['email'], 'string', 'max' => 100],
+            [['email'], 'string', 'max' => 254],
             [['email'], 'required', 'when' => function($model, $attribute) use ($userModule) {
                     return $userModule->emailRequired;
                 }],
@@ -318,7 +319,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
 
     /**
      * Specifies whether the user should appear in user lists or in the search.
-     * 
+     *
      * @since 1.2.3
      * @return boolean is visible
      */
@@ -338,11 +339,10 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
      */
     public function beforeDelete()
     {
-
         // We don't allow deletion of users who owns a space - validate that
-        foreach (\humhub\modules\space\models\Membership::GetUserSpaces($this->id) as $space) {
+        foreach (Membership::getUserSpaces($this->id, false) as $space) {
             if ($space->isSpaceOwner($this->id)) {
-                throw new Exception('Tried to delete a user (' . $this->id . ') which is owner of a space!');
+                throw new Exception('Tried to delete a user (' . $this->id . ') which is owner of a space (' . $space->id . ')!');
             }
         }
 

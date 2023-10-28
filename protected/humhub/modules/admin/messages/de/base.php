@@ -8,6 +8,7 @@ return array (
   'Authentication' => 'Authentifizierung',
   'Back to overview' => 'Zurück zur Übersicht',
   'Back to user overview' => 'Zurück zur Benutzerübersicht',
+  'Base URL needs to begin with http:// or https://' => 'Basis URL muss mit http:// oder https:// beginnen',
   'Basic' => 'Allgemein',
   'Caching' => 'Caching',
   'Cronjobs' => 'Cronjobs',
