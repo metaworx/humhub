@@ -1,6 +1,29 @@
 HumHub Change Log
 =================
 
+1.3.5  (October 10, 2018)
+---------------------------
+
+- Fix: Serialization of notifications without originator fails
+- Fix: Hide unapproved member activities
+- Fix #3313: Unable to deny invitation to private space
+- Fix: Added missing `parent::init()` to `humhub\modules\stream\widgets\StreamViewer`
+- Fix: Added PHP GD extension to the requirements (docs and selftest)
+- Fix: Comment edit triggers new activity
+- Fix: Fixed typo from `MailSummary::INTERVAL_HOURY` to `MailSummary::INTERVAL_HOURLY`
+- Enh: Added `humhub.modules.ui.filter.TextInput` and related `humhub\modules\ui\filter\widgets\TextFilterInput`
+- Enh: Enable `data-action-keypress` by default
+- Enh: Added `preventDefault` argument to `humhub.modules.action.bindAction` to disable prevent default behaviour for action events
+- Fix: Fix bootstrap-datepicker.en.min.js 404 (Not Found)
+- Fix: Comment form files not cleared
+- Enh: Added `humhub\modules\file\models\isAssignedTo($record)` argument in order to check if a File is attached to a specific record
+- Fix: rich-text mobile view wrong min-height calculation
+- Fix #3314: layout container width differences
+- Fix #3315: Exception on first login with ldap
+- Fix comment scroll overflows button
+- Fix widgetAction events case issue
+- Added `humhub.modules.util.string.capitalizeFirstLetter` and `lowerCaseFirstLetter`
+
 
 1.3.4  (September 25, 2018)
 ---------------------------
