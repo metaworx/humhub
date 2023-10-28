@@ -22,6 +22,11 @@ class Controller extends \yii\web\Controller
 {
 
     /**
+     * @event \yii\base\Event an event raised on init a controller.
+     */
+    const EVENT_INIT = 'init';
+
+    /**
      * @var null|string the name of the sub layout to be applied to this controller's views.
      * This property mainly affects the behavior of [[render()]].
      */
@@ -41,6 +46,15 @@ class Controller extends \yii\web\Controller
      * @var boolean append page title 
      */
     public $prependActionTitles = true;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->trigger(self::EVENT_INIT);
+    }
 
     /**
      * @inheritdoc
@@ -82,14 +96,18 @@ class Controller extends \yii\web\Controller
     }
 
     /**
-     * Throws HttpException in case the request is not an post request.
+     * Throws HttpException in case the request is not an post request, otherwise returns true.
+     * 
      * @throws \yii\web\HttpException
+     * @return boolean returns true in case the current request is a POST
      */
     public function forcePostRequest()
     {
         if (\Yii::$app->request->method != 'POST') {
             throw new \yii\web\HttpException(405, Yii::t('ContentModule.controllers_ContentController', 'Invalid request method!'));
         }
+
+        return true;
     }
 
     /**
@@ -139,7 +157,9 @@ class Controller extends \yii\web\Controller
                 $this->getView()->pageTitle = $this->pageTitle;
             }
 
-            $this->setJsViewStatus();
+            if (!Yii::$app->request->isAjax || Yii::$app->request->isPjax) {
+                $this->setJsViewStatus();
+            }
 
             return true;
         }
@@ -215,9 +235,9 @@ class Controller extends \yii\web\Controller
     public function setJsViewStatus()
     {
         $modluleId = (Yii::$app->controller->module) ? Yii::$app->controller->module->id : '';
-        $this->view->registerJs('humhub.modules.ui.status.setState("' . $modluleId . '", "' . Yii::$app->controller->id . '", "' . Yii::$app->controller->action->id . '");', \yii\web\View::POS_BEGIN);
+        $this->view->registerJs('humhub.modules.ui.view.setState("' . $modluleId . '", "' . Yii::$app->controller->id . '", "' . Yii::$app->controller->action->id . '");', \yii\web\View::POS_BEGIN);
 
-        if(Yii::$app->request->isPjax) {
+        if (Yii::$app->request->isPjax) {
             \humhub\widgets\TopMenu::setViewState();
         }
     }

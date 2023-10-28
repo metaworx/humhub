@@ -14,6 +14,7 @@ use yii\helpers\Json;
 /**
  * Base Class for Modules / Extensions
  *
+ * @property SettingsManager $settings
  * @author luke
  */
 class Module extends \yii\base\Module
@@ -325,6 +326,12 @@ class Module extends \yii\base\Module
         return [];
     }
 
+    /**
+     * Determines whether the module has notification classes or not
+     * 
+     * @since 1.2
+     * @return boolean has notifications
+     */
     public function hasNotifications()
     {
         return !empty($this->getNotifications());

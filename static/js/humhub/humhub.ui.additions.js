@@ -52,9 +52,11 @@ humhub.module('ui.additions', function (module, require, $) {
 
         var $element = (element instanceof $) ? element : $(element);
         $.each(_additions, function (id) {
+            // Only apply certain filter if filter option is set
             if (options.filter && !options.filter.indexOf(id)) {
                 return;
             }
+            
             try {
                 module.apply($element, id);
             } catch (e) {
@@ -78,6 +80,12 @@ humhub.module('ui.additions', function (module, require, $) {
         }
 
         var $match = $element.find(addition.selector).addBack(addition.selector);
+        
+        // only apply addition if we actually find a match
+        if(!$match.length) {
+            return;
+        }
+        
         addition.handler.apply($match, [$match, $element]);
     };
 
@@ -95,6 +103,10 @@ humhub.module('ui.additions', function (module, require, $) {
         module.register('autosize', '.autosize', function ($match) {
             $match.autosize();
         });
+        
+        module.register('select2', '[data-ui-select2]', function ($match) {
+            $match.select2({theme:"humhub"});
+        });
 
         // Show tooltips on elements
         module.register('tooltip', '.tt', function ($match) {
@@ -109,7 +121,7 @@ humhub.module('ui.additions', function (module, require, $) {
         });
 
         module.register('markdown', '[data-ui-markdown]', function ($match) {
-            var converter = new Markdown.Converter();
+            var converter = new Markdown.getSanitizingConverter();
             Markdown.Extra.init(converter);
             $match.each(function () {
                 var $this = $(this);

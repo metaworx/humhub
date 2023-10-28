@@ -143,7 +143,7 @@ humhub.module('action', function(module, require, $) {
     };
 
     /**
-     * Creates an component instance out of the given node.
+     * Creates a component instance out of the given node.
      * @param {type} node
      * @param {type} options
      * @returns {undefined}
@@ -537,6 +537,10 @@ humhub.module('action', function(module, require, $) {
         event.finish = function() {
             _removeLoaderFromEventTarget(event.originalEvent);
             that.unblock($trigger);
+        };
+        
+        event.data = function(key, def) {
+            return that.data($trigger, key, def);
         };
 
         return event;

@@ -1,8 +1,8 @@
 <?php
 return array (
-  '<strong>Confirm</strong> Action' => '<strong>確認</ strong>アクション',
+  '<strong>Confirm</strong> Action' => '<strong>確認</ strong> アクション',
   '<strong>Latest</strong> updates' => '<strong>最新</strong> 更新',
-  '<strong>Mail</strong> summary' => '<strong>メール</ strong>の概要',
+  '<strong>Mail</strong> summary' => '<strong>メール</ strong> の概要',
   'Account settings' => 'アカウント設定',
   'Administration' => '管理',
   'Allow' => '許可',
@@ -51,8 +51,8 @@ return array (
   'The date has to be in the past.' => '日付は過去である必要があります。',
   'The file has been deleted.' => 'ファイルが削除されました。',
   'The requested resource could not be found.' => '要求されたリソースが見つかりませんでした。',
-  'The space has be archived.' => 'スペースはアーカイブされています。',
-  'The space has be unarchived.' => 'スペースはアーカイブされていません。',
+  'The space has been archived.' => 'スペースはアーカイブされています。',
+  'The space has been unarchived.' => 'スペースはアーカイブされていません。',
   'Unsubscribe' => '退会する',
   'User not found!' => 'ユーザーは見つかりませんでした',
   'You are not allowed to run this action.' => 'この操作を実行することはできません。',

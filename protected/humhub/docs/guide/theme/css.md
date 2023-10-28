@@ -24,7 +24,13 @@ If you wish to overwrite default theme variables as text and background colors, 
 If you are using the command line tool [lessc](http://lesscss.org/), you can build your theme as follows:
 
 ```
-lessc -x build.less ../css/theme.css
+lessc -x themes/Example/less/build.less themes/Example/css/theme.css
+```
+
+or respectively by using [grunt](../developer/core-build.md):
+
+```
+grunt build-theme --name=Example
 ```
 
 > Info: For compiling your less file, there are also other alternatives like  [WinLess](http://winless.org/) or  [SimpLESS](https://wearekiss.com/simpless). 
