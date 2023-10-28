@@ -1,6 +1,38 @@
 Yii Framework 2 authclient extension Change Log
 ===============================================
 
+2.2.4 July 02, 2019
+-------------------
+
+- Enh #276: Bumped VK API version to 5.95, according to developers recommendation (EvgeniyRRU)
+- Enh #278: Keep only selected parameters in default return URLs of OAuth services (albertborsos)
+
+
+2.2.3 June 04, 2019
+-------------------
+
+- Chg #273: `OpenIdConnect::validateClaims()` is now protected (samdark)
+
+
+2.2.2 May 14, 2019
+------------------
+
+- Bug #270: Updated Facebook icon to match brand guidelines (ServerDotBiz)
+
+
+2.2.1 April 23, 2019
+--------------------
+
+- Bug #252: Fix bug when `OAuthToken` is incorrectly instantiated if configuration array has incorrect order (rob006)
+
+
+2.2.0 April 16, 2019
+--------------------
+
+- Bug #266: Updated Google client image (nurielmeni)
+- Bug #267: Upgrade LinkedIn client to v2 (machour)
+
+
 2.1.8 January 28, 2019
 ----------------------
 
