@@ -130,7 +130,7 @@ class Response extends Message
         if (preg_match('/^([^=&])+=[^=&]+(&[^=&]+=[^=&]+)*$/', $content)) {
             return Client::FORMAT_URLENCODED;
         }
-        if (preg_match('/^<.*>$/s', $content)) {
+        if (preg_match('/^<\?xml.*>$/s', $content)) {
             return Client::FORMAT_XML;
         }
         return null;
@@ -196,9 +196,6 @@ class Response extends Message
     private function getParser()
     {
         $format = $this->getFormat();
-        if ($format === null) {
-            throw new Exception("Unable to detect format for content parsing. Raw response:\n\n" . $this->toString());
-        }
         return $this->client->getParser($format);
     }
 }

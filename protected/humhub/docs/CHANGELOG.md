@@ -2,6 +2,23 @@ HumHub Change Log
 =================
 
 
+1.3.14  (June 26, 2019)
+------------------------
+- Fix: LinkedIn API call to v1 deprecated use v2 (@Felli)
+- Fix #3531: File module Fil: isAssignedTo method broken
+- Fix: Added missing admin group title encodings
+- Enh: Added featured module flag to marketplace view
+- Fix: Directory stats progress color (@Felli)
+- Fix #2724: Edited post does not display the space on dashboard
+- Fix #3533: Responsive design issues
+- Fix #3471: Display of Date Time Column in excel with empty/false value
+- Fix #3581: Search form with GET causes repeated sticking of url parameters (@Bhoft)
+- Enh: Added configuration option to hide Activity sidebar widget on dashboard
+- Fix #3570: en-GB language code Datepicker 404
+- Fix #3584: "Array to string conversion" on some LDAP attributes
+- Fix #3437: Composer warning for bower-asset/jPlayer
+
+
 1.3.13  (May 3, 2019)
 ----------------------
 - Enh: Added HomeUrl support to ConsoleApplication
@@ -35,7 +52,6 @@ HumHub Change Log
 - Fix: Notification count update does not respect notification group
 - Fix: Change email form is restricted to max 45 characters. Changed to 150 (current DB restriction)
 - Fix: Footer menu renders redundant `<li>` end tag.
-
 
 1.3.11  (March 06, 2019)
 ---------------------------
