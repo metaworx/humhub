@@ -75,26 +75,51 @@ To do so:
  -  Edit `phpunit.xml` to enable any specific functionality you
     want to test, as well as to provide test values to utilize.
 
+### Execute tests against a real LDAP server
+
+This project provides a [Vagrant](https://www.vagrantup.com/) virtual machine definition with an OpenLDAP server
+installed and configured.
+
+To execute the tests against this server, do the following steps (which assume you have Vagrant >
+1.6 installed)
+
+1. Run the virtual machine with the LDAP server: `vagrant up`
+2. Copy `phpunit.xml.dist` to `phpunit.xml`.
+3. Edit `phpunit.xml` to set the config value `TESTS_ZEND_LDAP_ONLINE_ENABLED` value to
+   `true`.
+4. Run the unit tests using `./vendor/bin/phpunit`.
+
+When done, you can halt the LDAP server using `vagrant halt`.
+
+> ### Alternate testing approach
+>
+> The PHPUnit config file defines environment variables, which allows users on unix-like systems to
+> simplify steps 2-4 to:
+>
+> ```console
+> $ TESTS_ZEND_LDAP_ONLINE_ENABLED=true ./vendor/bin/phpunit
+> ```
+
 ## Running Coding Standards Checks
 
-This component uses [php-cs-fixer](http://cs.sensiolabs.org/) for coding
+This component uses [phpcs](https://github.com/squizlabs/PHP_CodeSniffer) for coding
 standards checks, and provides configuration for our selected checks.
-`php-cs-fixer` is installed by default via Composer.
+`phpcs` is installed by default via Composer.
 
 To run checks only:
 
 ```console
-$ ./vendor/bin/php-cs-fixer fix . -v --diff --dry-run --config-file=.php_cs
+$ composer cs-check
 ```
 
-To have `php-cs-fixer` attempt to fix problems for you, omit the `--dry-run`
-flag:
+`phpcs` also includes a tool for fixing most CS violations, `phpcbf`:
+
 
 ```console
-$ ./vendor/bin/php-cs-fixer fix . -v --diff --config-file=.php_cs
+$ composer cs-fix
 ```
 
-If you allow php-cs-fixer to fix CS issues, please re-run the tests to ensure
+If you allow `phpcbf` to fix CS issues, please re-run the tests to ensure
 they pass, and make sure you add and commit the changes after verification.
 
 ## Recommended Workflow for Contributions
@@ -227,3 +252,8 @@ repository, we suggest doing some cleanup of these branches.
    ```console
    $ git push {username} :<branchname>
    ```
+
+
+## Conduct
+
+Please see our [CONDUCT.md](CONDUCT.md) to understand expected behavior when interacting with others in the project.

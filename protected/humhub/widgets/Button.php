@@ -31,165 +31,124 @@ use yii\helpers\Url;
  *
  * @package humhub\widgets
  */
-class Button extends Widget
+class Button extends BootstrapComponent
 {
-    const TYPE_PRIMARY = 'primary';
-    const TYPE_DEFAULT = 'default';
-    const TYPE_INFO = 'info';
-    const TYPE_WARNING = 'warning';
-    const TYPE_DANGER = 'danger';
-    const TYPE_SUCCESS = 'success';
-    const TYPE_NONE = 'none';
-
-    public $type;
-    public $htmlOptions = [];
-    public $text;
-    public $_icon;
 
     public $_loader = true;
-
     public $_link = false;
 
-    public static function instance($text = null)
+    /**
+     * @param string $text Button text
+     * @return static
+     */
+    public static function save($text = null)
     {
-        return new self(['text' => $text]);
+        if(!$text) {
+            $text = Yii::t('base', 'Save');
+        }
+
+        return self::primary($text);
     }
 
+    /**
+     * @param string $text Button text
+     * @param string $href
+     * @return static
+     */
+    public static function asLink($text = null, $href = '#')
+    {
+        return self::none($text)->link($href);
+    }
+
+    /**
+     * @param string $text Button text
+     * @return static
+     */
     public static function back($url, $text = null)
     {
         if(!$text) {
             $text = Yii::t('base', 'Back');
         }
 
-        $instance = self::defaultType($text);
-        return $instance->link($url)->icon('fa-arrow-left')->right();
+        return self::defaultType($text)->link($url)->icon('fa-arrow-left')->right()->loader(true);
     }
 
-    public static function none($text = null)
-    {
-        return new self(['type' => self::TYPE_NONE, 'text' => $text]);
+    public static function userPickerSelfSelect($selector, $text = null) {
+        if(!$text) {
+            $text = Yii::t('base', 'Select Me');
+        }
+
+        return self::asLink($text)->action('selectSelf', null, $selector)->icon('fa-check-circle-o')->right()->cssClass('input-field-addon');
     }
 
-    public static function primary($text = null)
-    {
-        return new self(['type' => self::TYPE_PRIMARY, 'text' => $text]);
-    }
-
-    public static function defaultType($text = null)
-    {
-        return new self(['type' => self::TYPE_DEFAULT, 'text' => $text]);
-    }
-
-    public static function info($text = null)
-    {
-        return new self(['type' => self::TYPE_INFO, 'text' => $text]);
-    }
-
-    public static function warning($text = null)
-    {
-        return new self(['type' => self::TYPE_WARNING, 'text' => $text]);
-    }
-
-    public static function success($text = null)
-    {
-        return new self(['type' => self::TYPE_SUCCESS, 'text' => $text]);
-    }
-
-    public static function danger($text = null)
-    {
-        return new self(['type' => self::TYPE_DANGER, 'text' => $text]);
-    }
-
+    /**
+     * @param bool $active
+     * @return $this
+     */
     public function loader($active = true)
     {
         $this->_loader = $active;
         return $this;
     }
 
-    public function link($url = null)
+    /**
+     * @param null $url
+     * @return $this
+     */
+    public function link($url = null, $pjax = true)
     {
         $this->_link = true;
+        $this->loader(false);
         $this->htmlOptions['href'] = Url::to($url);
+
+        $this->pjax($pjax);
+
         return $this;
     }
 
-    public function right($right = true)
+    /**
+     * If set to false the [data-pjax-prevent] flag is attached to the link.
+     * @param bool $pjax
+     * @return $this
+     */
+    public function pjax($pjax = true)
     {
-        if($right) {
-            Html::removeCssClass($this->htmlOptions,'pull-left');
-            Html::addCssClass($this->htmlOptions, 'pull-right');
-        } else {
-            Html::removeCssClass($this->htmlOptions,'pull-right');
+        if(!$pjax) {
+            $this->options(['data-pjax-prevent' => true]);
         }
-
         return $this;
     }
 
-    public function left($left = true)
-    {
-        if($left) {
-            Html::removeCssClass($this->htmlOptions,'pull-right');
-            Html::addCssClass($this->htmlOptions, 'pull-left');
-        } else {
-            Html::removeCssClass($this->htmlOptions,'pull-left');
-        }
-
-        return $this;
-    }
-
-    public function sm()
-    {
-        Html::addCssClass($this->htmlOptions, 'btn-sm');
-        return $this;
-    }
-
-    public function lg()
-    {
-        Html::addCssClass($this->htmlOptions, 'btn-lg');
-        return $this;
-    }
-
-    public function xs()
-    {
-        Html::addCssClass($this->htmlOptions, 'btn-xs');
-        return $this;
-    }
-
+    /**
+     * @return $this
+     */
     public function submit()
     {
         $this->htmlOptions['type'] = 'submit';
         return $this;
     }
 
-    public function style($style)
-    {
-        Html::addCssStyle($this->htmlOptions, $style);
-        return $this;
-    }
-
-    public function id($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    public function cssClass($cssClass)
-    {
-        Html::addCssClass($this->htmlOptions, $cssClass);
-        return $this;
-    }
-
-    public function options($options)
-    {
-        $this->htmlOptions = ArrayHelper::merge($this->htmlOptions, $options);
-        return $this;
-    }
-
+    /**
+     * Adds a data-action-click handler to the button.
+     * @param $handler
+     * @param null $url
+     * @param null $target
+     * @return static
+     */
     public function action($handler, $url = null, $target = null)
     {
         return $this->onAction('click', $handler, $url, $target);
     }
 
+    /**
+     * Adds a data-action-* handler to the button.
+     *
+     * @param $event
+     * @param $handler
+     * @param null $url
+     * @param null $target
+     * @return $this
+     */
     public function onAction($event, $handler, $url = null, $target = null)
     {
         $this->htmlOptions['data-action-'.$event] = $handler;
@@ -205,6 +164,15 @@ class Button extends Widget
         return $this;
     }
 
+    /**
+     * Adds a confirmation behaviour to the button.
+     *
+     * @param null $title
+     * @param null $body
+     * @param null $confirmButtonText
+     * @param null $cancelButtonText
+     * @return $this
+     */
     public function confirm($title = null, $body = null, $confirmButtonText = null, $cancelButtonText = null)
     {
         if($title) {
@@ -228,29 +196,14 @@ class Button extends Widget
         return $this;
     }
 
-    public function icon($content, $raw = false)
-    {
-        if(!$raw) {
-            $this->icon(Html::tag('i', '', ['class' => 'fa '.$content]), true);
-        } else {
-            $this->_icon = $content;
-        }
-
-        return $this;
-    }
-
     /**
-     * @inheritdoc
+     * @return string renders and returns the actual html element by means of the current settings
      */
-    public function run()
+    public function renderComponent()
     {
-        $this->setCssClass();
-
         if($this->_loader) {
             $this->htmlOptions['data-ui-loader'] = '';
         }
-
-        $this->htmlOptions['id'] = $this->getId(true);
 
         if($this->_link) {
             $href = isset($this->htmlOptions['href']) ? $this->htmlOptions['href'] : null;
@@ -260,34 +213,27 @@ class Button extends Widget
         }
     }
 
-    protected function setCssClass()
+    public function getWidgetOptions()
     {
-        if($this->type !== self::TYPE_NONE) {
-            Html::addCssClass($this->htmlOptions, 'btn');
-            Html::addCssClass($this->htmlOptions, 'btn-'.$this->type);
-        }
+        $options = parent::getWidgetOptions();
+        $options['_link'] = $this->_link;
+        $options['_loader'] = $this->_loader;
+        return $options;
     }
 
-    protected function getText()
+    /**
+     * @inheritdoc
+     */
+    public function getComponentBaseClass()
     {
-        if($this->_icon) {
-            return $this->_icon.' '.$this->text;
-        }
-
-        return $this->text;
+        return 'btn';
     }
 
-    public function __toString()
+    /**
+     * @inheritdoc
+     */
+    public function getTypedClass($type)
     {
-        return $this::widget([
-            'id' => $this->id,
-            'type' => $this->type,
-            'text' => $this->text,
-            'htmlOptions' => $this->htmlOptions,
-            '_icon' => $this->_icon,
-            '_link' => $this->_link,
-            '_loader' => $this->_loader,
-        ]);
+        return 'btn-'.$type;
     }
-
 }
