@@ -40,6 +40,38 @@ verify($user->getPosts())->notNull();
 // empty
 verify($user->getComments())->isEmpty();
 verify($user->getRoles())->notEmpty();
+
+//Other methods:
+* stringContainsString
+* stringNotContainsString
+* stringContainsStringIgnoringCase
+* stringNotContainsStringIgnoringCase
+* isArray
+* bool
+* float
+* int
+* numeric
+* object
+* resource
+* string
+* scalar
+* isCallable
+* notArray
+* notBool
+* notFloat
+* notInt
+* notNumeric
+* notObject
+* notResource
+* notString
+* notScalar
+* notCallable
+* equalsCanonicalizing
+* notEqualsCanonicalizing
+* equalsIgnoringCase
+* notEqualsIgnoringCase
+* equalsWithDelta
+* notEqualsWithDelta
 ```
 
 Shorthands for testing truth/fallacy:
@@ -48,6 +80,7 @@ Shorthands for testing truth/fallacy:
 verify_that($user->isActivated());
 verify_not($user->isBanned());
 ```
+
 
 These two functions don't check for strict true/false matching, rather `empty` function is used.
 `verify_that` checks that result is not empty value, `verify_not` does the opposite.
