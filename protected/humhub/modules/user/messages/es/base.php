@@ -40,6 +40,6 @@ return array (
   'You\'re not registered.' => 'Usted no está registrado.',
   'Your account is disabled!' => '¡Su cuenta está deshabilitada!',
   'Your account is not approved yet!' => '¡Su cuenta todavía no ha sido aprobada!',
-  'Your new password must not equal your current password!' => 'Su nueva clave no debe ser igual a su clave actual.',
+  'Your new password must not be equal your current password!' => 'Tu nueva clave no debe ser igual a la actual',
   'or' => 'o',
 );

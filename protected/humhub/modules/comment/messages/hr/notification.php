@@ -1,5 +1,6 @@
 <?php
 return array (
+  '[Deleted]' => '[Obrisano]',
   '{displayNames} commented {contentTitle}' => '{displayNames} komentirao je {contentTitle}',
   '{displayNames} commented {contentTitle} in space {space}' => '{displayNames} komentirao je {contentTitle} u prostoru {space}',
   '{displayNames} commented {contentTitle}.' => '{displayNames} komentirao je {contentTitle}.',

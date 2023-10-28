@@ -60,6 +60,8 @@ return array (
   'Show more' => 'Prikaži više',
   'Some files could not be uploaded:' => 'Neke datoteke nisu prenesene:',
   'Space not found!' => 'Prostor nije pronađen!',
+  'Text could not be copied to clipboard' => 'Tekst nije mogao biti kopiran u privremenu memoriju',
+  'Text has been copied to clipboard' => 'Tekst je kopiran u privremenu memoriju',
   'The date has to be in the past.' => 'Datum mora biti u prošlosti.',
   'The file has been deleted.' => 'Datoteka je izbrisana.',
   'The requested resource could not be found.' => 'Traženi resurs nije moguće pronaći.',

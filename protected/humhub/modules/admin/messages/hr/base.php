@@ -8,6 +8,7 @@ return array (
   'Authentication' => 'Ovjera autentičnosti',
   'Back to overview' => 'Povratak na pregled',
   'Back to user overview' => 'Povratak na pregled korisnika',
+  'Base URL needs to begin with http:// or https://' => 'Bazni URL mora početi s http:// ili https://',
   'Basic' => 'Osnovno',
   'Caching' => 'Caching',
   'Cronjobs' => 'Cronjobs',

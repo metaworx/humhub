@@ -1,6 +1,38 @@
 HumHub Change Log
 =================
 
+1.2.5  (April 11, 2018)
+---------------------
+
+When you customized or used the createCVS method of PendingRegistrationsController please 
+migrate your code to SpreadsheetExport. PHPOffice is replaced by PHPSpreadsheet.
+
+- Enh: Added BaseURL setting protocol scheme validation
+- Fix #2849: ActiveQueryContent doesn't find public profile content when guest access is enabled
+- Enh: Fixed username alignment in comments (@githubjeka)
+- Enh: More readable WallEntryAddon links (@githubjeka)
+- Fix: Documentation grammar fixes (@Felli)
+- Fix: Let's Encrypt ACME Error (@Felli)
+- Fix: Typo in password recovery (@acs-ferreira)
+- Fix: Profile posts of friends not appears on dashboard
+- Fix #2745: Yii2 2.0.13 will break the admin interface
+- Enh: Allow auto detection of response dataType
+- Fix #2947: Allow json success result on modalSubmit
+- Enh: Disabled automatic content following on likes by default
+- Enh: Improved IntegrityChecker memory usage
+- Chg: `PendingRegistrationsController->createCVS` removed
+- Fix: Stream image preview size not changeable
+- Fix: Increased maximum e-mail address length from 45 characters to 254
+- Fix: Group member search by firstname/lastname
+- Enh: Added Slovene language
+- Enh: Added Croatian language
+- Fix: User approval, lastname field is shown twice to admins
+- Fix: User model namespace issue in `humhub/modules/user/components/UrlRule`
+- Enh: Raised notification over view pagination size to 20
+- Enh: Added `humhub/modules/space/models/Module::flushCache()` and `humhub/modules/space/behaviours/SpaceModelModules::flushCache()` in order to flush the space module cache
+- Enh: Added further `FunctionalTester` utilities
+- Enh: Added Norwegian Nynorsk language
+- Fix #3009: Change the Space URL raises 404
 
 1.2.4  (December 13, 2017)
 --------------------------
