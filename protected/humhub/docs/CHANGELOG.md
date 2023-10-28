@@ -1,6 +1,21 @@
 HumHub Change Log
 =================
 
+1.3.10  (February 22, 2019)
+---------------------------
+- Fix: Removed ContentTag logging in search update
+- Fix #2567 No results in directory search containing single quote ( ' )
+- Fix #3468 Private space stream contains public content filter 
+- Fix #3473 Captcha validation breaks invite by mail
+- Enh: `data-action-confirm` now works on non action based links in combination with `data-action-method`
+- Enh: `grunt test` now uses the composer codeception version instead of a global executable
+- Enh: `grunt test` supports an additional `--env` option in order to set the codeception environment
+- Fix: Absolute url generation in tests not working
+- Enh: Added `HumHubHelper:fetchinviteToken()` in order to fetch invite tokens from emails in functional tests
+- Fix: Added "utf8mb4" character set support to database requirements
+- Fix: Finnish language name in language dropdown
+
+
 1.3.9  (February 13, 2019)
 --------------------------
 
