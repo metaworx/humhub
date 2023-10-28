@@ -112,7 +112,7 @@ humhub.module('stream.wall', function (module, require, $) {
     WallStream.prototype.initScroll = function() {
         var that = this;
         $(window).off('scroll.wallStream').on('scroll.wallStream', function () {
-            if(that.state.scrollLock || !that.canLoadMore() || !that.state.lastRequest || that.state.lastRequest.isSingleEntryRequest()) {
+            if(that.state.scrollLock || !that.canLoadMore() || !that.state.lastRequest || that.state.firstRequest.isSingleEntryRequest()) {
                 return;
             }
 
@@ -146,7 +146,7 @@ humhub.module('stream.wall', function (module, require, $) {
         event.off('humhub:content:newEntry.wallStream');
         event.off('humhub:content:afterMove.wallStream');
         event.off('humhub:topic:updated.wallStream');
-        event.off('scroll.wallStream');
+        $(window).off('scroll.wallStream');
     };
 
     var WallStreamFilter = Filter.extend();

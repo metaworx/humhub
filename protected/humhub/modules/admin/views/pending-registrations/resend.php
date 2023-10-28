@@ -2,17 +2,26 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+
+/** @var $model \humhub\modules\user\models\Invite */
 ?>
 <div class="panel-body">
-    <h4><?= Yii::t('AdminModule.views_approval_resend', 'Send invitation email again?'); ?></h4>
+    <h4><?= Yii::t('AdminModule.views_invite_resend', 'Send invitation email again?'); ?></h4>
     <br>
 
     <?= \yii\widgets\DetailView::widget([
         'model' => $model,
         'attributes' => [
             'email:email',
-            'created_at:datetime',
-            'updated_at:datetime',
+            [
+                'label' => 'Invited by',
+                'attribute' => 'originator.username',
+            ],
+            [
+                'label' => 'Invited at',
+                'attribute' => 'created_at',
+                'format' => 'datetime',
+            ],
         ],
     ]); ?>
 
