@@ -9,7 +9,7 @@
 namespace humhub\modules\like\models;
 
 use Yii;
-use humhub\models\Setting;
+
 use humhub\modules\content\components\ContentAddonActiveRecord;
 
 /**
@@ -51,8 +51,7 @@ class Like extends ContentAddonActiveRecord
     {
         return array(
             array(['object_model', 'object_id'], 'required'),
-            array(['id', 'object_id', 'target_user_id', 'created_by', 'updated_by'], 'integer'),
-            array(['updated_at', 'created_at'], 'safe')
+            array(['id', 'object_id', 'target_user_id'], 'integer'),
         );
     }
 

@@ -31,7 +31,10 @@ return array (
   'Save' => 'Salva',
   'Search' => 'Cerca',
   'Search for users and spaces' => 'Cerca per utenti e space',
+  'Show more' => 'Mostra altro',
   'Space not found!' => 'Space non trovato!',
+  'The date has to be in the past.' => 'La data deve essere nel passato.',
+  'Unsubscribe' => 'Cancella sottoscrizione',
   'User not found!' => 'Utente non trovato!',
   'Your daily summary' => 'Il tuo riepilogo giornaliero',
 );
