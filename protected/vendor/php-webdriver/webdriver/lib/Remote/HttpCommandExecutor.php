@@ -157,6 +157,7 @@ class HttpCommandExecutor implements WebDriverCommandExecutor
         DriverCommand::IMPLICITLY_WAIT => ['method' => 'POST', 'url' => '/session/:sessionId/timeouts'],
         DriverCommand::MAXIMIZE_WINDOW => ['method' => 'POST', 'url' => '/session/:sessionId/window/maximize'],
         DriverCommand::MINIMIZE_WINDOW => ['method' => 'POST', 'url' => '/session/:sessionId/window/minimize'],
+        DriverCommand::NEW_WINDOW => ['method' => 'POST', 'url' => '/session/:sessionId/window/new'],
         DriverCommand::SET_ALERT_VALUE => ['method' => 'POST', 'url' => '/session/:sessionId/alert/text'],
         DriverCommand::SET_SCRIPT_TIMEOUT => ['method' => 'POST', 'url' => '/session/:sessionId/timeouts'],
         DriverCommand::SET_TIMEOUT => ['method' => 'POST', 'url' => '/session/:sessionId/timeouts'],
@@ -325,7 +326,7 @@ class HttpCommandExecutor implements WebDriverCommandExecutor
                 $url
             );
             if (is_array($params) && !empty($params)) {
-                $msg .= sprintf(' with params: %s', json_encode($params));
+                $msg .= sprintf(' with params: %s', json_encode($params, JSON_UNESCAPED_SLASHES));
             }
 
             throw new WebDriverCurlException($msg . "\n\n" . $error);

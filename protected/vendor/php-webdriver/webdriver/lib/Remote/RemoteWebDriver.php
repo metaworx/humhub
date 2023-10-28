@@ -200,6 +200,18 @@ class RemoteWebDriver implements WebDriver, JavaScriptExecutor, WebDriverHasInpu
     }
 
     /**
+     * Create a new top-level browsing context.
+     *
+     * @codeCoverageIgnore
+     * @deprecated Use $driver->switchTo()->newWindow()
+     * @return WebDriver The current instance.
+     */
+    public function newWindow()
+    {
+        return $this->switchTo()->newWindow();
+    }
+
+    /**
      * Find the first WebDriverElement using the given mechanism.
      *
      * @param WebDriverBy $by
@@ -298,6 +310,9 @@ class RemoteWebDriver implements WebDriver, JavaScriptExecutor, WebDriverHasInpu
 
     /**
      * Get all window handles available to the current session.
+     *
+     * Note: Do not use `end($driver->getWindowHandles())` to find the last open window, for proper solution see:
+     * https://github.com/php-webdriver/php-webdriver/wiki/Alert,-tabs,-frames,-iframes#switch-to-the-new-window
      *
      * @return array An array of string containing all available window handles.
      */
@@ -595,6 +610,10 @@ class RemoteWebDriver implements WebDriver, JavaScriptExecutor, WebDriverHasInpu
     }
 
     /**
+     * Execute custom commands on remote end.
+     * For example vendor-specific commands or other commands not implemented by php-webdriver.
+     *
+     * @see https://github.com/php-webdriver/php-webdriver/wiki/Custom-commands
      * @param string $endpointUrl
      * @param string $method
      * @param array $params
