@@ -6,7 +6,7 @@ return array (
   'kartik-v/yii2-krajee-base' => 
   array (
     'name' => 'kartik-v/yii2-krajee-base',
-    'version' => '2.0.0.0',
+    'version' => '2.0.5.0',
     'alias' => 
     array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base/src',
@@ -168,7 +168,7 @@ return array (
   'kartik-v/yii2-widget-activeform' => 
   array (
     'name' => 'kartik-v/yii2-widget-activeform',
-    'version' => '1.5.7.0',
+    'version' => '1.5.8.0',
     'alias' => 
     array (
       '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform/src',
@@ -204,7 +204,7 @@ return array (
   'yiisoft/yii2-authclient' => 
   array (
     'name' => 'yiisoft/yii2-authclient',
-    'version' => '2.1.7.0',
+    'version' => '2.1.8.0',
     'alias' => 
     array (
       '@yii/authclient' => $vendorDir . '/yiisoft/yii2-authclient/src',
@@ -267,19 +267,10 @@ return array (
   'yiisoft/yii2-bootstrap' => 
   array (
     'name' => 'yiisoft/yii2-bootstrap',
-    'version' => '2.0.8.0',
+    'version' => '2.0.9.0',
     'alias' => 
     array (
       '@yii/bootstrap' => $vendorDir . '/yiisoft/yii2-bootstrap/src',
-    ),
-  ),
-  'yiisoft/yii2-apidoc' => 
-  array (
-    'name' => 'yiisoft/yii2-apidoc',
-    'version' => '2.1.0.0',
-    'alias' => 
-    array (
-      '@yii/apidoc' => $vendorDir . '/yiisoft/yii2-apidoc',
     ),
   ),
   'yiisoft/yii2-debug' => 
@@ -303,7 +294,7 @@ return array (
   'yiisoft/yii2-gii' => 
   array (
     'name' => 'yiisoft/yii2-gii',
-    'version' => '2.0.7.0',
+    'version' => '2.0.8.0',
     'alias' => 
     array (
       '@yii/gii' => $vendorDir . '/yiisoft/yii2-gii/src',
