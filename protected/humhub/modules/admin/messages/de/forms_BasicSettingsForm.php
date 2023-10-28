@@ -17,13 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Server Timezone' => '',
+    'Show sharing panel on dashboard' => '',
     'Show user profile post form on dashboard' => '',
     'Base URL' => 'Basis URL',
     'Default language' => 'Standardsprache',
     'Default space' => 'Standardspace',
     'Invalid space' => 'Ungültiger Space',
-    'Logo upload' => 'Logo hochlanden',
+    'Logo upload' => 'Logo hochladen',
     'Name of the application' => 'Name der Anwendung',
+    'Server Timezone' => 'Zeitzone des Servers',
     'Show introduction tour for new users' => 'Zeige Einführungstour für neue Benutzer',
 ];

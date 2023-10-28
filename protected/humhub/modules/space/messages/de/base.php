@@ -17,9 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Visible for all' => '@@Sichtbar für alle@@',
-    ' Invite and request' => 'Einladung und Anfrage',
-    'Could not delete user who is a space owner! Name of Space: {spaceName}' => 'Space-Inhaber kann nicht gelöscht werden! Name des Spaces: »{spaceName}«',
+    'Default' => '',
+    'Private' => '',
+    'Public' => '',
+    'Could not delete user who is a space owner! Name of Space: {spaceName}' => 'Rubrik-Inhaber kann nicht gelöscht werden! Name der Rubrik: »{spaceName}«',
     'Everyone can enter' => 'Frei zugänglich',
     'Invite and request' => 'Einladung und Anfrage',
     'Only by invite' => 'Nur mit einer Einladung',

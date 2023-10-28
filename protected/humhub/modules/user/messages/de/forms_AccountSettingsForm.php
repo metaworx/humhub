@@ -17,10 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'TimeZone' => '',
-    'Invalid language!' => '@@Ungültige Sprache!@@',
     'Hide panel on dashboard' => 'Panel auf dem Dashboard ausblenden',
     'Language' => 'Sprache',
     'Profile visibility' => 'Sichtbarkeit des Profils',
     'Tags' => 'Tags',
+    'TimeZone' => 'Zeitzone',
 ];

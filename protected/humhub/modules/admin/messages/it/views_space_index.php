@@ -17,17 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Define here default settings for new spaces.' => '',
-    'Overview' => '',
-    'All' => '@@Tutti@@',
-    'Delete space' => '@@Cancella space@@',
-    'Edit space' => '@@Modifica space@@',
-    'Search for space name' => '@@Cerca per nome space@@',
-    'Search for space owner' => '@@Cerca per proprietario space@@',
-    'Space name' => '@@Nome space@@',
-    'Space owner' => '@@Proprietario space@@',
-    'View space' => '@@Vedi space@@',
     '<strong>Manage</strong> spaces' => '<strong>Gestisci</strong> space',
-    'In this overview you can find every space and manage it.' => 'In questa panoramica puoi cercare ogni space e gestirlo.',
+    'Define here default settings for new spaces.' => 'Definisci qui le impostazioni di default per i nuovi space.',
+    'In this overview you can find every space and manage it.' => 'In questa panoramica puoi trovare tutti gli space e gestirli.',
+    'Overview' => 'Panoramica',
     'Settings' => 'Impostazioni',
 ];

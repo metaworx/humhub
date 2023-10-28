@@ -17,8 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    '<strong>Setup</strong> Wizard' => '@@<strong>Kurulum</strong> Sihirbazı@@',
-    '<strong>Welcome</strong> to HumHub<br>Your Social Network Toolbox' => '<strong>Hoşgeldiniz</strong> HumHub<br>Sosyal Ağ Kurulum',
+    '<strong>Welcome</strong> to HumHub<br>Your Social Network Toolbox' => '<strong>Humhub</strong> Sosyal Ağ Kurulumu',
     'Next' => 'İleri',
-    'This wizard will install and configure your own HumHub instance.<br><br>To continue, click Next.' => 'Bu kurulum sihirbazı ile kendi Humhub örneğini yapabilirsiniz. <br> Devam etmek için İleri\'yi tıklatın.',
+    'This wizard will install and configure your own HumHub instance.<br><br>To continue, click Next.' => 'Kurulum sihirbazı ile kendi Humhub Sosyal Ağınızı oluşturabilirsiniz. <br> Devam etmek için İleri\'yi tıklatın.',
 ];

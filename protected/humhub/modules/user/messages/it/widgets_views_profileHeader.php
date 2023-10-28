@@ -17,12 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Ok' => '',
-    'Edit account' => '@@Modifica account@@',
-    'Follow' => '@@Segui@@',
-    'Unfollow' => '@@Non seguo@@',
     '<strong>Something</strong> went wrong' => '<strong>Qualcosa</strong> è andato male',
-    'Followers' => 'Chi mi segue',
-    'Following' => 'Chi seguo io',
+    'Followers' => 'Mi seguono',
+    'Following' => 'Seguo io',
+    'Ok' => 'Ok',
     'Spaces' => 'Space',
 ];

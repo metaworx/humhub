@@ -17,15 +17,6 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'No matches with your selected filters!' => '',
-    'Nothing here yet!' => '',
-    '<b>Nobody wrote something yet.</b><br>Make the beginning and post something...' => '@@<b>Personne n\'a rien écrit pour le moment.</b><br>Soyez le premier et écrivez quelque chose...@@',
-    '<b>This profile stream is still empty</b>' => '@@<b>Ce flux de profil est vide</b>@@',
-    '<b>This space is still empty!</b><br>Start by posting something here...' => '@@<b>Cet espace est vide</b><br>Commencez par écrire quelque chose ici...@@',
-    '<b>Your dashboard is empty!</b><br>Post something on your profile or join some spaces!' => '@@<b>Votre tableau de bord est vide !</b><br>Écrivez quelque chose sur votre profil ou rejoignez des espaces !@@',
-    '<b>Your profile stream is still empty</b><br>Get started and post something...' => '@@<b>Votre profil est vide !</b><br>Commencez par écrire quelque chose...@@',
-    'Nothing found which matches your current filter(s)!' => '@@Rien ne correspond à vos critères actuels !@@',
-    'Show all' => '@@Tout voir@@',
     'Back to stream' => 'Retour au fil d\'actualités',
     'Content with attached files' => 'Contenu avec pièces jointes',
     'Created by me' => 'Créé par moi',
@@ -33,6 +24,8 @@ return [
     'Filter' => 'Filtre',
     'Include archived posts' => 'Inclure les archives',
     'Last update' => 'Dernière mise à jour',
+    'No matches with your selected filters!' => 'Aucun résultat.',
+    'Nothing here yet!' => 'Rien à afficher actuellement.',
     'Only private posts' => 'Uniquement les publications privées',
     'Only public posts' => 'Uniquement les publications publiques',
     'Posts only' => 'Uniquement les publications',
