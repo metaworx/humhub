@@ -4,11 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009
+class ComposerStaticInitcd86b41e13f537cc2405eb9b034a63cc
 {
     public static $files = array (
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
@@ -197,6 +197,7 @@ class ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
             'DeepCopy\\' => 9,
         ),
@@ -689,9 +690,13 @@ class ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
+        'Doctrine\\Deprecations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
+        ),
         'Doctrine\\Common\\Lexer\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
+            0 => __DIR__ . '/..' . '/doctrine/lexer/src',
         ),
         'DeepCopy\\' => 
         array (
@@ -1405,10 +1410,10 @@ class ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit55534c2e7af6d86961d4faa57f2cb009::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcd86b41e13f537cc2405eb9b034a63cc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcd86b41e13f537cc2405eb9b034a63cc::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitcd86b41e13f537cc2405eb9b034a63cc::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitcd86b41e13f537cc2405eb9b034a63cc::$classMap;
 
         }, null, ClassLoader::class);
     }
