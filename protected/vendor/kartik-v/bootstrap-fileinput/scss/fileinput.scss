@@ -1,5 +1,5 @@
 /*!
- * bootstrap-fileinput v5.2.6
+ * bootstrap-fileinput v5.2.7
  * http://plugins.krajee.com/file-input
  *
  * Krajee default styling for bootstrap-fileinput.
@@ -347,12 +347,6 @@ input[type=file].file-loading {
     }
   }
 
-  .file-preview-other-frame {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .file-preview-text {
     display: block;
     color: $boston-blue;
@@ -546,13 +540,6 @@ input[type=file].file-loading {
     right: 0;
   }
 
-  .kv-zoom-caption {
-    max-width: 50%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
   .kv-zoom-header {
     padding: 0.5rem;
   }
@@ -718,6 +705,10 @@ input[type=file].file-loading {
   }
 }
 
+.kv-zoom-actions {
+  min-width: 140px;
+}
+
 .kv-zoom-actions .btn-kv {
   margin-left: multiply($pad, 0.6);
 }
@@ -726,15 +717,6 @@ input[type=file].file-loading {
   min-height: 300px;
   text-align: center;
   white-space: nowrap;
-
-  > * {
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  .kv-spacer {
-    height: 100%;
-  }
 
   .file-preview-image {
     max-height: 100%;
@@ -853,4 +835,10 @@ input[type=file].file-loading {
   background-color: $link-water;
   border-color: $pelorous;
   box-shadow: none;
+}
+
+.file-preview-other-frame, .file-preview-object, .kv-zoom-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

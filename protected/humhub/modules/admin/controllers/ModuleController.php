@@ -10,11 +10,10 @@ namespace humhub\modules\admin\controllers;
 
 use humhub\components\Module;
 use humhub\modules\admin\components\Controller;
+use humhub\modules\admin\models\forms\GeneralModuleSettingsForm;
 use humhub\modules\admin\models\forms\ModuleSetAsDefaultForm;
+use humhub\modules\admin\permissions\ManageModules;
 use humhub\modules\content\components\ContentContainerModule;
-use humhub\modules\content\components\ContentContainerModuleManager;
-use humhub\modules\space\models\Space;
-use humhub\modules\user\models\User;
 use Yii;
 use yii\base\Exception;
 use yii\web\HttpException;
@@ -30,6 +29,11 @@ class ModuleController extends Controller
     /**
      * @inheritdoc
      */
+    public $subLayout = '@admin/views/layouts/module';
+
+    /**
+     * @inheritdoc
+     */
     public $adminOnly = false;
 
     /**
@@ -38,7 +42,6 @@ class ModuleController extends Controller
     public function init()
     {
         $this->appendPageTitle(Yii::t('AdminModule.base', 'Modules'));
-        $this->subLayout = '@admin/views/layouts/module';
 
         return parent::init();
     }
@@ -49,7 +52,7 @@ class ModuleController extends Controller
     public function getAccessRules()
     {
         return [
-            ['permissions' => \humhub\modules\admin\permissions\ManageModules::class]
+            ['permissions' => ManageModules::class]
         ];
     }
 
@@ -59,53 +62,9 @@ class ModuleController extends Controller
         return $this->redirect(['/admin/module/list']);
     }
 
-
     public function actionList()
     {
-        $installedModules = Yii::$app->moduleManager->getModules();
-
-        return $this->render('list', [
-            'installedModules' => $installedModules,
-            'deprecatedModuleIds' => $this->getDeprecatedModules(),
-            'marketplaceUrls' => $this->getMarketplaceUrls()
-        ]);
-    }
-
-
-    private function getMarketplaceUrls()
-    {
-        $marketplaceUrls = [];
-
-        if (Yii::$app->hasModule('marketplace')) {
-            try {
-                foreach (Yii::$app->getModule('marketplace')->onlineModuleManager->getModules() as $id => $module) {
-                    if (!empty($module['marketplaceUrl'])) {
-                        $marketplaceUrls[$id] = $module['marketplaceUrl'];
-                    }
-                }
-            } catch (\Exception $ex) {
-            }
-        }
-
-        return $marketplaceUrls;
-    }
-
-
-    private function getDeprecatedModules()
-    {
-        $deprecatedModuleIds = [];
-        if (Yii::$app->hasModule('marketplace')) {
-            try {
-                foreach (Yii::$app->getModule('marketplace')->onlineModuleManager->getModules() as $id => $module) {
-                    if (!empty($module['isDeprecated'])) {
-                        $deprecatedModuleIds[] = $id;
-                    }
-                }
-            } catch (\Exception $ex) {
-            }
-        }
-
-        return $deprecatedModuleIds;
+        return $this->render('list');
     }
 
     /**
@@ -244,18 +203,30 @@ class ModuleController extends Controller
             throw new HttpException(500, 'Invalid module type!');
         }
 
-        $model = new ModuleSetAsDefaultForm();
-        $model->spaceDefaultState = ContentContainerModuleManager::getDefaultState(Space::class, $moduleId);
-        $model->userDefaultState = ContentContainerModuleManager::getDefaultState(User::class, $moduleId);
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            ContentContainerModuleManager::setDefaultState(User::class, $moduleId, $model->userDefaultState);
-            ContentContainerModuleManager::setDefaultState(Space::class, $moduleId, $model->spaceDefaultState);
+        $model = (new ModuleSetAsDefaultForm())->setModule($moduleId);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->renderModalClose();
         }
 
         return $this->renderAjax('setAsDefault', ['module' => $module, 'model' => $model]);
     }
 
+    /**
+     * Module settings
+     * @return string
+     */
+    public function actionModuleSettings()
+    {
+        $moduleSettingsForm = new GeneralModuleSettingsForm();
+
+        if ($moduleSettingsForm->load(Yii::$app->request->post()) && $moduleSettingsForm->save()) {
+            $this->view->saved();
+            return $this->redirect(['/admin/module/list']);
+        }
+
+        return $this->renderAjax('moduleSettings', [
+            'settings' => $moduleSettingsForm,
+        ]);
+    }
 
 }

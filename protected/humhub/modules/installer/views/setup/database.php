@@ -10,17 +10,14 @@ use humhub\modules\ui\form\widgets\ActiveForm;
 
 <div id="database-form" class="panel panel-default animated fadeIn">
     <div class="panel-heading">
-        <?php echo Yii::t('InstallerModule.base', '<strong>Database</strong> Configuration'); ?>
+        <?= Yii::t('InstallerModule.base', '<strong>Database</strong> Configuration'); ?>
     </div>
 
     <div class="panel-body">
-        <p>
-            <?php echo Yii::t('InstallerModule.base', 'Below you have to enter your database connection details. If you’re not sure about these, please contact your system administrator.'); ?>
-        </p>
+        <p><?= Yii::t('InstallerModule.base', 'Below you have to enter your database connection details. If you’re not sure about these, please contact your system administrator.'); ?></p>
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <hr/>
         <?= $form->field($model, 'hostname') ?>
         <hr/>
         <?= $form->field($model, 'port') ?>
@@ -32,16 +29,15 @@ use humhub\modules\ui\form\widgets\ActiveForm;
         <?= $form->field($model, 'database') ?>
         <?= $form->field($model, 'create')->checkbox() ?>
 
-        <?php if ($errorMessage) { ?>
+        <?php if ($errorMessage): ?>
             <div class="alert alert-danger">
-                <strong><?php echo Yii::t('InstallerModule.base', 'Ohh, something went wrong!'); ?></strong><br/>
-                <?php echo Html::encode($errorMessage); ?>
+                <strong><?= Yii::t('InstallerModule.base', 'Ohh, something went wrong!'); ?></strong><br/>
+                <?= Html::encode($errorMessage); ?>
             </div>
-        <?php } ?>
+        <?php endif; ?>
+        <hr/>
 
-        <hr>
-
-        <?php echo Html::submitButton(Yii::t('InstallerModule.base', 'Next'), ['class' => 'btn btn-primary', 'data-loader' => "modal", 'data-message' => Yii::t('InstallerModule.base', 'Initializing database...')]); ?>
+        <?= Html::submitButton(Yii::t('InstallerModule.base', 'Next'), ['class' => 'btn btn-primary', 'data-loader' => "modal", 'data-message' => Yii::t('InstallerModule.base', 'Initializing database...')]); ?>
 
         <?php ActiveForm::end(); ?>
     </div>
@@ -55,9 +51,9 @@ use humhub\modules\ui\form\widgets\ActiveForm;
     })
 
     // Shake panel after wrong validation
-    <?php if ($model->hasErrors()) { ?>
+    <?php if ($model->hasErrors()): ?>
     $('#database-form').removeClass('fadeIn');
     $('#database-form').addClass('shake');
-    <?php } ?>
+    <?php endif; ?>
 
 </script>
