@@ -426,6 +426,7 @@ class SettingController extends Controller
                 HSetting::Set('theme', $form->theme);
                 HSetting::Set('paginationSize', $form->paginationSize);
                 HSetting::Set('displayNameFormat', $form->displayName);
+                HSetting::Set('spaceOrder', $form->spaceOrder, 'space');
 
                 // set flash message
                 Yii::app()->user->setFlash('data-saved', Yii::t('AdminModule.controllers_SettingController', 'Saved'));
@@ -436,10 +437,11 @@ class SettingController extends Controller
             $form->theme = HSetting::Get('theme');
             $form->paginationSize = HSetting::Get('paginationSize');
             $form->displayName = HSetting::Get('displayNameFormat');
+            $form->spaceOrder = HSetting::Get('spaceOrder', 'space');
         }
 
         $themes = HTheme::getThemes();
-        $themes[''] = Yii::t('AdminModule.controllers_SettingController', 'No theme');
+        //$themes[''] = Yii::t('AdminModule.controllers_SettingController', 'No theme');
         $this->render('design', array('model' => $form, 'themes' => $themes));
     }
 
@@ -497,7 +499,7 @@ class SettingController extends Controller
         $form->imageMagickPath = HSetting::Get('imageMagickPath', 'file');
         $form->maxFileSize = HSetting::Get('maxFileSize', 'file') / 1024 / 1024;
         $form->useXSendfile = HSetting::Get('useXSendfile', 'file');
-        $form->forbiddenExtensions = HSetting::Get('forbiddenExtensions', 'file');
+        $form->allowedExtensions = HSetting::Get('allowedExtensions', 'file');
 
         // Ajax Validation
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'file-settings-form') {
@@ -513,7 +515,7 @@ class SettingController extends Controller
                 $form->imageMagickPath = HSetting::Set('imageMagickPath', $form->imageMagickPath, 'file');
                 $form->maxFileSize = HSetting::Set('maxFileSize', $form->maxFileSize * 1024 * 1024, 'file');
                 $form->useXSendfile = HSetting::Set('useXSendfile', $form->useXSendfile, 'file');
-                $form->forbiddenExtensions = HSetting::Set('forbiddenExtensions', strtolower($form->forbiddenExtensions), 'file');
+                $form->allowedExtensions = HSetting::Set('allowedExtensions', strtolower($form->allowedExtensions), 'file');
 
                 // set flash message
                 Yii::app()->user->setFlash('data-saved', Yii::t('AdminModule.controllers_SettingController', 'Saved and flushed cache'));
@@ -524,8 +526,9 @@ class SettingController extends Controller
 
         // Determine PHP Upload Max FileSize
         $maxUploadSize = Helpers::GetBytesOfPHPIniValue(ini_get('upload_max_filesize'));
-        if ($maxUploadSize > Helpers::GetBytesOfPHPIniValue(ini_get('post_max_size')))
+        if ($maxUploadSize > Helpers::GetBytesOfPHPIniValue(ini_get('post_max_size'))) {
             $maxUploadSize = Helpers::GetBytesOfPHPIniValue(ini_get('post_max_size'));
+        }
         $maxUploadSize = floor($maxUploadSize / 1024 / 1024);
 
         // Determine currently used ImageLibary
@@ -544,6 +547,71 @@ class SettingController extends Controller
 
         $this->render('cronjob', array(
         ));
+    }
+
+    /**
+     * List of OEmbed Providers
+     */
+    public function actionOEmbed()
+    {
+        $providers = UrlOembed::getProviders();
+        $this->render('oembed', array('providers' => $providers));
+    }
+
+    /**
+     * Add or edit an OEmbed Provider
+     */
+    public function actionOEmbedEdit()
+    {
+
+        $form = new OEmbedProviderForm;
+
+        $prefix = Yii::app()->request->getParam('prefix');
+        $providers = UrlOembed::getProviders();
+
+        if (isset($providers[$prefix])) {
+            $form->prefix = $prefix;
+            $form->endpoint = $providers[$prefix];
+        }
+
+        // uncomment the following code to enable ajax-based validation
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'oembed-edit-form') {
+            echo CActiveForm::validate($form);
+            Yii::app()->end();
+        }
+
+        if (isset($_POST['OEmbedProviderForm'])) {
+            $_POST['OEmbedProviderForm'] = Yii::app()->input->stripClean($_POST['OEmbedProviderForm']);
+            $form->attributes = $_POST['OEmbedProviderForm'];
+
+            if ($form->validate()) {
+
+                if ($prefix && isset($providers[$prefix])) {
+                    unset($providers[$prefix]);
+                }
+                $providers[$form->prefix] = $form->endpoint;
+                UrlOembed::setProviders($providers);
+
+                $this->redirect(Yii::app()->createUrl('//admin/setting/oembed'));
+            }
+        }
+
+        $this->render('oembed_edit', array('model' => $form, 'prefix' => $prefix));
+    }
+
+    /**
+     * Deletes OEmbed Provider
+     */
+    public function actionOEmbedDelete()
+    {
+        $prefix = Yii::app()->request->getParam('prefix');
+        $providers = UrlOembed::getProviders();
+
+        if (isset($providers[$prefix])) {
+            unset($providers[$prefix]);
+            UrlOembed::setProviders($providers);
+        }
+        $this->redirect(Yii::app()->createUrl('//admin/setting/oembed'));
     }
 
     /**

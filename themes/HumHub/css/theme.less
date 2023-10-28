@@ -234,6 +234,11 @@ h4 {
 
 .media {
 
+  .time {
+    font-size: 11px;
+    color: @colorFont4;
+  }
+
   .media-body {
 
     font-size: 13px;
@@ -248,7 +253,7 @@ h4 {
 
       }
 
-      small {
+      small, small a {
         font-size: 11px;
         color: @colorFont4;
       }
@@ -260,11 +265,6 @@ h4 {
       margin-top: 5px;
       margin-bottom: 5px;
       min-height: 15px;
-    }
-
-    .time {
-      font-size: 11px;
-      color: @colorFont4;
     }
 
     .module-controls {
@@ -282,6 +282,11 @@ h4 {
     a {
       color: @colorInfo2;
     }
+
+  }
+
+  .content .files a {
+    color: @colorFont3;
   }
 }
 
@@ -507,23 +512,9 @@ h4 {
   }
 }
 
-/*.nav-tabs {
-  .dropdown-menu {
-    li {
-      a {
-        font-size: 12px;
-      }
-    }
-  }
-}*/
-
 .nav-pills.preferences {
-  position: absolute;
-  right: 10px;
-  top: 10px;
 
   .dropdown .dropdown-toggle {
-    padding: 2px 10px;
     color: @colorFont4;
   }
 
@@ -531,7 +522,6 @@ h4 {
 
     .dropdown-toggle, .dropdown-toggle:hover {
       background-color: @colorPrimary3;
-      color: white;
     }
   }
 
@@ -1305,6 +1295,10 @@ table {
   background: url('../img/loader.gif') no-repeat center center;
 }
 
+#wallStream .loader {
+  background: url('../img/loader_body.gif') no-repeat center center;
+}
+
 .loader-small {
   height: 32px;
   width: 32px;
@@ -1409,9 +1403,39 @@ ul.tag_input.focus {
   color: @colorInfo2;
 }
 
+.file_upload_remove_link, .file_upload_remove_link:hover {
+  color: @colorDanger1;
+}
+
 // Contentform error
 #contentFormError {
   color: @colorDanger1;
+}
+
+// fileupload button
+.comment_create, .content_edit {
+  position: relative;
+
+  .fileinput-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    padding: 6px 10px;
+    background: transparent !important;
+
+    .fa {
+      color: @colorBackground3;
+    }
+  }
+
+  .fileinput-button:hover .fa {
+    background: transparent !important;
+    color: @colorBackground4;
+  }
+
+  .fileinput-button:active {
+    box-shadow: none !important;
+  }
 }
 
 // Flash message after saving
@@ -1452,26 +1476,17 @@ ul.tag_input.focus {
 // TourModule
 
 ul.tour-list {
-  list-style: none;
-  margin-bottom: 0;
-  padding-left: 10px;
 
   li {
-    padding-top: 5px;
 
     a {
       color: @colorInfo2;
-
-      .fa {
-        width: 16px;
-      }
     }
   }
 
   li.completed {
     a {
       color: @colorFont4;
-      text-decoration: line-through;
     }
   }
 }
@@ -1499,6 +1514,41 @@ ul.tour-list {
   background-color: #f9f0d2;
 }
 
+// atwho Plugin
+.atwho-view .cur {
+  border-left: 3px solid @colorInfo2;
+  background-color: #f7f7f7 !important;
+}
+
+.atwho-user, .atwho-space, .atwho-input a {
+  color: @colorInfo2;
+}
+
+.atwho-input a:hover {
+  color: @colorInfo2;
+}
+
+.atwho-view strong {
+  background-color: #f9f0d2;
+}
+
+.atwho-view .cur strong {
+  background-color: #f9f0d2;
+}
+
+// jPlayer Extension
+
+.comment {
+
+  .jp-progress {
+    background-color: #dbdcdd !important;
+  }
+
+  .jp-play-bar {
+    background: #cacaca;
+  }
+}
+
 //
 // Animate.css modifications
 // --------------------------------------------------
@@ -1519,16 +1569,6 @@ img.bounceIn {
   -moz-animation-duration: 800ms;
   animation-duration: 800ms;
 }
-
-/*body {
-  background-color: @colorPrimary3;
-
-  .panel {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-  }
-}*/
 
 .outside {
 

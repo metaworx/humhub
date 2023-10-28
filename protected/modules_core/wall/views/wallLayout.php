@@ -1,9 +1,8 @@
 <?php
 /**
- * This view represents the layout of a wall entry.
+ * This view represents the basic layout of a wall entry.
  *
- * @property User $user the user which created this post
- * @property Post $post the current post
+ * @property HActiveRecordContent $object the object which this wall entry belongs to.
  *
  * @package humhub.modules_core.wall
  * @since 0.5
@@ -43,6 +42,16 @@
         <h4 class="media-heading"><a
                 href="<?php echo $object->content->user->getProfileUrl(); ?>"><?php echo $object->content->user->displayName; ?></a>
             <small><?php echo HHtml::timeago($object->content->created_at); ?>
+                
+                <?php if ($object->content->created_at != $object->content->updated_at): ?>
+                    (<?php echo Yii::t('WallModule.views_wallLayout', 'Updated :timeago', array (':timeago'=>HHtml::timeago($object->content->updated_at))); ?>)
+                <?php endif; ?>
+                
+
+                <!-- show space name -->
+                <?php if (Wall::$currentType != Wall::TYPE_SPACE && $object->content->container instanceof Space): ?>
+                    <?php echo Yii::t('WallModule.views_wallLayout', 'in'); ?> <strong><a href="<?php echo $object->content->container->getUrl(); ?>"><?php echo $object->content->container->name; ?></a></strong>
+                <?php endif; ?>
 
                 <!-- show labels -->
                 <?php $this->widget('application.modules_core.wall.widgets.WallEntryLabelWidget', array('object' => $object)); ?>
@@ -53,11 +62,14 @@
 
     </div>
     <hr/>
+
     <!-- show content -->
-    <div class="content">
+    <div class="content" id="wall_content_<?php echo $object->getUniqueId(); ?>">
         <?php echo $content; ?>
     </div>
 
     <!-- show controls -->
     <?php $this->widget('application.modules_core.wall.widgets.WallEntryAddonWidget', array('object' => $object)); ?>
 </div>
+
+

@@ -17,12 +17,14 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Become this user' => '',
-  'Delete' => '',
-  'Disabled' => '',
-  'Enabled' => '',
-  'Save' => '',
-  'Unapproved' => '',
-  'User not found!' => '',
-  'You cannot delete yourself!' => '',
+  'LDAP' => '',
+  'Local' => '',
+  'Become this user' => 'Diventa questo utente',
+  'Delete' => 'Cancella',
+  'Disabled' => 'Disabilitato',
+  'Enabled' => 'Abilitato',
+  'Save' => 'Salva',
+  'Unapproved' => 'Non approvato',
+  'User not found!' => 'Utente non trovato!',
+  'You cannot delete yourself!' => 'Non puoi cancellare te stesso!',
 );

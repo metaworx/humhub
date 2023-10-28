@@ -17,15 +17,15 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  ' Invite and request' => '',
   '<strong>Create</strong> new space' => '',
+  'Advanced access settings' => '',
   'Also non-members can see this<br>space, but have no access' => '',
   'Create' => '',
   'Every user can enter your space<br>without your approval' => '',
-  'Everyone can enter' => '',
   'For everyone' => '',
   'How you want to name your space?' => '',
   'Invite and request' => '',
+  'Join Policy' => '',
   'Only by invite' => '',
   'Please write down a small description for other users.' => '',
   'Private (Invisible)' => '',
@@ -33,6 +33,9 @@ return array (
   'This space will be hidden<br>for all non-members' => '',
   'Users can also apply for a<br>membership to this space' => '',
   'Users can be only added<br>by invitation' => '',
+  'Visibility' => '',
   'space description' => '',
   'space name' => '',
+  ' Invite and request' => '@@@@',
+  'Everyone can enter' => '@@@@',
 );

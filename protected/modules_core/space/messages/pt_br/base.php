@@ -17,5 +17,12 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Could not delete user who is a space owner! Name of Space: {spaceName}' => '',
+  ' Invite and request' => '',
+  'Everyone can enter' => '',
+  'Invite and request' => '',
+  'Only by invite' => '',
+  'Private (Invisible)' => '',
+  'Public (Visible)' => '',
+  'Visible for all' => '',
+  'Could not delete user who is a space owner! Name of Space: {spaceName}' => 'Não foi possível excluir o usuário que é dono de um espaço! Nome do espaço: {spacename}',
 );

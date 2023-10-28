@@ -1,28 +1,40 @@
-<div class="panel panel-default <?php if (Yii::app()->getController()->id == 'dashboard') {
+<div class="panel panel-default <?php
+if (Yii::app()->getController()->id == 'dashboard') {
     echo 'hidden';
-} ?>">
+}
+?>">
     <div class="panel-body" id="contentFormBody">
 
-<?php echo CHtml::form('', 'POST'); ?>
+        <?php echo CHtml::form('', 'POST'); ?>
 
         <ul id="contentFormError">
         </ul>
 
-<?php echo $form; ?>
+        <?php echo $form; ?>
+
+        <?php
+
+        /* Modify textarea for mention input */
+        $this->widget('application.widgets.HEditorWidget', array(
+            'id' => 'contentForm_message',
+        ));
+
+        ?>
 
         <div id="notifyUserContainer" class="form-group hidden" style="margin-top: 15px;">
             <input type="text" value="" id="notifyUserInput" name="notifyUserInput"/>
 
             <?php
-            $user_url = $this->createUrl('//user/search/json', array('keyword' => '-keywordPlaceholder-'));
+
+            $userSearchUrl = $this->createUrl('//user/search/json', array('keyword' => '-keywordPlaceholder-'));;
             if (get_class($contentContainer) == 'Space') {
-                $user_url = $this->createUrl('//space/space/searchMemberJson', array('sguid' => $this->contentContainer->guid, 'keyword' => '-keywordPlaceholder-'));
+                $userSearchUrl = $this->createUrl('//space/space/searchMemberJson', array('sguid' => $this->contentContainer->guid, 'keyword' => '-keywordPlaceholder-'));;
             }
 
             /* add UserPickerWidget to notify members */
             $this->widget('application.modules_core.user.widgets.UserPickerWidget', array(
                 'inputId' => 'notifyUserInput',
-                'userSearchUrl' => $user_url,
+                'userSearchUrl' => $userSearchUrl,
                 'maxUsers' => 10,
                 'userGuid' => Yii::app()->user->guid,
                 'placeholderText' => Yii::t('WallModule.widgets_views_archiveLink', 'Add a member to notify'),
@@ -32,7 +44,6 @@
         </div>
 
         <?php
-        echo CHtml::hiddenField("fileList", '', array('id' => "contentFrom_files"));
         echo CHtml::hiddenField("containerGuid", $contentContainer->guid);
         echo CHtml::hiddenField("containerClass", get_class($contentContainer));
         ?>
@@ -46,14 +57,14 @@
                 <?php
                 $url = CHtml::normalizeUrl(Yii::app()->createUrl($submitUrl));
                 echo HHtml::ajaxSubmitButton($submitButtonText, $url, array(
-                    'type' => 'POST',
-                    'dataType' => 'json',
-                    'beforeSend' => "function() {
+                        'type' => 'POST',
+                        'dataType' => 'json',
+                        'beforeSend' => "function() {
                     $('.contentForm').removeClass('error');
                     $('#contentFormError').hide();
                     $('#contentFormError').empty();
                 }",
-                    'success' => "function(response) {
+                        'success' => "function(response) {
                     if (response.success) {
 
                         // application.modules_core.wall function
@@ -69,9 +80,12 @@
                         $('.label-public').addClass('hidden');
                         $('#contentFrom_files').val('');
                         $('#public').attr('checked', false);
+                        $('#contentForm_message_contenteditable').html('" . Yii::t("PostModule.widgets_views_postForm", "Whats on your mind?") . "');
+                        $('#contentForm_message_contenteditable').addClass('atwho-placeholder');
+
 
                         // Notify FileUploadButtonWidget to clear (by providing uploaderId)
-                        clearFileUpload('contentFormFiles');
+                        resetUploader('contentFormFiles');
 
                     } else {
 
@@ -91,19 +105,35 @@
 
                     }
              }",
-                        ), array('id' => "post_submit_button", 'class' => 'btn btn-info')
+                    ), array('id' => "post_submit_button", 'class' => 'btn btn-info')
                 );
                 ?>
                 <?php
                 // Creates Uploading Button
                 $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
-                    'uploaderId' => 'contentFormFiles', // Unique ID of Uploader Instance
-                    'bindToFormFieldId' => 'contentFrom_files', // Hidden field to store uploaded files
+                    'uploaderId' => 'contentFormFiles',
+                    'fileListFieldName' => 'fileList',
                 ));
                 ?>
+                <script>
+                    $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
+                        $('.btn_container').show();
+                    });
+                    
+                    $('#fileUploaderButton_contentFormFiles').bind('fileuploadprogressall', function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        if (progress != 100) {
+                            // Fix: remove focus from upload button to hide tooltip
+                            $('#post_submit_button').focus();
+
+                            // hide form buttons
+                            $('.btn_container').hide();
+                        }
+                    });
+                </script>
 
                 <!-- public checkbox -->
-<?php echo CHtml::checkbox("visibility", "", array('id' => 'contentForm_visibility', 'class' => 'contentForm hidden')); ?>
+                <?php echo CHtml::checkbox("visibility", "", array('id' => 'contentForm_visibility', 'class' => 'contentForm hidden')); ?>
 
                 <!-- content sharing -->
                 <div class="pull-right">
@@ -112,20 +142,21 @@
 
                     <ul class="nav nav-pills preferences" style="right: 0; top: 5px;">
                         <li class="dropdown">
-                            <a class="dropdown-toggle" style="padding: 5px 10px;" data-toggle="dropdown" href="#"><i class="fa fa-cogs"></i></a>
+                            <a class="dropdown-toggle" style="padding: 5px 10px;" data-toggle="dropdown" href="#"><i
+                                    class="fa fa-cogs"></i></a>
                             <ul class="dropdown-menu pull-right">
                                 <li>
                                     <a href="javascript:notifyUser();"><i
                                             class="fa fa-bell"></i> <?php echo Yii::t('WallModule.widgets_views_archiveLink', 'Notify members'); ?>
                                     </a>
                                 </li>
-<?php if (get_class($this->contentContainer) == 'Space' && $this->contentContainer->canShare()): /* can create public content */ ?>
+                                <?php if (get_class($this->contentContainer) == 'Space' && $this->contentContainer->canShare()): /* can create public content */ ?>
                                     <li>
                                         <a id="contentForm_visibility_entry" href="javascript:changeVisibility();"><i
                                                 class="fa fa-unlock"></i> <?php echo Yii::t('WallModule.widgets_views_archiveLink', 'Make public'); ?>
                                         </a>
                                     </li>
-<?php endif; ?>
+                                <?php endif; ?>
                             </ul>
                         </li>
                     </ul>
@@ -135,19 +166,16 @@
 
             </div>
 
-
-
             <?php
             // Creates a list of already uploaded Files
             $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
-                'uploaderId' => 'contentFormFiles', // Unique ID of Uploader Instance
-                'bindToFormFieldId' => 'contentFrom_files', // Hidden field to store uploaded files
+                'uploaderId' => 'contentFormFiles'
             ));
             ?>
 
         </div>
         <!-- /contentForm_Options -->
-<?php echo CHtml::endForm(); ?>
+        <?php echo CHtml::endForm(); ?>
     </div>
     <!-- /panel body -->
 </div> <!-- /panel -->
@@ -160,9 +188,8 @@
     jQuery('.contentForm_options').hide();
     $('#contentFormError').hide();
 
-
     // Remove info text from the textinput
-    jQuery('#contentFormBody').click(function() {
+    jQuery('#contentFormBody').click(function () {
 
         // Hide options by default
         jQuery('.contentForm_options').fadeIn();

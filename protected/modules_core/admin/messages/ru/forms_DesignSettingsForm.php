@@ -17,7 +17,8 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Default pagination size (Entries per page)' => '',
-  'Display Name (Format)' => '',
-  'Theme' => '',
+  'Dropdown space order' => '',
+  'Default pagination size (Entries per page)' => 'Пагинация по-умолчанию (штук на странице)',
+  'Display Name (Format)' => 'Отображать название (Формат)',
+  'Theme' => 'Тема оформления',
 );

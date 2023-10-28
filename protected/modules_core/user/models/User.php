@@ -78,7 +78,7 @@ class User extends HActiveRecordContentContainer implements ISearchable
                 'class' => 'application.modules_core.user.behaviors.UserSettingBehavior',
             ),
             'HFollowableBehavior' => array(
-                'class' => 'application.behaviors.HFollowableBehavior',
+                'class' => 'application.modules_core.user.behaviors.HFollowableBehavior',
             ),
             'UserModelModulesBehavior' => array(
                 'class' => 'application.modules_core.user.behaviors.UserModelModulesBehavior',
@@ -142,6 +142,7 @@ class User extends HActiveRecordContentContainer implements ISearchable
                 array('username', 'unique', 'caseSensitive' => false, 'className' => 'User'),
                 array('email', 'email'),
                 array('group_id', 'numerical'),
+                array('email', 'unique', 'caseSensitive' => false, 'className' => 'User'),
                 array('username', 'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9äöüÄÜÖß ]/', 'message' => Yii::t('UserModule.models_User', 'Username must consist of letters, numbers and spaces only')),
             );
         }
@@ -152,7 +153,7 @@ class User extends HActiveRecordContentContainer implements ISearchable
         $rules[] = array('guid', 'length', 'max' => 45);
         $rules[] = array('username', 'unique', 'caseSensitive' => false, 'className' => 'User');
         $rules[] = array('email', 'unique', 'caseSensitive' => false, 'className' => 'User');
-        $rules[] = array('tags', 'length', 'max' => 100);
+        $rules[] = array('email,tags', 'length', 'max' => 100);
         $rules[] = array('username', 'length', 'max' => 25);
         $rules[] = array('language', 'length', 'max' => 5);
         $rules[] = array('language', 'match', 'not' => true, 'pattern' => '/[^a-zA-Z_]/', 'message' => Yii::t('UserModule.models_User', 'Invalid language!'));
@@ -193,6 +194,7 @@ class User extends HActiveRecordContentContainer implements ISearchable
             'username' => Yii::t('UserModule.models_User', 'Username'),
             'email' => Yii::t('UserModule.models_User', 'Email'),
             'tags' => Yii::t('UserModule.models_User', 'Tags'),
+            'auth_mode' => Yii::t('UserModule.models_User', 'Authentication mode'),
             'language' => Yii::t('UserModule.models_User', 'Language'),
 
             'created_at' => Yii::t('UserModule.models_User', 'Created At'),
@@ -306,7 +308,7 @@ class User extends HActiveRecordContentContainer implements ISearchable
             }
 
             $this->last_activity_email = new CDbExpression('NOW()');
-            
+
             // Set Status
             if ($this->status == "") {
                 if (HSetting::Get('needApproval', 'authentication_internal')) {
@@ -419,8 +421,8 @@ class User extends HActiveRecordContentContainer implements ISearchable
         // Delete all pending invites
         UserInvite::model()->deleteAllByAttributes(array('user_originator_id' => $this->id));
 
-        Follow::model()->deleteAllByAttributes(array('user_id' => $this->id));
-        Follow::model()->deleteAllByAttributes(array('object_model' => 'User', 'object_id' => $this->id));
+        UserFollow::model()->deleteAllByAttributes(array('user_id' => $this->id));
+        UserFollow::model()->deleteAllByAttributes(array('object_model' => 'User', 'object_id' => $this->id));
 
         // Delete all group admin assignments
         GroupAdmin::model()->deleteAllByAttributes(array('user_id' => $this->id));

@@ -51,8 +51,8 @@ class Content extends CActiveRecord
     protected $attachFileGuidsAfterSave;
 
     /**
-     * A array of user objects which should informed about this new content. 
-     * 
+     * A array of user objects which should informed about this new content.
+     *
      * @var Array User
      */
     protected $notifyUsersOfNewContent = array();
@@ -171,10 +171,10 @@ class Content extends CActiveRecord
     }
 
     /**
-     * Returns a SIContent Object by given Class and ID
+     * Returns a Content Object by given Class and ID
      *
-     * @param type $className
-     * @param type $id
+     * @param string $className Class Name of the Content
+     * @param int $id Primary Key
      */
     static function Get($className, $id)
     {
@@ -221,9 +221,11 @@ class Content extends CActiveRecord
             $wallEntry->save();
         }
 
-        // Handle user notifications by ContentFormWidget
         if ($this->isNewRecord) {
+            // If there are notifyUsers specified by populateByForm() make them follow this content
             foreach ($this->notifyUsersOfNewContent as $user) {
+                $this->getUnderlyingObject()->follow($user->id);
+
                 // Fire Notification to user
                 $notification = new Notification();
                 $notification->class = "ContentCreatedNotification";
@@ -239,9 +241,7 @@ class Content extends CActiveRecord
             }
         }
 
-        $this->updateInvolvedUsers();
-
-        File::attachToContent($this, $this->attachFileGuidsAfterSave);
+        File::attachPrecreated($this->getUnderlyingObject(), $this->attachFileGuidsAfterSave);
 
         return parent::afterSave();
     }
@@ -262,64 +262,16 @@ class Content extends CActiveRecord
             HSearch::getInstance()->deleteModel($this->getContentObject());
         }
 
-        // Remove From User Content
-        UserContent::model()->deleteAllByAttributes(array('object_model' => $this->object_model, 'object_id' => $this->object_id));
-
-        // Try delete the underlying object (Post, Question, Task, ...)
-        if ($this->getUnderlyingObject() !== null)
-            $this->getUnderlyingObject()->delete();
-
         return parent::beforeDelete();
     }
 
-    /**
-     * Updates the involved Users of this object.
-     * Currently this will be execution always after saving, maybe find a better way.
-     *
-     * Fast Hack!11!
-     *
-     * ToDo: - Make it more flexible!
-     *       - Make it faster!
-     *       - Missing Users which likes a comment
-     */
-    public function updateInvolvedUsers()
+    public function afterDelete()
     {
-
-        // Collect User Ids
-        $foundUsersIds = array();
-
-        $foundUsersIds[] = $this->created_by;
-
-        if ($this->object_model != "Activity") {
-            $comments = Comment::model()->findAllByAttributes(array('object_model' => $this->object_model, 'object_id' => $this->object_id));
-            foreach ($comments as $comment) {
-                $foundUsersIds[] = $comment->created_by;
-
-                // Comment Likes
-                $likes = Like::model()->findAllByAttributes(array('object_model' => 'Comment', 'object_id' => $comment->id));
-                foreach ($likes as $like) {
-                    $foundUsersIds[] = $like->created_by;
-                }
-            }
-
-            $likes = Like::model()->findAllByAttributes(array('object_model' => $this->object_model, 'object_id' => $this->object_id));
-            foreach ($likes as $like) {
-                $foundUsersIds[] = $like->created_by;
-            }
+        // Try delete the underlying object (Post, Question, Task, ...)
+        $this->resetUnderlyingObject();
+        if ($this->getUnderlyingObject() !== null) {
+            $this->getUnderlyingObject()->delete();
         }
-
-        UserContent::model()->deleteAllByAttributes(array('object_model' => $this->object_model, 'object_id' => $this->object_id));
-
-        // Add currently involved users
-        foreach (array_unique($foundUsersIds) as $userId) {
-            $userContent = new UserContent();
-            $userContent->object_model = $this->object_model;
-            $userContent->object_id = $this->object_id;
-            $userContent->user_id = $userId;
-            $userContent->save();
-        }
-
-        // Rewrite!
     }
 
     /**
@@ -333,14 +285,19 @@ class Content extends CActiveRecord
     public function canDelete($userId = "")
     {
 
-        if (HSetting::Get('canAdminAlwaysDeleteContent', 'security') == 1 && Yii::app()->user->isAdmin())
-            return true;
-
         if ($userId == "")
             $userId = Yii::app()->user->id;
 
         if ($this->created_by == $userId)
             return true;
+        
+        if (Yii::app()->user->isAdmin()) {
+            return true;
+        }
+
+        if ($this->container instanceof Space && $this->container->isAdmin($userId)) {
+            return true;
+        }
 
         return false;
     }
@@ -422,22 +379,11 @@ class Content extends CActiveRecord
      */
     public function isPublic()
     {
-        
+
         if ($this->visibility == self::VISIBILITY_PUBLIC) {
             return true;
         }
-        
-        /*
-        // Space Content
-        if ($this->space_id != null) {
-            if ($this->visibility == self::VISIBILITY_PUBLIC)
-                return true;
 
-            // User Content
-        } elseif ($this->user_id != null) {
-            return true;
-        }
-        */
         return false;
     }
 
