@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf1dfdbb23b88e1123cf3831177e74489
+class ComposerStaticInit88f3be0256687e7ed831be2d9963525f
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -775,13 +775,6 @@ class ComposerStaticInitf1dfdbb23b88e1123cf3831177e74489
                 0 => __DIR__ . '/..' . '/jbroadway/urlify',
             ),
         ),
-        'T' => 
-        array (
-            'Twig_' => 
-            array (
-                0 => __DIR__ . '/..' . '/twig/twig/lib',
-            ),
-        ),
         'H' => 
         array (
             'HTMLPurifier' => 
@@ -1434,10 +1427,10 @@ class ComposerStaticInitf1dfdbb23b88e1123cf3831177e74489
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf1dfdbb23b88e1123cf3831177e74489::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf1dfdbb23b88e1123cf3831177e74489::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitf1dfdbb23b88e1123cf3831177e74489::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitf1dfdbb23b88e1123cf3831177e74489::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit88f3be0256687e7ed831be2d9963525f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit88f3be0256687e7ed831be2d9963525f::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit88f3be0256687e7ed831be2d9963525f::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit88f3be0256687e7ed831be2d9963525f::$classMap;
 
         }, null, ClassLoader::class);
     }

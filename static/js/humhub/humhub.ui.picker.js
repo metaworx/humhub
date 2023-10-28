@@ -201,7 +201,7 @@ humhub.module('ui.picker', function (module, require, $) {
         }
 
         var placeholder = input.attr('placeholder');
-        if (placeholder.length) {
+        if (typeof placeholder !== 'undefined' && placeholder.length) {
             input.attr('size', placeholder.length);
         }
     };
@@ -303,7 +303,7 @@ humhub.module('ui.picker', function (module, require, $) {
 
         var selectionTmpl = (item.image && !item.new) ? Picker.template.selectionWithImage : Picker.template.selectionNoImage;
 
-        if (this.$.data('tags')) {
+        if (this.$.data('clearable') || this.$.data('clearable') === undefined) {
             selectionTmpl += Picker.template.selectionClear;
         }
 

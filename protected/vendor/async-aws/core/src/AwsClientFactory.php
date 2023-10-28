@@ -13,6 +13,7 @@ use AsyncAws\CodeBuild\CodeBuildClient;
 use AsyncAws\CodeCommit\CodeCommitClient;
 use AsyncAws\CodeDeploy\CodeDeployClient;
 use AsyncAws\CognitoIdentityProvider\CognitoIdentityProviderClient;
+use AsyncAws\Comprehend\ComprehendClient;
 use AsyncAws\Core\Credentials\CacheProvider;
 use AsyncAws\Core\Credentials\ChainProvider;
 use AsyncAws\Core\Credentials\CredentialProvider;
@@ -25,6 +26,7 @@ use AsyncAws\ElastiCache\ElastiCacheClient;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\Firehose\FirehoseClient;
 use AsyncAws\Iam\IamClient;
+use AsyncAws\Iot\IotClient;
 use AsyncAws\Kinesis\KinesisClient;
 use AsyncAws\Kms\KmsClient;
 use AsyncAws\Lambda\LambdaClient;
@@ -40,6 +42,7 @@ use AsyncAws\Ssm\SsmClient;
 use AsyncAws\StepFunctions\StepFunctionsClient;
 use AsyncAws\TimestreamQuery\TimestreamQueryClient;
 use AsyncAws\TimestreamWrite\TimestreamWriteClient;
+use AsyncAws\Translate\TranslateClient;
 use AsyncAws\XRay\XRayClient;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -199,6 +202,19 @@ class AwsClientFactory
         return $this->serviceCache[__METHOD__];
     }
 
+    public function comprehend(): ComprehendClient
+    {
+        if (!class_exists(ComprehendClient::class)) {
+            throw MissingDependency::create('async-aws/comprehend', 'ComprehendClient');
+        }
+
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ComprehendClient($this->configuration, $this->credentialProvider, $this->httpClient, $this->logger);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function dynamoDb(): DynamoDbClient
     {
         if (!class_exists(DynamoDbClient::class)) {
@@ -272,6 +288,19 @@ class AwsClientFactory
 
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new IamClient($this->configuration, $this->credentialProvider, $this->httpClient, $this->logger);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function iot(): IotClient
+    {
+        if (!class_exists(IotClient::class)) {
+            throw MissingDependency::create('async-aws/iot', 'Iot');
+        }
+
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new IotClient($this->configuration, $this->credentialProvider, $this->httpClient, $this->logger);
         }
 
         return $this->serviceCache[__METHOD__];
@@ -476,6 +505,19 @@ class AwsClientFactory
 
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new TimestreamWriteClient($this->configuration, $this->credentialProvider, $this->httpClient, $this->logger);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function translate(): TranslateClient
+    {
+        if (!class_exists(TranslateClient::class)) {
+            throw MissingDependency::create('async-aws/translate', 'Translate');
+        }
+
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new TranslateClient($this->configuration, $this->credentialProvider, $this->httpClient, $this->logger);
         }
 
         return $this->serviceCache[__METHOD__];
