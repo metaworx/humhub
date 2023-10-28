@@ -9,10 +9,13 @@ var PromiseOrPolyfill = (typeof Promise === "undefined") ? PromisePolyfill : Pro
 // TODO: Compile debug logging code out of production builds?
 var debugLog: (s: string) => void = function(s: string) {};
 var showWarnings = true;
+// Workaround for:
+// - IE9 (can't bind console functions directly), and
+// - Edge Issue #14495220 (referencing `console` without F12 Developer Tools can cause an exception)
 var warnOrLog = function() {
-  (console.warn || console.log).call(arguments);
-}; // IE9 workaround (can't bind console functions).
-var warn = warnOrLog.bind(console, "[clipboard-polyfill]");
+  (console.warn || console.log).apply(console, arguments);
+};
+var warn = warnOrLog.bind("[clipboard-polyfill]");
 
 var TEXT_PLAIN = "text/plain";
 
@@ -107,15 +110,12 @@ export default class ClipboardPolyfill {
 
   public static read(): Promise<DT> {
     return (new PromiseOrPolyfill((resolve, reject) => {
-      if (seemToBeInIE()) {
-        readIE().then(
-          (s: string) => resolve(DTFromText(s)),
-          reject
-        );
-        return;
-      }
-      // TODO: Attempt to read using async clipboard API.
-      reject("Read is not supported in your browser.");
+      // TODO: Attempt to use navigator.clipboard.read() directly.
+      // Requires DT -> DataTransfer conversion.
+      this.readText().then(
+        (s: string) => resolve(DTFromText(s)),
+        reject
+      );
     })) as Promise<DT>;
   }
 
@@ -127,7 +127,6 @@ export default class ClipboardPolyfill {
       return readIE();
     }
     return (new PromiseOrPolyfill((resolve, reject) => {
-      // TODO: Attempt to read using async clipboard API.
       reject("Read is not supported in your browser.");
     })) as Promise<string>;
   }
@@ -210,7 +209,6 @@ function copyTextUsingDOM(str: string): boolean {
 
   var span = document.createElement("span");
   span.innerText = str;
-  // span.style.whiteSpace = "pre-wrap"; // TODO: Use `innerText` above instead?
 
   spanParent.appendChild(span);
   document.body.appendChild(tempElem);
