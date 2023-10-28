@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Date' => '',
+    'Date' => '日期',
     'Markdown' => '',
     'Birthday' => '生日',
     'Country' => '国家',
@@ -26,4 +26,5 @@ return [
     'Select List' => '选择列表',
     'Text' => '文本',
     'Text Area' => '文本域',
+    'Checkbox' => '',
 ];

@@ -30,6 +30,15 @@ return array (
       '@yii/authclient' => $vendorDir . '/yiisoft/yii2-authclient',
     ),
   ),
+  'yiisoft/yii2-imagine' => 
+  array (
+    'name' => 'yiisoft/yii2-imagine',
+    'version' => '2.0.4.0',
+    'alias' => 
+    array (
+      '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine',
+    ),
+  ),
   'yiisoft/yii2-jui' => 
   array (
     'name' => 'yiisoft/yii2-jui',
@@ -37,6 +46,15 @@ return array (
     'alias' => 
     array (
       '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
+  'zhuravljov/yii2-queue' => 
+  array (
+    'name' => 'zhuravljov/yii2-queue',
+    'version' => '0.7.1.0',
+    'alias' => 
+    array (
+      '@zhuravljov/yii/queue' => $vendorDir . '/zhuravljov/yii2-queue/src',
     ),
   ),
   'yiisoft/yii2-codeception' => 
