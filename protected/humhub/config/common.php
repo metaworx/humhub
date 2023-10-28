@@ -7,7 +7,7 @@ Yii::setAlias('@humhub', '@app/humhub');
 
 $config = [
     'name' => 'HumHub',
-    'version' => '0.20.0-beta.1',
+    'version' => '0.20.0-beta.2',
     'basePath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR,
     'bootstrap' => ['log', 'humhub\components\bootstrap\ModuleAutoLoader'],
     'sourceLanguage' => 'en',
@@ -62,6 +62,13 @@ $config = [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@humhub/views/mail',
+            'view' => [
+                'class' => '\humhub\components\View',
+                'theme' => [
+                    'class' => '\humhub\components\Theme',
+                    'name' => 'HumHub'
+                ],
+            ],
         ],
         'view' => [
             'class' => '\humhub\components\View',

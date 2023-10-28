@@ -6,8 +6,9 @@ return array (
   'Configure' => 'Configurar',
   'Disable' => 'Desabilitar',
   'Enable' => 'Habilitar',
+  'Enable module...' => 'Habilitar módulo...',
   'More info' => 'Mais informações',
-  'Processing...' => 'Processando...',
+  'Processing...' => '@@Processando...@@',
   'Set as default' => 'Marcar como padrão',
   'Uninstall' => 'Desinstalar',
 );

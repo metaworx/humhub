@@ -68,6 +68,9 @@ class InitialData
         Setting::Set('theme', "HumHub");
         Setting::Set('spaceOrder', 0, 'space');
 
+        // read and save colors from current theme
+        \humhub\components\Theme::setColorVariables('HumHub');
+
         // Basic
         Setting::Set('enable', 1, 'tour');
         Setting::Set('defaultLanguage', Yii::$app->language);
@@ -153,7 +156,7 @@ class InitialData
         $field->title = 'Gender';
         $field->sort_order = 300;
         $field->profile_field_category_id = $cGeneral->id;
-        $field->field_type_class = 'ProfileFieldTypeSelect';
+        $field->field_type_class = \humhub\modules\user\models\fieldtype\Select::className();
         $field->is_system = 1;
         if ($field->save()) {
             $field->fieldType->options = "male=>Male\nfemale=>Female\ncustom=>Custom";
@@ -237,7 +240,7 @@ class InitialData
         $field->title = 'About';
         $field->sort_order = 900;
         $field->profile_field_category_id = $cGeneral->id;
-        $field->field_type_class = 'ProfileFieldTypeTextArea';
+        $field->field_type_class = \humhub\modules\user\models\fieldtype\TextArea::className();
         $field->is_system = 1;
         if ($field->save()) {
             #$field->fieldType->maxLength = 100;
@@ -317,17 +320,6 @@ class InitialData
             $field->fieldType->save();
         }
 
-
-        $field = new ProfileField();
-        $field->internal_name = "im_icq";
-        $field->title = 'ICQ Number';
-        $field->sort_order = 700;
-        $field->profile_field_category_id = $cCommunication->id;
-        $field->field_type_class = 'ProfileFieldTypeNumber';
-        $field->is_system = 1;
-        if ($field->save()) {
-            $field->fieldType->save();
-        }
 
         $field = new ProfileField();
         $field->internal_name = "im_xmpp";

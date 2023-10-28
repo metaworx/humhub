@@ -14,7 +14,6 @@ use humhub\models\Setting;
 use humhub\models\UrlOembed;
 use humhub\modules\admin\components\Controller;
 use humhub\modules\user\libs\Ldap;
-
 /**
  * SettingController 
  * 
@@ -130,7 +129,7 @@ class SettingController extends Controller
         // Build Group Dropdown
         $groups = array();
         $groups[''] = Yii::t('AdminModule.controllers_SettingController', 'None - shows dropdown in user registration.');
-        foreach (\humhub\modules\user\models\Group::findAll([]) as $group) {
+        foreach (\humhub\modules\user\models\Group::find()->all() as $group) {
             $groups[$group->id] = $group->name;
         }
 
@@ -157,6 +156,7 @@ class SettingController extends Controller
         $form->loginFilter = Setting::Get('loginFilter', 'authentication_ldap');
         $form->userFilter = Setting::Get('userFilter', 'authentication_ldap');
         $form->usernameAttribute = Setting::Get('usernameAttribute', 'authentication_ldap');
+        $form->emailAttribute = Setting::Get('emailAttribute', 'authentication_ldap');
 
         if ($form->password != '')
             $form->password = '---hidden---';
@@ -174,6 +174,7 @@ class SettingController extends Controller
             Setting::Set('loginFilter', $form->loginFilter, 'authentication_ldap');
             Setting::Set('userFilter', $form->userFilter, 'authentication_ldap');
             Setting::Set('usernameAttribute', $form->usernameAttribute, 'authentication_ldap');
+            Setting::Set('emailAttribute', $form->emailAttribute, 'authentication_ldap');
 
             // set flash message
             Yii::$app->getSession()->setFlash('data-saved', Yii::t('AdminModule.controllers_SettingController', 'Saved'));
@@ -342,6 +343,9 @@ class SettingController extends Controller
                     $logoImage = new \humhub\libs\LogoImage();
                     $logoImage->setNew($form->logo);
                 }
+
+                // read and save colors from current theme
+                \humhub\components\Theme::setColorVariables($form->theme);
 
                 Yii::$app->getSession()->setFlash('data-saved', Yii::t('AdminModule.controllers_SettingController', 'Saved'));
                 Yii::$app->response->redirect(Url::toRoute('/admin/setting/design'));

@@ -124,32 +124,28 @@ class ContentController extends Controller
      */
     public function actionStick()
     {
+        Yii::$app->response->format = 'json';
 
         $this->forcePostRequest();
 
         $json = array();
-        $json['success'] = false;   // default
+        $json['success'] = false;
 
-        $id = (int) Yii::$app->request->getParam('id', "");
-        $className = Yii::$app->request->getParam('className', "");
-
-        $object = Content::Get($className, $id);
-        if ($object != null && $object->content->canStick()) {
-
-            if ($object->content->countStickedItems() < 2) {
-                $object->content->stick();
+        $content = Content::findOne(['id' => Yii::$app->request->get('id', "")]);
+        if ($content !== null && $content->canStick()) {
+            if ($content->countStickedItems() < 2) {
+                $content->stick();
 
                 $json['success'] = true;
-                $json['wallEntryIds'] = $object->content->getWallEntryIds();
+                $json['wallEntryIds'] = $content->getWallEntryIds();
             } else {
                 $json['errorMessage'] = Yii::t('ContentModule.controllers_ContentController', "Maximum number of sticked items reached!\n\nYou can stick only two items at once.\nTo however stick this item, unstick another before!");
             }
         } else {
             $json['errorMessage'] = Yii::t('ContentModule.controllers_ContentController', "Could not load requested object!");
         }
-        // returns JSON
-        echo CJSON::encode($json);
-        Yii::$app->end();
+
+        return $json;
     }
 
     /**
@@ -159,50 +155,41 @@ class ContentController extends Controller
      */
     public function actionUnStick()
     {
+        Yii::$app->response->format = 'json';
 
         $this->forcePostRequest();
 
         $json = array();
-        $json['success'] = false;   // default
+        $json['success'] = false;
 
-        $id = (int) Yii::$app->request->getParam('id', "");
-        $className = Yii::$app->request->getParam('className', "");
-
-        $object = Content::Get($className, $id);
-
-        if ($object != null && $object->content->canStick()) {
-            $object->content->unstick();
-
+        $content = Content::findOne(['id' => Yii::$app->request->get('id', "")]);
+        if ($content !== null && $content->canStick()) {
+            $content->unstick();
             $json['success'] = true;
-            $json['wallEntryIds'] = $object->content->getWallEntryIds();
+            $json['wallEntryIds'] = $content->getWallEntryIds();
         }
 
-        // returns JSON
-        echo CJSON::encode($json);
-        Yii::$app->end();
+        return $json;
     }
 
     public function actionNotificationSwitch()
     {
+        Yii::$app->response->format = 'json';
+
         $this->forcePostRequest();
 
         $json = array();
         $json['success'] = false;   // default
 
-        $id = (int) Yii::$app->request->getParam('id', "");
-        $className = Yii::$app->request->getParam('className', "");
-        $switch = Yii::$app->request->getParam('switch', true);
-
-        $object = Content::Get($className, $id);
-
-        if ($object != null) {
-            $object->follow(Yii::$app->user->id, ($switch == 1) ? true : false );
+        $content = Content::findOne(['id' => Yii::$app->request->get('id', "")]);
+        if ($content !== null) {
+            $switch = (Yii::$app->request->get('switch', true) == 1) ? true : false;
+            $obj = $content->getPolymorphicRelation();
+            $obj->follow(Yii::$app->user->id, $switch);
             $json['success'] = true;
         }
 
-        // returns JSON
-        echo CJSON::encode($json);
-        Yii::$app->end();
+        return $json;
     }
 
 }
