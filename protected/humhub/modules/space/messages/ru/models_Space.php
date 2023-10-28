@@ -17,12 +17,17 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Homepage' => '',
+    'Administrators' => '',
+    'Default content visibility' => '',
+    'Members' => '',
+    'Moderators' => '',
+    'Users' => '',
     'Color' => 'Цвет',
     'Created At' => 'Создано в',
     'Created By' => 'Создано',
     'Description' => 'Описание',
-    'Join Policy' => 'Полномочия',
+    'Homepage' => 'Начальная страница',
+    'Join Policy' => 'Регистрационная политика',
     'Name' => 'Имя',
     'Owner' => 'Владелец',
     'Status' => 'Статус',
@@ -30,6 +35,6 @@ return [
     'Updated At' => 'Обновлено в',
     'Updated by' => 'Обновлено',
     'Visibility' => 'Отображение',
-    'You cannot create private visible spaces!' => 'Вы не можете создавать приватные видимые пространства!',
-    'You cannot create public visible spaces!' => 'Вы не можете создавать публичные видимые пространства!',
+    'You cannot create private visible spaces!' => 'Вы не можете создавать приватные пространства!',
+    'You cannot create public visible spaces!' => 'Вы не можете создавать публичные пространства!',
 ];
