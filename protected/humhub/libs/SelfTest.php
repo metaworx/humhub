@@ -41,7 +41,7 @@ class SelfTest
 
         // Checks PHP Version
         $title = 'PHP - Version - ' . PHP_VERSION;
-        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+        if (version_compare(PHP_VERSION, '5.6', '>=')) {
             $checks[] = array(
                 'title' => Yii::t('base', $title),
                 'state' => 'OK'
@@ -205,7 +205,7 @@ class SelfTest
 
         // Checks APC Extension
         $title = 'PHP - APC Support';
-        if (function_exists('apc_add')) {
+        if (function_exists('apc_add') || function_exists('apcu_add')) {
             $checks[] = array(
                 'title' => Yii::t('base', $title),
                 'state' => 'OK'
