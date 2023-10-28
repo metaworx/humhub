@@ -73597,8 +73597,13 @@
               parseDOM:
                   [{
                       tag: "a[href]", getAttrs: function getAttrs(dom) {
+                          var href = dom.getAttribute("href");
+                          if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
+                              href = '#';
+                          }
+
                           return {
-                              href: dom.getAttribute("href"),
+                              href: href,
                               title: dom.getAttribute("title"),
                               target: dom.getAttribute("target"),
                               fileGuid: dom.getAttribute("data-file-guid")
@@ -73607,6 +73612,10 @@
                   }],
               toDOM: function (node) {
                   var href = (window.humhub && node.attrs.fileGuid) ? humhub.modules.file.getFileUrl(node.attrs.fileGuid)  : node.attrs.href;
+
+                  if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
+                      href = '#';
+                  }
 
                   return ["a", {
                       href: href,
@@ -73620,6 +73629,10 @@
                   mark: "link", getAttrs: function (tok) {
                       var href = (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("href")).url : tok.attrGet("href");
                       var fileGuid = (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("href")).guid : null;
+
+                      if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
+                          href = '#';
+                      }
 
                       return ({
                           href: href,
@@ -73908,6 +73921,9 @@
                   tokens[idx].attrPush(['data-file-url', hrefFilter.url]); // add new attribute
               }
 
+              if (!/^https?:\/\//i.test(hrefFilter.url) && !/^mailto:/i.test(hrefFilter.url) && !/^ftps?:\/\//i.test(hrefFilter.url))  {
+                  tokens[idx].attrs[hrefIndex][1] = '#';
+              }
 
               // If you are sure other plugins can't add `target` - drop check below
               var aIndex = tokens[idx].attrIndex('target');
