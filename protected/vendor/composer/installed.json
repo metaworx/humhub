@@ -289,17 +289,17 @@
     },
     {
         "name": "bower-asset/clipboard.js",
-        "version": "v2.8.6",
-        "version_normalized": "2.8.6.0",
+        "version": "v2.8.1",
+        "version_normalized": "2.8.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/lgarron/clipboard-polyfill.git",
-            "reference": "d96be142b0794769531cc4c240dd5131f83796dc"
+            "reference": "d6a8e16b0efecbe7996b06537f0b4e1583a3c7fb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/lgarron/clipboard-polyfill/zipball/d96be142b0794769531cc4c240dd5131f83796dc",
-            "reference": "d96be142b0794769531cc4c240dd5131f83796dc",
+            "url": "https://api.github.com/repos/lgarron/clipboard-polyfill/zipball/d6a8e16b0efecbe7996b06537f0b4e1583a3c7fb",
+            "reference": "d6a8e16b0efecbe7996b06537f0b4e1583a3c7fb",
             "shasum": null
         },
         "type": "bower-asset",
