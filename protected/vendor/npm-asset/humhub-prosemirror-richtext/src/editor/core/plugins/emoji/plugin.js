@@ -6,8 +6,8 @@
  */
 
 import { Plugin, PluginKey } from 'prosemirror-state';
-import { EmojiState } from './state';
-import EmojiProvider from "./provider";
+import { EmojiQueryState } from './state';
+import {EmojiProvider, getProvider} from "./provider";
 import twemoji from "twemoji";
 import * as util from "./util";
 
@@ -16,17 +16,6 @@ const pluginKey = new PluginKey('emoji');
 const emojiPlugin = (context) => {
     return new Plugin({
         props: {
-            transformPastedHTML: (html) => {
-                let $html = $(html);
-                let $dom = $('<body>').append($html);
-
-                let cfg = context.getPluginOption('emoji', 'twemoji');
-                cfg.attributes = (icon, variant) => {
-                    return {'data-name': util.getNameByChar(icon), 'style': 'width:16px'};
-                };
-
-                return $('<html>').append(twemoji.parse($dom[0],cfg)).html();
-            },
             transformPastedText: (text) => {
                 text = twemoji.parse(text, context.getPluginOption('emoji', 'twemoji'));
 
@@ -37,9 +26,8 @@ const emojiPlugin = (context) => {
         },
         state: {
             init(config, state) {
-                return new EmojiState(state, {
-                    provider: (context.options.emoji && context.options.emoji.provider)
-                        ?  context.options.emoji.provider : new EmojiProvider(context)
+                return new EmojiQueryState(state, {
+                    provider: getProvider(context)
                 });
             },
             apply(tr, prevPluginState, oldState, newState) {

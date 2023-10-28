@@ -16,11 +16,11 @@ let findUserFlag = function() {
     const directMapping = {
         'en-us': 'us',
         'en': 'us',
-        'en_gb': 'uk',
-        'pt_br': 'portugal',
-        'fa_ir': 'iran',
-        'zh_cn': 'cn',
-        'zh_tw': 'cn',
+        'en-gb': 'uk',
+        'pt-br': 'portugal',
+        'fa-ir': 'iran',
+        'zh-cn': 'cn',
+        'zh-tw': 'cn',
         'ja': 'jp',
         'ko': 'kr',
         'ar': 'united_arab_emirates',
@@ -28,7 +28,7 @@ let findUserFlag = function() {
         'ru' : 'ru',
         'vi': 'vietnam',
         'sv': 'sweden',
-        'nb_no': 'norway',
+        'nb-no': 'norway',
         'it' : 'it',
         'fr': 'fr',
         'es': 'es',
@@ -48,8 +48,8 @@ let findUserFlag = function() {
             return util.getCharByName(directMapping[language]);
         }
 
-        $.each(util.getByCategory('flags'), (flag) => {
-            if(flag.keywords.indexOf(language) >= 0) {
+        $.each(util.getByCategory('flags'), (index, flag) => {
+            if(flag && flag.keywords && flag.keywords.indexOf(language) >= 0) {
                 result = flag.char;
                 return false;
             }
@@ -67,7 +67,7 @@ let chooser = undefined;
 class EmojiChooser {
     constructor(provider) {
         this.provider = provider;
-        this.categoryOrder = ['people', 'animals_and_nature', 'food_and_drink', 'activity', 'travel_and_places', 'objects', 'symbols', 'flags'];
+        this.categoryOrder = ['people', 'animals_and_nature', 'food_and_drink', 'activity', 'travel_and_places', 'objects', 'symbols', 'flags', 'search'];
         this.categories = {
             people: {$icon: util.getCharToDom('\uD83D\uDE00')},
             animals_and_nature: {$icon: util.getCharToDom('\uD83D\uDC3B')},
@@ -76,30 +76,80 @@ class EmojiChooser {
             travel_and_places: {$icon: util.getCharToDom('\u2708\uFE0F')},
             objects: {$icon: util.getCharToDom('\uD83D\uDDA5')},
             symbols: {$icon: util.getCharToDom('\u2764\uFE0F')},
-            flags: {$icon: util.getCharToDom(findUserFlag())}
+            flags: {$icon: util.getCharToDom(findUserFlag())},
+            search: {$icon: util.getCharToDom('\uD83D\uDD0D')}
         };
-
-        this.initDom();
-        this.initCategory(this.categoryOrder[0]);
     }
 
     update(provider) {
         this.provider = provider;
         let position = provider.$node.offset();
+
+        if(!this.$) {
+            this.initDom();
+            this.initCategory(this.categoryOrder[0]);
+        }
+
         this.$.css({
             top: position.top + provider.$node.outerHeight() - 5,
             left: position.left,
         }).show();
+
+        this.$.find('.humhub-emoji-chooser-search').focus();
     }
 
     initDom() {
         let that = this;
-        this.$ = $('<div class="atwho-view humhub-richtext-provider">').hide().appendTo($('body')).on('hidden', () => {
+        this.$ = $('<div class="atwho-view humhub-richtext-provider humhub-emoji-chooser"><div><input type="text" class="form-control humhub-emoji-chooser-search"></div></div>')
+            .hide().appendTo($('body'))
+            .on('hidden', () => {
+                if(that.provider) {
+                    that.provider.reset();
+                }
+            });
 
-            if(that.provider) {
-                that.provider.reset();
+        this.$.find('.humhub-emoji-chooser-search').on('keydown', function(e) {
+            switch (e.which) {
+                case 9:
+                    e.preventDefault();
+                    that.nextCategory();
+                    break;
+                case 13:
+                    e.preventDefault();
+                    that.provider.select();
+                    break;
+                case 37:
+                    that.prev();
+                    break;
+                case 38:
+                    that.up();
+                    break;
+                case 39:
+                    that.next();
+                    break;
+                case 40:
+                    that.down();
+                    break;
             }
+        }).on('keyup', function(e) {
+            if (e.which !== 8 && !/[a-z0-9\d]/i.test(String.fromCharCode(e.which))) {
+                return;
+            }
+
+            let val = $(this).val();
+            if(!val.length && that.lastActiveCategory) {
+                that.openCategory(that.lastActiveCategory);
+                return;
+            }
+
+            let currentlyActive = that.getActiveCategoryMenuItem().attr('data-emoji-nav-item');
+            if(currentlyActive !== 'search') {
+                that.lastActiveCategory = currentlyActive;
+            }
+
+            that.updateSearch(val);
         });
+
         this.initNav();
     }
 
@@ -119,12 +169,50 @@ class EmojiChooser {
 
             $nav.append($item);
         });
+
+        $nav.find('[data-emoji-nav-item="search"]').hide();
+    }
+
+    clearSearch() {
+        this.$.find('[data-emoji-nav-item="search"]').hide();
+        this.$.find('.humhub-emoji-chooser-search').val('');
+    }
+
+    updateSearch(searchStr) {
+        this.$.find('[data-emoji-nav-item="search"]').show();
+        let result = [];
+        let length = searchStr.length;
+        this.categoryOrder.forEach((categoryName, index) => {
+            $.each(util.getByCategory(categoryName), (index, emoji) => {
+                if(emoji && emoji.keywords) {
+                    $.each(emoji.keywords, (index, keyword) => {
+                        if(length < 3) {
+                            if(keyword.lastIndexOf(searchStr, 0) === 0) {
+                                result.push(emoji);
+                                return false;
+                            }
+                        } else if(keyword.includes(searchStr)) {
+                            result.push(emoji);
+                            return false;
+                        }
+                    });
+                }
+            });
+        });
+
+        this.openCategory('search');
+        this.setCategoryItems('search', result);
     }
 
     openCategory(categoryName) {
         let categoryDef = this.categories[categoryName];
-        if(!categoryDef.$) {
+
+        if(!this.$.find('[data-emoji-category="'+categoryName+'"]').length) {
             this.initCategory(categoryName)
+        }
+
+        if(categoryName !== 'search') {
+            this.clearSearch();
         }
 
         this.$.find('[data-emoji-nav-item]').removeClass('cur');
@@ -141,9 +229,23 @@ class EmojiChooser {
             that.provider.select();
         }).prependTo(this.$);
 
-        let $list = $('<ul class="atwo-view-ul">').appendTo($category);
-        let $li = undefined;
-        util.getByCategory(categoryName).forEach((emojiDef) => {
+        $('<ul class="atwo-view-ul humhub-emoji-chooser-item-list">').appendTo($category);
+        this.categories[categoryName].$ = $category;
+        this.setCategoryItems(categoryName);
+    }
+
+    setCategoryItems(categoryName, items) {
+        if(!items && categoryName !== 'search') {
+            items = util.getByCategory(categoryName);
+        }
+
+        if(!items) {
+            items = [];
+        }
+
+        let $list = this.categories[categoryName].$.find('.humhub-emoji-chooser-item-list').empty();
+
+        items.forEach((emojiDef) => {
             let $li = $('<li class="atwho-emoji-entry">').append(util.getCharToDom(emojiDef.char, emojiDef.name));
 
             if(categoryName === 'flags' && emojiDef.char === findUserFlag()) {
@@ -154,13 +256,12 @@ class EmojiChooser {
         });
 
         $list.children().first().addClass('cur');
-
-        this.categories[categoryName].$ = $category;
     }
 
     reset() {
         this.provder = undefined;
-        this.$.hide();
+        this.$.remove();
+        this.$ = undefined;
     }
 
     getSelection() {
@@ -182,6 +283,19 @@ class EmojiChooser {
 
     getActiveCategoryTab() {
         return this.$.find('[data-emoji-category]:visible');
+    }
+
+    getActiveCategoryMenuItem() {
+        return this.$.find('[data-emoji-nav-item].cur');
+    }
+
+    nextCategory() {
+        let $next = this.getActiveCategoryMenuItem().next('[data-emoji-nav-item]:not([data-emoji-nav-item="search"])');
+        if(!$next.length) {
+            $next = this.$.find('[data-emoji-nav-item]:first');
+        }
+
+        this.openCategory($next.attr('data-emoji-nav-item'));
     }
 
     prev() {
@@ -258,55 +372,61 @@ class EmojiChooser {
     }
 }
 
-let EmojiProvider = function (context) {
-    this.event = $({});
-    this.context = context;
-};
-
-EmojiProvider.prototype.query = function (state, node) {
-    this.state = state;
-    this.$node = $(node);
-    this.update();
-};
-
-EmojiProvider.prototype.reset = function (query, node) {
-    if (this.$node) {
-        this.$node = undefined;
-        this.getChooser().reset();
-        this.event.trigger('closed');
-    }
-};
-
-EmojiProvider.prototype.next = function () {
-    this.getChooser().next();
-};
-
-EmojiProvider.prototype.prev = function () {
-    this.getChooser().prev();
-};
-
-EmojiProvider.prototype.down = function () {
-    this.getChooser().down();
-};
-
-EmojiProvider.prototype.up = function () {
-    this.getChooser().up();
-};
-
-EmojiProvider.prototype.select = function () {
-    this.state.addEmoji(this.getChooser().getSelection());
-};
-
-EmojiProvider.prototype.update = function () {
-    this.getChooser().update(this);
-};
-
-EmojiProvider.prototype.getChooser = function () {
-    if(!chooser) {
-        chooser = new EmojiChooser(this);
+export class EmojiProvider {
+    constructor(context) {
+        this.event = $({});
+        this.context = context;
     }
 
-    return chooser;
-};
+    query(state, node) {
+        this.state = state;
+        this.$node = $(node);
+        this.update();
+    };
 
-export default EmojiProvider
+    reset(query, node) {
+        if (this.$node) {
+            this.$node = undefined;
+            this.getChooser().reset();
+            this.event.trigger('closed');
+        }
+    };
+
+    next() {
+        this.getChooser().next();
+    };
+
+    prev() {
+        this.getChooser().prev();
+    };
+
+    down() {
+        this.getChooser().down();
+    };
+
+    up() {
+        this.getChooser().up();
+    };
+
+    select() {
+        this.state.addEmoji(this.getChooser().getSelection());
+    };
+
+    update() {
+        this.getChooser().update(this);
+    };
+
+    getChooser() {
+        if(!chooser) {
+            chooser = new EmojiChooser(this);
+        }
+
+        return chooser;
+    };
+}
+
+
+export function getProvider(context) {
+    return (context.options.emoji && context.options.emoji.provider)
+        ?  context.options.emoji.provider : new EmojiProvider(context);
+}

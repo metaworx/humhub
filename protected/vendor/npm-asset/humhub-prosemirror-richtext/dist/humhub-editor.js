@@ -13801,6 +13801,10 @@
                 width: 585, height: 1024,
                 path: "M0 949l9-48q3-1 46-12t63-21q16-20 23-57 0-4 35-165t65-310 29-169v-14q-13-7-31-10t-39-4-33-3l10-58q18 1 68 3t85 4 68 1q27 0 56-1t69-4 56-3q-2 22-10 50-17 5-58 16t-62 19q-4 10-8 24t-5 22-4 26-3 24q-15 84-50 239t-44 203q-1 5-7 33t-11 51-9 47-3 32l0 10q9 2 105 17-1 25-9 56-6 0-18 0t-18 0q-16 0-49-5t-49-5q-78-1-117-1-29 0-81 5t-69 6z"
             },
+            emoji: {
+                width: 20, height: 20,
+                path: "M10 0.4c-5.302 0-9.6 4.298-9.6 9.6s4.298 9.6 9.6 9.6c5.301 0 9.6-4.298 9.6-9.601 0-5.301-4.299-9.599-9.6-9.599zM10 17.599c-4.197 0-7.6-3.402-7.6-7.6s3.402-7.599 7.6-7.599c4.197 0 7.601 3.402 7.601 7.6s-3.404 7.599-7.601 7.599zM7.501 9.75c0.828 0 1.499-0.783 1.499-1.75s-0.672-1.75-1.5-1.75-1.5 0.783-1.5 1.75 0.672 1.75 1.501 1.75zM12.5 9.75c0.829 0 1.5-0.783 1.5-1.75s-0.672-1.75-1.5-1.75-1.5 0.784-1.5 1.75 0.672 1.75 1.5 1.75zM14.341 11.336c-0.363-0.186-0.815-0.043-1.008 0.32-0.034 0.066-0.869 1.593-3.332 1.593-2.451 0-3.291-1.513-3.333-1.592-0.188-0.365-0.632-0.514-1.004-0.329-0.37 0.186-0.52 0.636-0.335 1.007 0.050 0.099 1.248 2.414 4.672 2.414 3.425 0 4.621-2.316 4.67-2.415 0.184-0.367 0.036-0.81-0.33-0.998z"
+            },
             code: {
                 width: 896, height: 1024,
                 path: "M608 192l-96 96 224 224-224 224 96 96 288-320-288-320zM288 192l-288 320 288 320 96-96-224-224 224-224-96-96z"
@@ -44602,7 +44606,7 @@ var full$1 = Object.freeze({
          *
          */
 
-        var EmojiState = function EmojiState(state, options) {
+        var EmojiQueryState = function EmojiQueryState(state, options) {
             var this$1 = this;
 
             this.state = state;
@@ -44619,11 +44623,11 @@ var full$1 = Object.freeze({
             this.reset();
         };
 
-        EmojiState.prototype.findQueryNode = function findQueryNode () {
+        EmojiQueryState.prototype.findQueryNode = function findQueryNode () {
             return $(this.view.dom).find('[data-emoji-query]');
         };
 
-        EmojiState.prototype.update = function update (state, view) {
+        EmojiQueryState.prototype.update = function update (state, view) {
             this.view = view;
             this.state = state;
             var ref = state.schema.marks;
@@ -44663,7 +44667,7 @@ var full$1 = Object.freeze({
             }
         };
 
-        EmojiState.prototype.reset = function reset () {
+        EmojiQueryState.prototype.reset = function reset () {
             this.active = false;
             this.query = null;
             if(this.view) {
@@ -44672,7 +44676,7 @@ var full$1 = Object.freeze({
             }
         };
 
-        EmojiState.prototype.addEmoji = function addEmoji (item) {
+        EmojiQueryState.prototype.addEmoji = function addEmoji (item) {
             var ref = this.state.schema.nodes;
                 var emoji = ref.emoji;
             var ref$1 = this.state.schema.marks;
@@ -44697,6 +44701,48 @@ var full$1 = Object.freeze({
             this.view.focus();
         };
 
+        var SimpleEmojiState = function SimpleEmojiState(provider) {
+            var this$1 = this;
+
+            this.provider = provider;
+            this.provider.event.on('focus', function () {
+                if(this$1.view) {
+                    this$1.view.focus();
+                }
+            });
+            this.reset();
+        };
+
+        SimpleEmojiState.prototype.update = function update (state, view, node) {
+            this.view = view;
+            this.state = state;
+            this.provider.query(this, node);
+        };
+
+        SimpleEmojiState.prototype.reset = function reset () {
+            if(this.view) {
+                this.provider.reset();
+                this.view.focus();
+            }
+        };
+
+        SimpleEmojiState.prototype.addEmoji = function addEmoji (item) {
+            var ref = this.state.schema.nodes;
+                var emoji = ref.emoji;
+
+            var node = emoji.create({
+                'data-name': String(item.name),
+                alt: item.alt,
+                src: item.src
+            }, null);
+
+            var tr = this.state.tr.replaceSelectionWith(node);
+
+            this.view.dispatch(tr);
+            this.view.focus();
+            this.reset();
+        };
+
         /*
          * @link https://www.humhub.org/
          * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
@@ -44713,11 +44759,11 @@ var full$1 = Object.freeze({
             var directMapping = {
                 'en-us': 'us',
                 'en': 'us',
-                'en_gb': 'uk',
-                'pt_br': 'portugal',
-                'fa_ir': 'iran',
-                'zh_cn': 'cn',
-                'zh_tw': 'cn',
+                'en-gb': 'uk',
+                'pt-br': 'portugal',
+                'fa-ir': 'iran',
+                'zh-cn': 'cn',
+                'zh-tw': 'cn',
                 'ja': 'jp',
                 'ko': 'kr',
                 'ar': 'united_arab_emirates',
@@ -44725,7 +44771,7 @@ var full$1 = Object.freeze({
                 'ru' : 'ru',
                 'vi': 'vietnam',
                 'sv': 'sweden',
-                'nb_no': 'norway',
+                'nb-no': 'norway',
                 'it' : 'it',
                 'fr': 'fr',
                 'es': 'es',
@@ -44745,8 +44791,8 @@ var full$1 = Object.freeze({
                     return getCharByName(directMapping[language]);
                 }
 
-                $.each(getByCategory('flags'), function (flag) {
-                    if(flag.keywords.indexOf(language) >= 0) {
+                $.each(getByCategory('flags'), function (index, flag) {
+                    if(flag && flag.keywords && flag.keywords.indexOf(language) >= 0) {
                         result = flag.char;
                         return false;
                     }
@@ -44763,7 +44809,7 @@ var full$1 = Object.freeze({
 
         var EmojiChooser = function EmojiChooser(provider) {
             this.provider = provider;
-            this.categoryOrder = ['people', 'animals_and_nature', 'food_and_drink', 'activity', 'travel_and_places', 'objects', 'symbols', 'flags'];
+            this.categoryOrder = ['people', 'animals_and_nature', 'food_and_drink', 'activity', 'travel_and_places', 'objects', 'symbols', 'flags', 'search'];
             this.categories = {
                 people: {$icon: getCharToDom('\uD83D\uDE00')},
                 animals_and_nature: {$icon: getCharToDom('\uD83D\uDC3B')},
@@ -44772,30 +44818,80 @@ var full$1 = Object.freeze({
                 travel_and_places: {$icon: getCharToDom('\u2708\uFE0F')},
                 objects: {$icon: getCharToDom('\uD83D\uDDA5')},
                 symbols: {$icon: getCharToDom('\u2764\uFE0F')},
-                flags: {$icon: getCharToDom(findUserFlag())}
+                flags: {$icon: getCharToDom(findUserFlag())},
+                search: {$icon: getCharToDom('\uD83D\uDD0D')}
             };
-
-            this.initDom();
-            this.initCategory(this.categoryOrder[0]);
         };
 
         EmojiChooser.prototype.update = function update (provider) {
             this.provider = provider;
             var position = provider.$node.offset();
+
+            if(!this.$) {
+                this.initDom();
+                this.initCategory(this.categoryOrder[0]);
+            }
+
             this.$.css({
                 top: position.top + provider.$node.outerHeight() - 5,
                 left: position.left,
             }).show();
+
+            this.$.find('.humhub-emoji-chooser-search').focus();
         };
 
         EmojiChooser.prototype.initDom = function initDom () {
             var that = this;
-            this.$ = $('<div class="atwho-view humhub-richtext-provider">').hide().appendTo($('body')).on('hidden', function () {
+            this.$ = $('<div class="atwho-view humhub-richtext-provider humhub-emoji-chooser"><div><input type="text" class="form-control humhub-emoji-chooser-search"></div></div>')
+                .hide().appendTo($('body'))
+                .on('hidden', function () {
+                    if(that.provider) {
+                        that.provider.reset();
+                    }
+                });
 
-                if(that.provider) {
-                    that.provider.reset();
+            this.$.find('.humhub-emoji-chooser-search').on('keydown', function(e) {
+                switch (e.which) {
+                    case 9:
+                        e.preventDefault();
+                        that.nextCategory();
+                        break;
+                    case 13:
+                        e.preventDefault();
+                        that.provider.select();
+                        break;
+                    case 37:
+                        that.prev();
+                        break;
+                    case 38:
+                        that.up();
+                        break;
+                    case 39:
+                        that.next();
+                        break;
+                    case 40:
+                        that.down();
+                        break;
                 }
+            }).on('keyup', function(e) {
+                if (e.which !== 8 && !/[a-z0-9\d]/i.test(String.fromCharCode(e.which))) {
+                    return;
+                }
+
+                var val = $(this).val();
+                if(!val.length && that.lastActiveCategory) {
+                    that.openCategory(that.lastActiveCategory);
+                    return;
+                }
+
+                var currentlyActive = that.getActiveCategoryMenuItem().attr('data-emoji-nav-item');
+                if(currentlyActive !== 'search') {
+                    that.lastActiveCategory = currentlyActive;
+                }
+
+                that.updateSearch(val);
             });
+
             this.initNav();
         };
 
@@ -44817,12 +44913,48 @@ var full$1 = Object.freeze({
 
                 $nav.append($item);
             });
+
+            $nav.find('[data-emoji-nav-item="search"]').hide();
+        };
+
+        EmojiChooser.prototype.clearSearch = function clearSearch () {
+            this.$.find('[data-emoji-nav-item="search"]').hide();
+            this.$.find('.humhub-emoji-chooser-search').val('');
+        };
+
+        EmojiChooser.prototype.updateSearch = function updateSearch (searchStr) {
+            this.$.find('[data-emoji-nav-item="search"]').show();
+            var result = [];
+            var length = searchStr.length;
+            this.categoryOrder.forEach(function (categoryName, index) {
+                $.each(getByCategory(categoryName), function (index, emoji) {
+                    if(emoji && emoji.keywords) {
+                        $.each(emoji.keywords, function (index, keyword) {
+                            if(length < 3) {
+                                if(keyword.lastIndexOf(searchStr, 0) === 0) {
+                                    result.push(emoji);
+                                    return false;
+                                }
+                            } else if(keyword.includes(searchStr)) {
+                                result.push(emoji);
+                                return false;
+                            }
+                        });
+                    }
+                });
+            });
+
+            this.openCategory('search');
+            this.setCategoryItems('search', result);
         };
 
         EmojiChooser.prototype.openCategory = function openCategory (categoryName) {
-            var categoryDef = this.categories[categoryName];
-            if(!categoryDef.$) {
+            if(!this.$.find('[data-emoji-category="'+categoryName+'"]').length) {
                 this.initCategory(categoryName);
+            }
+
+            if(categoryName !== 'search') {
+                this.clearSearch();
             }
 
             this.$.find('[data-emoji-nav-item]').removeClass('cur');
@@ -44839,8 +44971,23 @@ var full$1 = Object.freeze({
                 that.provider.select();
             }).prependTo(this.$);
 
-            var $list = $('<ul class="atwo-view-ul">').appendTo($category);
-            getByCategory(categoryName).forEach(function (emojiDef) {
+            $('<ul class="atwo-view-ul humhub-emoji-chooser-item-list">').appendTo($category);
+            this.categories[categoryName].$ = $category;
+            this.setCategoryItems(categoryName);
+        };
+
+        EmojiChooser.prototype.setCategoryItems = function setCategoryItems (categoryName, items) {
+            if(!items && categoryName !== 'search') {
+                items = getByCategory(categoryName);
+            }
+
+            if(!items) {
+                items = [];
+            }
+
+            var $list = this.categories[categoryName].$.find('.humhub-emoji-chooser-item-list').empty();
+
+            items.forEach(function (emojiDef) {
                 var $li = $('<li class="atwho-emoji-entry">').append(getCharToDom(emojiDef.char, emojiDef.name));
 
                 if(categoryName === 'flags' && emojiDef.char === findUserFlag()) {
@@ -44851,13 +44998,12 @@ var full$1 = Object.freeze({
             });
 
             $list.children().first().addClass('cur');
-
-            this.categories[categoryName].$ = $category;
         };
 
         EmojiChooser.prototype.reset = function reset () {
             this.provder = undefined;
-            this.$.hide();
+            this.$.remove();
+            this.$ = undefined;
         };
 
         EmojiChooser.prototype.getSelection = function getSelection () {
@@ -44879,6 +45025,19 @@ var full$1 = Object.freeze({
 
         EmojiChooser.prototype.getActiveCategoryTab = function getActiveCategoryTab () {
             return this.$.find('[data-emoji-category]:visible');
+        };
+
+        EmojiChooser.prototype.getActiveCategoryMenuItem = function getActiveCategoryMenuItem () {
+            return this.$.find('[data-emoji-nav-item].cur');
+        };
+
+        EmojiChooser.prototype.nextCategory = function nextCategory () {
+            var $next = this.getActiveCategoryMenuItem().next('[data-emoji-nav-item]:not([data-emoji-nav-item="search"])');
+            if(!$next.length) {
+                $next = this.$.find('[data-emoji-nav-item]:first');
+            }
+
+            this.openCategory($next.attr('data-emoji-nav-item'));
         };
 
         EmojiChooser.prototype.prev = function prev () {
@@ -44958,18 +45117,18 @@ var full$1 = Object.freeze({
             }
         };
 
-        var EmojiProvider = function (context) {
+        var EmojiProvider = function EmojiProvider(context) {
             this.event = $({});
             this.context = context;
         };
 
-        EmojiProvider.prototype.query = function (state, node) {
+        EmojiProvider.prototype.query = function query (state, node) {
             this.state = state;
             this.$node = $(node);
             this.update();
         };
 
-        EmojiProvider.prototype.reset = function (query, node) {
+        EmojiProvider.prototype.reset = function reset (query, node) {
             if (this.$node) {
                 this.$node = undefined;
                 this.getChooser().reset();
@@ -44977,37 +45136,43 @@ var full$1 = Object.freeze({
             }
         };
 
-        EmojiProvider.prototype.next = function () {
+        EmojiProvider.prototype.next = function next () {
             this.getChooser().next();
         };
 
-        EmojiProvider.prototype.prev = function () {
+        EmojiProvider.prototype.prev = function prev () {
             this.getChooser().prev();
         };
 
-        EmojiProvider.prototype.down = function () {
+        EmojiProvider.prototype.down = function down () {
             this.getChooser().down();
         };
 
-        EmojiProvider.prototype.up = function () {
+        EmojiProvider.prototype.up = function up () {
             this.getChooser().up();
         };
 
-        EmojiProvider.prototype.select = function () {
+        EmojiProvider.prototype.select = function select () {
             this.state.addEmoji(this.getChooser().getSelection());
         };
 
-        EmojiProvider.prototype.update = function () {
+        EmojiProvider.prototype.update = function update () {
             this.getChooser().update(this);
         };
 
-        EmojiProvider.prototype.getChooser = function () {
+        EmojiProvider.prototype.getChooser = function getChooser () {
             if(!chooser) {
                 chooser = new EmojiChooser(this);
             }
 
             return chooser;
         };
+
+
+        function getProvider(context) {
+            return (context.options.emoji && context.options.emoji.provider)
+                ?  context.options.emoji.provider : new EmojiProvider(context);
+        }
 
         /*
          * @link https://www.humhub.org/
@@ -45021,17 +45186,6 @@ var full$1 = Object.freeze({
         var emojiPlugin = function (context) {
             return new Plugin({
                 props: {
-                    transformPastedHTML: function (html) {
-                        var $html = $(html);
-                        var $dom = $('<body>').append($html);
-
-                        var cfg = context.getPluginOption('emoji', 'twemoji');
-                        cfg.attributes = function (icon, variant) {
-                            return {'data-name': getNameByChar(icon), 'style': 'width:16px'};
-                        };
-
-                        return $('<html>').append(twemoji.parse($dom[0],cfg)).html();
-                    },
                     transformPastedText: function (text) {
                         text = twemoji.parse(text, context.getPluginOption('emoji', 'twemoji'));
 
@@ -45042,9 +45196,8 @@ var full$1 = Object.freeze({
                 },
                 state: {
                     init: function init(config, state) {
-                        return new EmojiState(state, {
-                            provider: (context.options.emoji && context.options.emoji.provider)
-                                ?  context.options.emoji.provider : new EmojiProvider(context)
+                        return new EmojiQueryState(state, {
+                            provider: getProvider(context)
                         });
                     },
                     apply: function apply(tr, prevPluginState, oldState, newState) {
@@ -45657,9 +45810,46 @@ var full$1 = Object.freeze({
          *
          */
 
+        function insertEmoji(context) {
+            return new MenuItem({
+                title: context.translate("Insert Emoji"),
+                icon: icons.emoji,
+                sortOrder: 350,
+                enable: function enable(state) {
+                    return canInsert(state, context.schema.nodes.image)
+                },
+                run: function run(state, _, view, e) {
+                    if (!$('.humhub-richtext-provider:visible').length) {
+                        setTimeout(function () {
+                            var emojiState = new SimpleEmojiState(getProvider(context));
+                            emojiState.update(state, view, e.target);
+                        }, 50);
+                    }
+                }
+            })
+        }
+
+        function menu$6(context) {
+            return [
+                {
+                    id: 'insertEmoji',
+                    node: 'emoji',
+                    item: insertEmoji(context)
+                }
+            ]
+        }
+
+        /*
+         * @link https://www.humhub.org/
+         * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
+         * @license https://www.humhub.com/licences
+         *
+         */
+
         var emoji = {
             id: 'emoji',
             schema: schema$7,
+            menu: function (context) { return menu$6(context); },
             inputRules: function (schema) {
                 return [
                     emojiAutoCompleteRule(schema),
@@ -58222,7 +58412,7 @@ var entities$8 = Object.freeze({
             return new DropdownSubmenu([r.makeHead1, r.makeHead2, r.makeHead3, r.makeHead4, r.makeHead5, r.makeHead6], {label: context.translate("Heading")});
         }
 
-        function menu$6(context) {
+        function menu$7(context) {
             return [
                 {
                     id: 'makeHeading',
@@ -58246,7 +58436,7 @@ var entities$8 = Object.freeze({
         var heading$4 = {
             id: 'heading',
             schema: schema$9,
-            menu: function (context) { return menu$6(context); },
+            menu: function (context) { return menu$7(context); },
             inputRules: function (schema) {return [headingRule(schema)]},
         };
 
@@ -58295,7 +58485,7 @@ var entities$8 = Object.freeze({
             })
         }
 
-        function menu$7(context) {
+        function menu$8(context) {
             return [
                 {
                     id: 'insertHorizontalRule',
@@ -58315,7 +58505,7 @@ var entities$8 = Object.freeze({
         var horizontal_rule = {
             id: 'horizontal_rule',
             schema: schema$10,
-            menu: function (context) { return menu$7(context); }
+            menu: function (context) { return menu$8(context); }
         };
 
         /*
@@ -58787,7 +58977,7 @@ var entities$8 = Object.freeze({
             return val.replace(/(["'])/g, '');
         };
 
-        function menu$8(context) {
+        function menu$9(context) {
             return [
                 {
                     id: 'insertImage',
@@ -58899,7 +59089,7 @@ var entities$8 = Object.freeze({
         var image$6 = {
             id: 'image',
             schema: schema$11,
-            menu: function (context) { return menu$8(context); },
+            menu: function (context) { return menu$9(context); },
             plugins: function (context) {
                 return [
                     imagePlugin(context)
@@ -59137,7 +59327,7 @@ var entities$8 = Object.freeze({
             return result;
         }
 
-        function menu$9(context) {
+        function menu$10(context) {
             return [
                 {
                     id: 'linkItem',
@@ -59244,7 +59434,7 @@ var entities$8 = Object.freeze({
         var link$6 = {
             id: 'link',
             schema: schema$12,
-            menu: function (context) { return menu$9(context); },
+            menu: function (context) { return menu$10(context); },
             registerMarkdownIt: function (md) {
 
                 var defaultRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
@@ -60008,7 +60198,7 @@ var entities$8 = Object.freeze({
             });
         }
 
-        function menu$10(context) {
+        function menu$11(context) {
             return [
                 {
                     id: 'wrapOrderedList',
@@ -60027,7 +60217,7 @@ var entities$8 = Object.freeze({
          */
         var ordered_list = {
             id: 'ordered_list',
-            menu: function (context) { return menu$10(context); },
+            menu: function (context) { return menu$11(context); },
             schema: schema$16,
             inputRules: function (schema) {return [orderedListRule(schema)]}
         };
@@ -60072,7 +60262,7 @@ var entities$8 = Object.freeze({
             })
         }
 
-        function menu$11(context) {
+        function menu$12(context) {
             return [
                 {
                     id: 'makeParagraph',
@@ -60092,7 +60282,7 @@ var entities$8 = Object.freeze({
         var paragraph$4 = {
             id: 'paragraph',
             schema: schema$17,
-            menu: function (context) { return menu$11(context); }
+            menu: function (context) { return menu$12(context); }
         };
 
         /*
@@ -60130,7 +60320,7 @@ var entities$8 = Object.freeze({
             });
         }
 
-        function menu$12(context) {
+        function menu$13(context) {
             return [
                 {
                     id: 'markStrikethrough',
@@ -60150,7 +60340,7 @@ var entities$8 = Object.freeze({
         var strikethrough$4 = {
             id: 'strikethrough',
             schema: schema$18,
-            menu: function (context) { return menu$12(context); }
+            menu: function (context) { return menu$13(context); }
         };
 
         /*
@@ -60194,7 +60384,7 @@ var entities$8 = Object.freeze({
             });
         }
 
-        function menu$13(context) {
+        function menu$14(context) {
             return [
                 {
                     id: 'markStrong',
@@ -60268,7 +60458,7 @@ var entities$8 = Object.freeze({
         var strong = {
             id: 'strong',
             schema: schema$19,
-            menu: function (context) { return menu$13(context); },
+            menu: function (context) { return menu$14(context); },
             inputRules: function (schema) { return [strongRule(schema)]; },
         };
 
@@ -60668,7 +60858,7 @@ var entities$8 = Object.freeze({
             return new MenuItem(itemOptions);
         }
 
-        function menu$14(context) {
+        function menu$15(context) {
             return [
                 {
                     id: 'insertTable',
@@ -60711,7 +60901,7 @@ var entities$8 = Object.freeze({
         var table$4 = {
             id: 'table',
             schema: schema$20,
-            menu: function (context) { return menu$14(context); },
+            menu: function (context) { return menu$15(context); },
             registerMarkdownIt: function (markdownIt) {
                 markdownIt.block.ruler.at('table', markdownit_table);
             }
@@ -60956,7 +61146,7 @@ var entities$8 = Object.freeze({
             });
         };
 
-        function menu$15(context) {
+        function menu$16(context) {
             return [
                 {
                     id: 'uploadFile',
@@ -60976,7 +61166,7 @@ var entities$8 = Object.freeze({
 
         var upload = {
             id: 'upload',
-            menu:  function (context) { return menu$15(context); }
+            menu:  function (context) { return menu$16(context); }
         };
 
         /*
@@ -61174,7 +61364,7 @@ var entities$8 = Object.freeze({
             }
         }
 
-        function menu$16(context) {
+        function menu$17(context) {
             return [
                 {
                     id: 'fullScreen',
@@ -61206,7 +61396,7 @@ var entities$8 = Object.freeze({
                 });
             },
             menu: function (context) {
-                var fullScreenMenu = menu$16(context);
+                var fullScreenMenu = menu$17(context);
                 context.fullScreenMenuItem = fullScreenMenu[0].item;
                 return fullScreenMenu;
             }
@@ -61265,7 +61455,7 @@ var entities$8 = Object.freeze({
             return context.getPluginOption('resizeNav', 'selector', SELECTOR_DEFAULT);
         }
 
-        function menu$17(context) {
+        function menu$18(context) {
             return [
                 {
                     id: 'resizeNav',
@@ -61292,7 +61482,7 @@ var entities$8 = Object.freeze({
                     }
                 });
             },
-            menu: function (context) { return menu$17(context); }
+            menu: function (context) { return menu$18(context); }
         };
 
         /*
@@ -62856,14 +63046,18 @@ var entities$8 = Object.freeze({
 
         // Used as input to Rollup to generate the prosemirror js file
 
-        $(document).on('click.richtextProvider', function(evt) {
+        $(document).on('mousedown.richtextProvider', function(evt) {
             if(!$(evt.target).closest('.humhub-richtext-provider:visible').length) {
-                var provider = $('.humhub-richtext-provider').data('provider');
-                if(provider && provider.reset) {
-                    provider.reset();
-                } else {
-                    $('.humhub-richtext-provider').hide().trigger('hidden');
-                }
+                 $('.humhub-richtext-provider:visible').each(function() {
+                    var $provider = $(this);
+
+                    var provider = $provider.data('provider');
+                    if(provider && provider.reset) {
+                        provider.reset();
+                    } else {
+                        $provider.hide().trigger('hidden');
+                    }
+                });
             }
         });
 
@@ -62933,7 +63127,7 @@ var entities$8 = Object.freeze({
 
                 this.$editor = $(this.view.dom).on('focus', function () {
                     this$1.$menuBar.show();
-                }).on('blur', function () {
+                }).on('blur', function (e) {
                     if(!this$1.$.is('.fullscreen')) {
                         this$1.$menuBar.hide();
                     }
