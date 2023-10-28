@@ -11,6 +11,7 @@ namespace humhub\modules\content\widgets;
 use humhub\modules\content\permissions\CreatePublicContent;
 use humhub\modules\stream\actions\StreamEntryResponse;
 use humhub\modules\topic\models\Topic;
+use humhub\modules\ui\form\widgets\ActiveForm;
 use Yii;
 use yii\web\HttpException;
 use humhub\components\Widget;
@@ -71,7 +72,18 @@ class WallCreateContentForm extends Widget
      */
     public function renderForm()
     {
-        return "";
+        return '';
+    }
+
+    /**
+     * Returns the custom form implementation.
+     *
+     * @param ActiveForm $form
+     * @return string
+     */
+    public function renderActiveForm(ActiveForm $form): string
+    {
+        return $this->renderForm();
     }
 
     /**
@@ -88,7 +100,7 @@ class WallCreateContentForm extends Widget
         }
 
         return $this->render('@humhub/modules/content/widgets/views/wallCreateContentForm', [
-                    'form' => $this->renderForm(),
+                    'wallCreateContentForm' => $this,
                     'contentContainer' => $this->contentContainer,
                     'submitUrl' => $this->contentContainer->createUrl($this->submitUrl),
                     'submitButtonText' => $this->submitButtonText,

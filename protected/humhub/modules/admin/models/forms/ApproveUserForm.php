@@ -152,12 +152,15 @@ class ApproveUserForm extends \yii\base\Model
             $this->setApprovalDefaults();
         }
 
+        if (!$this->validate()) {
+            return false;
+        }
+
         $this->user->status = User::STATUS_ENABLED;
 
         if ($this->validate() &&
             $this->user->save() &&
             $this->send()) {
-            $this->user->setUpApproved();
             return true;
         }
 
