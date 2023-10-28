@@ -1,0 +1,66 @@
+Installation
+============
+
+1. Grab the source and put them somewhere into htdocs, either
+  - `git clone https://github.com/humhub/humhub.git` (__recommended__, for this you need git, obviously)
+  - or download <https://github.com/humhub/humhub/archive/master.zip>
+2. Create an empty mysql database
+3. Make following directories/files writable by webserver
+    - /assets
+    - /protected/runtime
+    - /protected/modules
+    - /protected/config/local
+    - /uploads/*
+    - 
+4. Open installation folder in browser (e.g. http://localhost/humhub)
+
+
+Enable Url Rewriting
+--------------------
+
+1. Rename file .htaccess.dist to .htaccess
+2. Add urlManager lines in protected/config/local/_settings.php
+
+        <?php return array (
+          'components' => 
+          array (
+
+            [...]
+
+            'urlManager' => array(
+                'urlFormat' => 'path',
+                'showScriptName' => false,
+            ),
+
+            [...]
+        ); ?>
+        
+
+Enable Cron Jobs
+----------------
+
+Add following lines to your crontab:
+
+        30 * * * * /path/to/humhub/protected/yiic cron hourly >/dev/null 2>&1
+        00 18 * * * /path/to/humhub/protected/yiic cron daily >/dev/null 2>&1
+
+
+Security/Production Mode
+------------------------
+
+1. Make sure following directories are not accessible throu webserver.
+(These folders are protected by default with ".htaccess")
+
+        - protected
+        - uploads/file
+
+2. Disable Errors / Debugging Open index.php in application root folder and disable debugging.
+    
+        [...]
+
+        // Disable these 3 lines when in production mode
+        //defined('YII_DEBUG') or define('YII_DEBUG', true);
+        //defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL', 5);
+        //ini_set('error_reporting', E_ALL);
+
+        [...]
