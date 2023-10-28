@@ -45,7 +45,7 @@ class ContentContainerStream extends Stream
     protected function handleContentContainer()
     {
         // Limit to this content container
-        $this->activeQuery->andWhere(['content.contentcontainer_id' => $this->contentContainer->contentContainerRecord->id]);
+        $this->activeQuery->andWhere(['content.contentcontainer_id' => $this->contentContainer->contentcontainer_id]);
 
         // Limit to public posts when no member
         if (!$this->contentContainer->canAccessPrivateContent($this->user)) {
@@ -68,7 +68,7 @@ class ContentContainerStream extends Stream
         if ($this->isInitialRequest()) {
             // Get number of pinned contents
             $pinnedQuery = clone $this->activeQuery;
-            $pinnedQuery->andWhere(['content.pinned' => 1]);
+            $pinnedQuery->andWhere(['AND', ['content.pinned' => 1], ['content.contentcontainer_id' => $this->contentContainer->contentcontainer_id]]);
             $pinnedCount = $pinnedQuery->count();
 
             // Increase query result limit to ensure there are also not pinned entries
@@ -78,6 +78,19 @@ class ContentContainerStream extends Stream
             $oldOrder = $this->activeQuery->orderBy;
             $this->activeQuery->orderBy("");
             $this->activeQuery->addOrderBy('content.pinned DESC');
+
+
+            // Only include pinned content of the current contentcontainer (profile stream)
+            $this->activeQuery->andWhere([
+                'OR',
+                [
+                    'AND',
+                    ['content.pinned' => 1],
+                    ['content.contentcontainer_id' => $this->contentContainer->contentcontainer_id],
+                ],
+                ['content.pinned' => 0],
+            ]);
+
             $this->activeQuery->addOrderBy($oldOrder);
         } else {
             // No pinned content in further queries

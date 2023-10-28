@@ -107,7 +107,7 @@
         "version_normalized": "3.3.11.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/RobinHerbots/Inputmask.git",
+            "url": "git@github.com:RobinHerbots/Inputmask.git",
             "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
         },
         "dist": {
@@ -2374,22 +2374,6 @@
         "license": [
             "MIT"
         ]
-    },
-    {
-        "name": "npm-asset/jquery.nicescroll",
-        "version": "3.6.8",
-        "version_normalized": "3.6.8.0",
-        "dist": {
-            "type": "tar",
-            "url": "https://registry.npmjs.org/jquery.nicescroll/-/jquery.nicescroll-3.6.8.tgz",
-            "reference": null,
-            "shasum": null
-        },
-        "require": {
-            "npm-asset/jquery": ">=1.8.3"
-        },
-        "type": "npm-asset",
-        "installation-source": "dist"
     },
     {
         "name": "npm-asset/kbw.timeentry",
