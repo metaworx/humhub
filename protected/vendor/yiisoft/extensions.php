@@ -168,7 +168,7 @@ return array (
   'kartik-v/yii2-widget-select2' => 
   array (
     'name' => 'kartik-v/yii2-widget-select2',
-    'version' => '2.1.0.0',
+    'version' => '2.1.1.0',
     'alias' => 
     array (
       '@kartik/select2' => $vendorDir . '/kartik-v/yii2-widget-select2',
@@ -177,7 +177,7 @@ return array (
   'kartik-v/yii2-widget-rating' => 
   array (
     'name' => 'kartik-v/yii2-widget-rating',
-    'version' => '1.0.2.0',
+    'version' => '1.0.3.0',
     'alias' => 
     array (
       '@kartik/rating' => $vendorDir . '/kartik-v/yii2-widget-rating',
@@ -285,7 +285,7 @@ return array (
   'yiisoft/yii2-jui' => 
   array (
     'name' => 'yiisoft/yii2-jui',
-    'version' => '2.0.6.0',
+    'version' => '2.0.7.0',
     'alias' => 
     array (
       '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
