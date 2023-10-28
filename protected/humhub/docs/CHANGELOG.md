@@ -1,8 +1,22 @@
 HumHub Change Log
 =================
 
+1.2.6  (May 14, 2018)
+-----------------------
+
+When you are using a custom theme, you may need to add the newly introduced footer navigation to your overwritten view files.
+You can find a full list of the view changes here: https://github.com/humhub/humhub/commit/a1815fb61d83619ce9ca40166800b8c5dcb9d539
+
+- Fix #3108: Fixed cronjob examples with leading zero (acs-ferreira)
+- Fix: Memory leak in activity mail summary processor cron
+- Fix: With enabled guest mode BaseAccountController does not redirect to login page
+- Enh: Added footer navigation - FooterMenu widget
+- Enh: Added HForm class events EVENT_AFTER_INIT and EVENT_BEFORE_RENDER
+- Enh: Updated translations
+
+
 1.2.5  (April 11, 2018)
----------------------
+-----------------------
 
 When you customized or used the createCVS method of PendingRegistrationsController please 
 migrate your code to SpreadsheetExport. PHPOffice is replaced by PHPSpreadsheet.
@@ -33,6 +47,7 @@ migrate your code to SpreadsheetExport. PHPOffice is replaced by PHPSpreadsheet.
 - Enh: Added further `FunctionalTester` utilities
 - Enh: Added Norwegian Nynorsk language
 - Fix #3009: Change the Space URL raises 404
+
 
 1.2.4  (December 13, 2017)
 --------------------------
