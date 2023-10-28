@@ -9,6 +9,7 @@
 namespace humhub\modules\user\models;
 
 use Yii;
+use yii\base\Exception;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\user\models\GroupAdmin;
 use humhub\modules\user\components\ActiveQueryUser;
@@ -86,7 +87,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
             [['tags'], 'string'],
             [['last_activity_email', 'created_at', 'updated_at', 'last_login'], 'safe'],
             [['guid'], 'string', 'max' => 45],
-            [['username'], 'string', 'max' => 25],
+            [['username'], 'string', 'max' => 25, 'min' => Yii::$app->params['user']['minUsernameLength']],
             [['time_zone'], 'in', 'range' => \DateTimeZone::listIdentifiers()],
             [['email'], 'string', 'max' => 100],
             [['auth_mode'], 'string', 'max' => 10],
