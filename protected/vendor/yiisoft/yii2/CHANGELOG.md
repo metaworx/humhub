@@ -1,6 +1,27 @@
 Yii Framework 2 Change Log
 ==========================
 
+2.0.30 November 19, 2019
+------------------------
+
+- Bug #17434: IE Ajax redirect fix for non 11.0 versions (kamarton)
+- Bug #17632: Unicode file name was not correctly parsed in multipart forms (AlexRas007, samdark)
+- Bug #17648: Handle empty column arrays in console `Table` widget (alex-code)
+- Bug #17657: Fix migration errors from missing `$schema` in RBAC init file when using MSSQL (PoohOka)
+- Bug #17670: Fix overriding core component class using `__class` (sup-ham, samdark)
+
+
+2.0.29 October 22, 2019
+-----------------------
+
+- Bug #8225: Fixed AJAX validation with checkboxList was only triggered on first select (execut)
+- Bug #17597: PostgreSQL 12 and partitioned tables support (batyrmastyr)
+- Bug #17602: `EmailValidator` with `checkDNS=true` throws `ErrorException` on bad domains on Alpine (batyrmastyr)
+- Bug #17606: Fix error in `AssetBundle` when a disabled bundle with custom init() was still published (onmotion)
+- Bug #17625: Fix boolean `data` attributes from subkeys rendering in `Html::renderTagAttributes()` (brandonkelly)
+- Enh #17607: Added Yii version 3 DI config compatibility (hiqsol)
+
+
 2.0.28 October 08, 2019
 -----------------------
 

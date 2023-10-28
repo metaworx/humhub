@@ -1,6 +1,23 @@
 Changelog
 =========
 
+1.0.18
+-----------------------------------------
+- Enh: Keep text marks when pasting text
+- Fix: Copy/Paste of bold text not working
+- Enh: Added `NodePos.isPlain()` and `NodePos.addMarks()`
+- Enh: Added input rule for bold mark
+- Enh: Added input rule for code mark
+- Fix  #6: Newline and paragraphs not working inside of tables
+- Enh: Leave mark when pressing right at the end of line
+- Enh: Added support of `<br>`
+- Fixes ios fullscreen issue https://github.com/humhub/humhub/issues/3711
+- Enh: Added `data-ui-gallery` to images
+- Enh: Added `context.uuid`
+- Enh: Added editor instance as `env` within `registerMarkdownIt`
+- Fix: Image edit button not visible because of z-index
+- Fix: Image edit menu not removed after cancel edit
+
 1.0.17 (October, 16, 2019)
 -----------------------------------------
 - Fix: removed non devDependencies

@@ -1,6 +1,18 @@
 Yii Framework 2 redis extension Change Log
 ==========================================
 
+2.0.11 November 05, 2019
+------------------------
+
+- Enh #66, #134, #135, #136, #142, #143, #147: Support Redis in cluster mode (hofrob)
+
+
+2.0.10 October 22, 2019
+-----------------------
+
+- Enh #188: Added option to wait between connection retry (marty-macfly, rob006)
+
+
 2.0.9 September 23, 2018
 ------------------------
 

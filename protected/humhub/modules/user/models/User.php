@@ -9,6 +9,8 @@
 namespace humhub\modules\user\models;
 
 use humhub\components\behaviors\GUID;
+use humhub\modules\admin\permissions\ManageGroups;
+use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\content\components\behaviors\CompatModuleManager;
 use humhub\modules\content\components\behaviors\SettingsBehavior;
 use humhub\modules\content\components\ContentContainerActiveRecord;
@@ -24,6 +26,7 @@ use humhub\modules\user\authclient\Password as PasswordAuth;
 use humhub\modules\user\behaviors\Followable;
 use humhub\modules\user\behaviors\ProfileController;
 use humhub\modules\user\components\ActiveQueryUser;
+use humhub\modules\user\components\PermissionManager;
 use humhub\modules\user\events\UserEvent;
 use humhub\modules\user\helpers\AuthHelper;
 use humhub\modules\user\Module;
@@ -431,6 +434,7 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
         Session::deleteAll(['user_id' => $this->id]);
         Friendship::deleteAll(['user_id' => $this->id]);
         Friendship::deleteAll(['friend_user_id' => $this->id]);
+        Auth::deleteAll(['user_id' => $this->id]);
 
         $this->updateAttributes([
             'email' => new Expression('NULL'),
@@ -741,10 +745,15 @@ class User extends ContentContainerActiveRecord implements IdentityInterface, Se
      * User can approve other users
      *
      * @return boolean
+     * @throws \yii\base\InvalidConfigException
      */
     public function canApproveUsers()
     {
         if ($this->isSystemAdmin()) {
+            return true;
+        }
+
+        if((new PermissionManager(['subject' => $this]))->can([ManageUsers::class, ManageGroups::class])) {
             return true;
         }
 
