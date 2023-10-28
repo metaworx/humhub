@@ -8,6 +8,7 @@ $baseDir = dirname(dirname($vendorDir));
 return array(
     'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/reflection/src', $vendorDir . '/phpdocumentor/reflection/tests/unit', $vendorDir . '/phpdocumentor/reflection/tests/mocks'),
     'ZendSearch' => array($vendorDir . '/nqxcode/zendsearch/library'),
+    'URLify' => array($vendorDir . '/jbroadway/urlify'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'PHPParser' => array($vendorDir . '/nikic/php-parser/lib'),
     'MikeVanRiel' => array($vendorDir . '/mikevanriel/text-to-latex/src', $vendorDir . '/mikevanriel/text-to-latex/tests/unit'),

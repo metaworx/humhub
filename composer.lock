@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "51ed79aaf4aeab2e91c99dac15e8a804",
+    "hash": "e88b20820c20c4de7b61cdb2b53372dc",
     "packages": [
         {
             "name": "bower-asset/blueimp-canvas-to-blob",
@@ -199,16 +199,16 @@
         },
         {
             "name": "bower-asset/fontawesome",
-            "version": "v4.6.1",
+            "version": "v4.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "6535013c330e801ecf0b23c437865a7fb344486d"
+                "reference": "8e241f209faa1dd2182c9fdc9c352d8806504a4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/6535013c330e801ecf0b23c437865a7fb344486d",
-                "reference": "6535013c330e801ecf0b23c437865a7fb344486d",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/8e241f209faa1dd2182c9fdc9c352d8806504a4e",
+                "reference": "8e241f209faa1dd2182c9fdc9c352d8806504a4e",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -236,16 +236,16 @@
         },
         {
             "name": "bower-asset/jquery",
-            "version": "2.2.3",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jquery/jquery-dist.git",
-                "reference": "af22a351b2ea5801ffb1695abb3bb34d5bed9198"
+                "reference": "c0185ab7c75aab88762c5aae780b9d83b80eda72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/af22a351b2ea5801ffb1695abb3bb34d5bed9198",
-                "reference": "af22a351b2ea5801ffb1695abb3bb34d5bed9198",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/c0185ab7c75aab88762c5aae780b9d83b80eda72",
+                "reference": "c0185ab7c75aab88762c5aae780b9d83b80eda72",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -492,6 +492,62 @@
             }
         },
         {
+            "name": "bower-asset/select2",
+            "version": "4.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/select2/select2.git",
+                "reference": "566c7846fbf8c3b7674346f26d0ee872c0a77629"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/select2/select2/zipball/566c7846fbf8c3b7674346f26d0ee872c0a77629",
+                "reference": "566c7846fbf8c3b7674346f26d0ee872c0a77629",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/js/select2.js",
+                    "src/scss/core.scss"
+                ]
+            },
+            "description": "Select2 is a jQuery based replacement for select boxes. It supports searching, remote data sets, and infinite scrolling of results."
+        },
+        {
+            "name": "bower-asset/select2-bootstrap-theme",
+            "version": "0.1.0-beta.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/select2/select2-bootstrap-theme.git",
+                "reference": "1a81f99b47a16d04554c4ec57d5416db4ce2256c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/select2/select2-bootstrap-theme/zipball/1a81f99b47a16d04554c4ec57d5416db4ce2256c",
+                "reference": "1a81f99b47a16d04554c4ec57d5416db4ce2256c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "bower-asset/anchor-js": "~1.1.1",
+                "bower-asset/bootstrap": "~3.3.5",
+                "bower-asset/bootstrap-sass-official": "~3.3.5",
+                "bower-asset/respond": "~1.4.2"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/select2-bootstrap.css",
+                    "dist/select2-bootstrap.min.css"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "node_modules",
+                    "components"
+                ]
+            }
+        },
+        {
             "name": "bower-asset/yii2-pjax",
             "version": "v2.0.6",
             "source": {
@@ -628,6 +684,60 @@
                 "html"
             ],
             "time": "2015-08-05 01:03:42"
+        },
+        {
+            "name": "jbroadway/urlify",
+            "version": "1.0.7-stable",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jbroadway/urlify.git",
+                "reference": "3a89d2ef543405a5826190d234146ac3b2a12611"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jbroadway/urlify/zipball/3a89d2ef543405a5826190d234146ac3b2a12611",
+                "reference": "3a89d2ef543405a5826190d234146ac3b2a12611",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "URLify": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Johnny Broadway",
+                    "email": "johnny@johnnybroadway.com",
+                    "homepage": "http://www.johnnybroadway.com/"
+                }
+            ],
+            "description": "PHP port of URLify.js from the Django project. Transliterates non-ascii characters for use in URLs.",
+            "homepage": "https://github.com/jbroadway/urlify",
+            "keywords": [
+                "encode",
+                "iconv",
+                "link",
+                "slug",
+                "translit",
+                "transliterate",
+                "transliteration",
+                "url",
+                "urlify"
+            ],
+            "time": "2015-12-07 18:29:02"
         },
         {
             "name": "nqxcode/zendsearch",
@@ -892,6 +1002,54 @@
                 "yii2"
             ],
             "time": "2016-04-28 14:50:20"
+        },
+        {
+            "name": "yiisoft/yii2-authclient",
+            "version": "2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-authclient.git",
+                "reference": "22910bfe0000538f5b3ca1102cd3de0b5d14a0e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-authclient/zipball/22910bfe0000538f5b3ca1102cd3de0b5d14a0e2",
+                "reference": "22910bfe0000538f5b3ca1102cd3de0b5d14a0e2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "yiisoft/yii2": ">=2.0.4"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\authclient\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "External authentication via OAuth and OpenID for the Yii framework",
+            "keywords": [
+                "OpenId",
+                "auth",
+                "oauth",
+                "yii2"
+            ],
+            "time": "2015-09-23 17:26:02"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -2180,7 +2338,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "bower-asset/select2-bootstrap-theme": 10
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

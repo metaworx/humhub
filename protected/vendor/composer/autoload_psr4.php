@@ -14,6 +14,7 @@ return array(
     'yii\\composer\\' => array($vendorDir . '/yiisoft/yii2-composer'),
     'yii\\codeception\\' => array($vendorDir . '/yiisoft/yii2-codeception'),
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
+    'yii\\authclient\\' => array($vendorDir . '/yiisoft/yii2-authclient'),
     'yii\\apidoc\\' => array($vendorDir . '/yiisoft/yii2-apidoc'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'xj\\jplayer\\' => array($vendorDir . '/xj/yii2-jplayer-widget'),
