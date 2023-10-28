@@ -19,6 +19,8 @@ return array (
   'Public (Registered users only)' => 'Publiek (Alleen geregistreerde gebruikers)',
   'Settings' => 'Instellingen',
   'Space' => 'Ruimte',
+  'User invitations have been added to the queue' => 'Gebruikersuitnodigingen zijn aan de wachtrij toegevoegd.',
+  'User memberships have been added to the queue' => 'Gebruikerslidmaatschappen zijn toegevoegd aan de wachtrij.',
   'Visible for all (members and guests)' => 'Zichtbaar voor iedereen (leden en gasten)',
   '{count} members' => '{count} leden',
 );

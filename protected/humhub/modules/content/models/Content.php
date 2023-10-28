@@ -15,6 +15,7 @@ use humhub\modules\admin\permissions\ManageUsers;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\components\ContentContainerModule;
+use humhub\modules\content\interfaces\ContentOwner;
 use humhub\modules\content\permissions\CreatePrivateContent;
 use humhub\modules\content\permissions\CreatePublicContent;
 use humhub\modules\content\permissions\ManageContent;
@@ -24,6 +25,7 @@ use humhub\modules\user\models\User;
 use Yii;
 use yii\base\Exception;
 use yii\base\InvalidArgumentException;
+use yii\db\IntegrityException;
 use yii\helpers\Url;
 
 /**
@@ -52,7 +54,7 @@ use yii\helpers\Url;
  * @mixin GUID
  * @since 0.5
  */
-class Content extends ContentDeprecated implements Movable
+class Content extends ContentDeprecated implements Movable, ContentOwner
 {
 
     /**
@@ -391,6 +393,7 @@ class Content extends ContentDeprecated implements Movable
 
     /**
      * {@inheritdoc}
+     * @throws \Throwable
      */
     public function move(ContentContainerActiveRecord $container = null, $force = false)
     {
@@ -401,7 +404,9 @@ class Content extends ContentDeprecated implements Movable
                 $this->setContainer($container);
                 if ($this->save()) {
                     ContentTag::deleteContentRelations($this, false);
-                    $this->getModel()->afterMove();
+                    $model = $this->getModel();
+                    $model->populateRelation('content', $this);
+                    $model->afterMove($container);
                 }
             });
         }
@@ -489,7 +494,7 @@ class Content extends ContentDeprecated implements Movable
      */
     public function checkMovePermission(ContentContainerActiveRecord $container = null)
     {
-        if(!$container) {
+        if (!$container) {
             $container = $this->container;
         }
         return $this->getModel()->isOwner() || Yii::$app->user->can(ManageUsers::class) || $container->can(ManageContent::class);
@@ -500,7 +505,7 @@ class Content extends ContentDeprecated implements Movable
      */
     public function afterMove(ContentContainerActiveRecord $container = null)
     {
-        // TODO: Implement afterMove() method.
+        // Nothing to do
     }
 
     /**
@@ -525,14 +530,20 @@ class Content extends ContentDeprecated implements Movable
      * e.g. in case there is no wall entry available for this content.
      *
      * @since 0.11.1
+     * @param boolean $scheme
+     * @return string the URL
      */
-    public function getUrl()
+    public function getUrl($scheme = false)
     {
-        if (method_exists($this->getPolymorphicRelation(), 'getUrl')) {
-            return $this->getPolymorphicRelation()->getUrl();
+        try {
+            if (method_exists($this->getPolymorphicRelation(), 'getUrl')) {
+                return $this->getPolymorphicRelation()->getUrl($scheme);
+            }
+        } catch (IntegrityException $e) {
+            Yii::error($e->getMessage(), 'content');
         }
 
-        return Url::toRoute(['/content/perma', 'id' => $this->id]);
+        return Url::toRoute(['/content/perma', 'id' => $this->id], $scheme);
     }
 
     /**
@@ -661,7 +672,7 @@ class Content extends ContentDeprecated implements Movable
 
         if ($user === null) {
             $user = Yii::$app->user->getIdentity();
-        } else if(!($user instanceof User)) {
+        } else if (!($user instanceof User)) {
             $user = User::findOne(['id' => $user]);
         }
 
@@ -727,7 +738,7 @@ class Content extends ContentDeprecated implements Movable
     {
         if (!$user && !Yii::$app->user->isGuest) {
             $user = Yii::$app->user->getIdentity();
-        } else if(! $user instanceof User) {
+        } else if (!$user instanceof User) {
             $user = User::findOne(['id' => $user]);
         }
 
@@ -784,5 +795,29 @@ class Content extends ContentDeprecated implements Movable
     public function updateStreamSortTime()
     {
         $this->updateAttributes(['stream_sort_date' => new \yii\db\Expression('NOW()')]);
+    }
+
+    /**
+     * @returns \humhub\modules\content\models\Content content instance of this content owner
+     */
+    public function getContent()
+    {
+        return $this;
+    }
+
+    /**
+     * @returns string name of the content like 'comment', 'post'
+     */
+    public function getContentName()
+    {
+        return $this->getModel()->getContentName();
+    }
+
+    /**
+     * @returns string short content description
+     */
+    public function getContentDescription()
+    {
+        return $this->getModel()->getContentDescription();
     }
 }

@@ -34,6 +34,9 @@ class InitialData
         Yii::$app->settings->set('displayNameFormat', '{profile.firstname} {profile.lastname}');
         Yii::$app->settings->set('horImageScrollOnMobile', true);
 
+        // Avoid immediate cron run after installation
+        Yii::$app->settings->set('cronLastDailyRun', time());
+
         // Authentication
         Yii::$app->getModule('user')->settings->set('auth.ldap.refreshUsers', '1');
         Yii::$app->getModule('user')->settings->set('auth.needApproval', '0');
@@ -66,6 +69,10 @@ class InitialData
 
         // Notification
         Yii::$app->getModule('notification')->settings->set('enable_html5_desktop_notifications', 0);
+
+        // Avoid warning direct after installation
+        Yii::$app->settings->set('cronLastRun', time());
+
 
         // Add Categories
         $cGeneral = new ProfileFieldCategory;

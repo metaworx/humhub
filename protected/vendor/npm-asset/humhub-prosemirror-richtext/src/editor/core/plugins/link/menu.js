@@ -64,11 +64,22 @@ export function promt(title, context, attrs, node, mark) {
             value: attrs && attrs.href,
             required: true,
             clean: (val) => {
-                if (!/^https?:\/\//i.test(val) && !/^mailto:/i.test(val) && !/^ftps?:\/\//i.test(val))  {
-                    val = 'http://' + val;
+                let validate = context.getPluginOption('link', 'validate');
+                let tested = (validate) ? validate(val) : false;
+
+                if(tested) {
+                    return (typeof tested === 'string') ? tested : val;
                 }
 
-                return val
+                if(validate &&  validate(val)) {
+                    return val;
+                }
+
+                if (!/^https?:\/\//i.test(val) && !/^mailto:/i.test(val) && !/^ftps?:\/\//i.test(val))  {
+                    return 'http://' + val;
+                }
+
+                return val;
             }
         }),
         title: new TextField({label: "Title", value: attrs && attrs.title, clean: clean})
@@ -83,6 +94,10 @@ export function promt(title, context, attrs, node, mark) {
         fields: fields,
         callback(attrs) {
             if(node) {
+                if(mark.attrs.href === attrs.href) {
+                    attrs.fileGuid = mark.attrs.fileGuid;
+                }
+
                 let newSet = mark.type.removeFromSet(node.marks);
                 let newNode = node.copy(attrs.text);
                 newNode.marks = newSet;

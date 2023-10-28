@@ -19,6 +19,8 @@ return array (
   'Public (Registered users only)' => 'Public (utilisateurs enregistrés uniquement)',
   'Settings' => 'Réglages',
   'Space' => 'Espace',
+  'User invitations have been added to the queue' => 'Les invitations des utilisateurs ont été ajoutées à la file d\'attente',
+  'User memberships have been added to the queue' => 'Les adhésions des utilisateurs ont été ajoutées à la file d\'attente',
   'Visible for all (members and guests)' => 'Visible par tous (membres et visiteurs)',
   '{count} members' => '{count} membres',
 );

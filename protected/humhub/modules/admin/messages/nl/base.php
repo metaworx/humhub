@@ -15,6 +15,7 @@ return array (
   'Design' => 'Ontwerp',
   'Files' => 'Bestanden',
   'Groups' => 'Groepen',
+  'Groups (Note: The Administrator group of this user can\'t be managed with your permissions)' => 'Groepen (Opmerking: de beheerdersgroep van deze gebruiker kan niet worden beheerd met uw machtigingen)',
   'Invite' => 'Uitnodiging',
   'Invited by' => 'Uitgenodigd door',
   'Logging' => 'Logging',
