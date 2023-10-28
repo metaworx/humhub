@@ -1,5 +1,6 @@
 <?php
 return array (
+  'Show all' => '@@Показать всё@@',
   '<b>Nobody wrote something yet.</b><br>Make the beginning and post something...' => '<b>Ещё никто ничего не написал.</b><br>Начните первым...',
   '<b>This profile stream is still empty</b>' => '<b>Поток профиля всё-ещё пуст</b>',
   '<b>This space is still empty!</b><br>Start by posting something here...' => '<b>Это пространство ещё пусто!</b><br>Начните размещая что-нибудь здесь...',
@@ -10,14 +11,13 @@ return array (
   'Created by me' => 'Созданные мной',
   'Creation time' => 'Время создания',
   'Filter' => 'Фильтр',
-  'Include archived posts' => 'Включить заархивированные сообщения',
+  'Include archived posts' => 'Включить архивированные сообщения',
   'Last update' => 'Последнее обновление',
   'Nothing found which matches your current filter(s)!' => 'Ничего соответсвующего вашим фильтрам не найдено!',
   'Only private posts' => 'Только личные сообщения',
-  'Only public posts' => 'Только публичные сообщение',
+  'Only public posts' => 'Только обнародованные сообщение',
   'Posts only' => 'Только сообщения',
   'Posts with links' => 'Сообщения с ссылками',
-  'Show all' => 'Показать всё',
   'Sorting' => 'Сортировка',
   'Where I´m involved' => 'В которых я участвую',
 );
