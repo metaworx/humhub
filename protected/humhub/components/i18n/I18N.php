@@ -45,11 +45,13 @@ class I18N extends \yii\i18n\I18N
     public function setUserLocale($user)
     {
         if ($user === null) {
-            throw \yii\base\InvalidParamException("User cannot be null!");
+            throw new \yii\base\InvalidParamException('User cannot be null!');
         }
 
         if (!empty($user->language)) {
             Yii::$app->language = $user->language;
+        } else {
+            $this->setDefaultLocale();
         }
 
         if (!($user->time_zone)) {
