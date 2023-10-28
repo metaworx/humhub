@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'humhub/humhub',
-        'pretty_version' => 'v1.13.1',
-        'version' => '1.13.1.0',
-        'reference' => '9cd1087742f528f4c1b6b520e6381ef0725d72b9',
+        'pretty_version' => 'v1.13.2',
+        'version' => '1.13.2.0',
+        'reference' => 'db0ef25dbc5194f676ef9fc6c125432e9b5a6be1',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
@@ -308,9 +308,9 @@
             'dev_requirement' => true,
         ),
         'humhub/humhub' => array(
-            'pretty_version' => 'v1.13.1',
-            'version' => '1.13.1.0',
-            'reference' => '9cd1087742f528f4c1b6b520e6381ef0725d72b9',
+            'pretty_version' => 'v1.13.2',
+            'version' => '1.13.2.0',
+            'reference' => 'db0ef25dbc5194f676ef9fc6c125432e9b5a6be1',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),
@@ -2033,9 +2033,9 @@
             'dev_requirement' => true,
         ),
         'yiisoft/yii2-gii' => array(
-            'pretty_version' => '2.1.4',
-            'version' => '2.1.4.0',
-            'reference' => 'd879cb186361fbc6f71a2d994d580b5a071a5642',
+            'pretty_version' => '2.2.2',
+            'version' => '2.2.2.0',
+            'reference' => '68efc6fb830feccfaa43354817b5bcd36c7bd5a8',
             'type' => 'yii2-extension',
             'install_path' => __DIR__ . '/../yiisoft/yii2-gii',
             'aliases' => array(),

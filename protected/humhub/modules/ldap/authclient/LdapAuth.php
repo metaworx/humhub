@@ -333,7 +333,7 @@ class LdapAuth extends BaseFormAuth implements AutoSyncUsers, SyncAttributes, Ap
         foreach ($normalized as $name => $value) {
             if (isset(Yii::$app->params['ldap']['dateFields'][$name]) && $value != '') {
                 $dateFormat = Yii::$app->params['ldap']['dateFields'][$name];
-                $date = DateTime::createFromFormat($dateFormat, $value);
+                $date = DateTime::createFromFormat($dateFormat, $value ?? '');
 
                 if ($date !== false) {
                     $normalized[$name] = $date->format('Y-m-d');
@@ -578,5 +578,16 @@ class LdapAuth extends BaseFormAuth implements AutoSyncUsers, SyncAttributes, Ap
         $attributes = $authClient->getUserAttributes();
 
         return $authClient;
+    }
+
+    /**
+     * @inheridoc
+     */
+    public function beforeSerialize(): void
+    {
+        // Make sure we normalized user attributes before put it in session (anonymous functions)
+        $this->setNormalizeUserAttributeMap([]);
+
+        $this->_ldap = null;
     }
 }
