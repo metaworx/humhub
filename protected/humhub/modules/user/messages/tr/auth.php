@@ -66,8 +66,13 @@ return [
     'email' => 'E-posta',
     'password' => 'Şifre',
     'username or email' => 'Kullanıcı Adı / E-posta',
+    '<strong>Change</strong> Password' => '',
     '<strong>Join</strong> the network' => '',
+    'Confirm' => '',
+    'Due to security reasons you are required to change your password in order to access the platform.' => '',
+    'Log out' => '',
     'Please enter the letters from the image.' => '',
     'Please login with your username/email and password.' => '',
+    'Please wait' => '',
     'User or Password incorrect.' => '',
 ];

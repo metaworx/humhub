@@ -69,5 +69,10 @@ return [
     'email' => 'البريد الإلكتروني',
     'password' => 'كلمه السر',
     'username or email' => 'اسم المستخدم أو البريد الالكتروني',
+    '<strong>Change</strong> Password' => '',
+    'Confirm' => '',
+    'Due to security reasons you are required to change your password in order to access the platform.' => '',
+    'Log out' => '',
+    'Please wait' => '',
     'User or Password incorrect.' => '',
 ];

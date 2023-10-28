@@ -34,6 +34,8 @@ return [
     'Basic' => 'Basis',
     'Caching' => 'Caching',
     'Cronjobs' => 'Cronjobs',
+    'Delete all' => 'Verwijder alles',
+    'Delete selected rows' => 'Verwijder de geselecteerde rijen',
     'Design' => 'Ontwerp',
     'Files' => 'Bestanden',
     'General' => 'Algemeen',
@@ -53,7 +55,6 @@ return [
     'Pending user registrations' => 'Wachtende gebruikersregistraties',
     'Permissions' => 'Permissies',
     'Proxy' => 'Proxy',
-    'Security' => 'Beveiliging',
     'Self test' => 'Zelf-test',
     'Settings' => 'Instellingen',
     'Sign up' => 'Registreer',
@@ -64,4 +65,6 @@ return [
     'User posts' => 'Gebruiker posts',
     'Userprofiles' => 'Gebruikerprofielen',
     'Users' => 'Gebruikers',
+    '<strong>Maintenance</strong> Mode' => '',
+    'Default' => '',
 ];

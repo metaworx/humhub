@@ -69,5 +69,10 @@ return [
     'email' => 'email',
     'password' => 'mật khẩu',
     'username or email' => 'tên truy cập hoặc email',
+    '<strong>Change</strong> Password' => '',
+    'Confirm' => '',
+    'Due to security reasons you are required to change your password in order to access the platform.' => '',
+    'Log out' => '',
+    'Please wait' => '',
     'User or Password incorrect.' => '',
 ];
