@@ -207,6 +207,7 @@ class Content extends ActiveRecord implements Movable, ContentOwner
                 'sourceClass' => $contentSource->className(),
                 'sourceId' => $contentSource->getPrimaryKey(),
                 'silent' => $this->isMuted(),
+                'streamChannel' => $this->stream_channel,
                 'contentId' => $this->id
             ]));
         }
@@ -749,7 +750,12 @@ class Content extends ActiveRecord implements Movable, ContentOwner
             $user = User::findOne(['id' => $user]);
         }
 
-        // User cann access own content
+        // Check global content visibility, private global content is visible for all users
+        if(empty($this->contentcontainer_id) && !Yii::$app->user->isGuest) {
+            return true;
+        }
+
+        // User can access own content
         if ($user !== null && $this->created_by == $user->id) {
             return true;
         }

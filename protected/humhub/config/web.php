@@ -21,6 +21,9 @@ $config = [
         ],
         'request' => [
             'class' => \humhub\components\Request::class,
+            'csrfCookie' => [
+                'sameSite' => PHP_VERSION_ID >= 70300 ? yii\web\Cookie::SAME_SITE_LAX : null,
+            ],
         ],
         'response' => [
             'class' => \humhub\components\Response::class,
@@ -30,13 +33,20 @@ $config = [
             'identityClass' => \humhub\modules\user\models\User::class,
             'enableAutoLogin' => true,
             'authTimeout' => 1400,
-            'loginUrl' => ['/user/auth/login']
+            'loginUrl' => ['/user/auth/login'],
+            'identityCookie' => [
+                'name' => '_identity',
+                'sameSite' => PHP_VERSION_ID >= 70300 ? yii\web\Cookie::SAME_SITE_LAX : null,
+            ],
         ],
         'errorHandler' => [
             'errorAction' => '/error/index',
         ],
         'session' => [
             'class' => \humhub\modules\user\components\Session::class,
+            'cookieParams' => [
+                'sameSite' => PHP_VERSION_ID >= 70300 ? yii\web\Cookie::SAME_SITE_LAX : null,
+            ],
         ],
     ],
     'modules' => [
@@ -49,7 +59,7 @@ $config = [
                     "Referrer-Policy" => "no-referrer-when-downgrade",
                     "X-Permitted-Cross-Domain-Policies" => "master-only",
                     "X-Frame-Options" => "sameorigin",
-                    "Content-Security-Policy" => "default-src *; connect-src  *; font-src 'self'; frame-src https://* http://* *; img-src https://* http://* * data:; object-src 'none'; script-src 'self' https://* http://* * 'unsafe-inline' 'report-sample'; style-src * https://* http://* * 'unsafe-inline';"
+                    "Content-Security-Policy" => "default-src *; connect-src  *; font-src 'self'; frame-src https://* http://* *; img-src https://* http://* * data:; object-src 'self'; script-src 'self' https://* http://* * 'unsafe-inline' 'report-sample'; style-src * https://* http://* * 'unsafe-inline';"
                 ]
             ]
         ]

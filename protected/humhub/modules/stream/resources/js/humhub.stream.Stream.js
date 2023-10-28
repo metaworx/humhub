@@ -21,9 +21,14 @@ humhub.module('stream.Stream', function (module, require, $) {
     var Filter =  require('ui.filter').Filter;
     var StreamRequest =  require('stream').StreamRequest;
     var loader = require('ui.loader');
+    var event = require('event');
+
+    var EVENT_AFTER_ADD_ENTRIES = 'humhub:stream:afterAddEntries';
+    var EVENT_BEFORE_ADD_ENTRIES = 'humhub:stream:beforeAddEntries';
+    var EVENT_INITIALIZED = 'humhub:stream:initialized';
 
     /**
-     * Number of initial stream enteis loaded when stream is initialized.
+     * Number of initial stream entries loaded when stream is initialized.
      * @type Number
      */
     var STREAM_INIT_COUNT = 8;
@@ -37,7 +42,7 @@ humhub.module('stream.Stream', function (module, require, $) {
 
     /**
      * If a data-stream-contentid is set on the stream root only one entry will
-     * be loaded. e.g. for permlinks
+     * be loaded. e.g. for permalinks
      * @type String
      */
     var DATA_STREAM_CONTENTID = 'stream-contentid';
@@ -68,15 +73,72 @@ humhub.module('stream.Stream', function (module, require, $) {
      * @param {type} container id or jQuery object of the stream container
      * @returns {undefined}
      */
-    var Stream = Widget.extend(function (container, options) {
-        Widget.call(this, container, options);
-    });
+    var Stream = Widget.extend();
 
     Stream.prototype.onClear = function() {/* abstract onClear function */};
 
-    Stream.prototype.initScroll = function() {/* abstract initScroll function */};
+    Stream.prototype.initScroll = function() {
+        if(window.IntersectionObserver && this.options.scrollSupport) {
+
+            var options = { root: this.$content[0], rootMargin: "50px" };
+            options = this.options.scrollOptions ? $.extend(options, this.options.scrollOptions) : options;
+            var $streamEnd = $('<div class="stream-end"></div>');
+            this.$content.append($streamEnd);
+
+            var that = this;
+            var observer = new IntersectionObserver(function(entries) {
+                if(that.preventScrollLoading()) {
+                    return;
+                }
+
+                if(entries.length && entries[0].isIntersecting) {
+                    that.load().finally(function() {
+                        that.state.scrollLock = false;
+                    });
+                }
+
+            }, options);
+
+            observer.observe($streamEnd[0]);
+        }
+    };
+
+    Stream.prototype.preventScrollLoading = function() {
+        return this.state.scrollLock || !this.canLoadMore() || !this.state.lastRequest || this.state.firstRequest.isSingleEntryRequest()
+    };
 
     Stream.prototype.initEvents = function() {/* abstract initScroll function */};
+
+    Stream.prototype.onUpdateAvailable = function(events) {
+        var that = this;
+        if(this.options.autoUpdate) {
+            that.loadUpdate();
+        }
+    };
+
+    Stream.prototype.initDefaultEvents = function() {
+        var that = this;
+        event.on('humhub:modules:content:live:NewContent.stream', function (evt, events) {
+            if(!events
+                || !that.state.initialized
+                || !events.length
+                || that.hasActiveFilters()
+                || (that.state.firstRequest && that.state.firstRequest.isSingleEntryRequest())
+                || !that.isUpdateAvailable(events)) {
+                return;
+            }
+
+            that.onUpdateAvailable();
+        });
+
+        this.on(EVENT_INITIALIZED, function() {
+            that.initScroll();
+        });
+    };
+
+    Stream.prototype.isUpdateAvailable = function(events) {
+        return false;
+    };
 
     /**
      * Initializes the stream configuration with default values.
@@ -109,15 +171,36 @@ humhub.module('stream.Stream', function (module, require, $) {
             .show()
             .loadInit()
             .then($.proxy(this.handleResponse, this))
+            .then($.proxy(this.updateTop, this))
+            .then($.proxy(this.triggerInitEvent, this))
             .catch($.proxy(this.handleLoadError, this));
+    };
+
+    /**
+     * Refreshes the first loaded entry. Note this entry should only be updated after initialization or when
+     * loading updates to the top. Do not update this value when appending new content created by the user itself, e.g post form!
+     *
+     * @param response
+     * @returns {*}
+     */
+    Stream.prototype.updateTop = function(response) {
+        if(response) {
+            this.topEntry = this.firstEntry(true);
+        }
+        return response;
+    };
+
+    Stream.prototype.triggerInitEvent = function(response) {
+        this.trigger(EVENT_INITIALIZED, this);
+        return response;
     };
 
     Stream.prototype.initWidget = function() {
         this.$content = this.$.find(this.options.contentSelector);
         this.loader = this.options.loader || new StreamLoader(this);
+        this.initDefaultEvents();
         this.initEvents();
         this.initFilter();
-        this.initScroll();
     };
 
     Stream.prototype.initFilter = function () {
@@ -136,7 +219,8 @@ humhub.module('stream.Stream', function (module, require, $) {
 
         this.state.firstRequest = new StreamRequest(this, {
             contentId: contentId,
-            limit: this.options.initLoadCount});
+            limit: this.options.initLoadCount
+        });
 
         return this.state.firstRequest.load();
     };
@@ -187,6 +271,18 @@ humhub.module('stream.Stream', function (module, require, $) {
 
     Stream.prototype.lastEntryLoaded = function () {
         return this.state.lastEntryLoaded === true;
+    };
+
+    Stream.prototype.loadUpdate = function() {
+        var topEntry = (this.topEntry) ? this.topEntry : Widget.instance(this.$.find(StreamEntry.SELECTOR+':first'));
+        var from = topEntry ? topEntry.getKey() : 0;
+        return this.load({
+            'to': from,
+            'prepend': true,
+            'respectPinned': true,
+            'loader': false,
+            'limit': 20
+        }).then($.proxy(this.updateTop, this));
     };
 
     Stream.prototype.load = function (options) {
@@ -267,12 +363,16 @@ humhub.module('stream.Stream', function (module, require, $) {
         this.removeResponseEntries(request);
         var $result = $(request.getResultHtml());
 
-        this.$.trigger('humhub:stream:beforeAddEntries', [request.response, request, $result]);
+        if(!$result.length) {
+            return Promise.resolve();
+        }
+
+        this.$.trigger(EVENT_BEFORE_ADD_ENTRIES, [request.response, request, $result]);
 
         var promise;
 
         if (options.prepend) {
-            promise = this.prependEntry($result);
+            promise = this.prependEntry($result, options.respectPinned);
         } else if (options.insertAfter) {
             promise = this.after($result, options.insertAfter);
         } else {
@@ -280,7 +380,7 @@ humhub.module('stream.Stream', function (module, require, $) {
         }
 
         return promise.then(function () {
-            that.trigger('humhub:stream:afterAddEntries', [request.response, request, $result]);
+            that.trigger(EVENT_AFTER_ADD_ENTRIES, [request.response, request, $result]);
             return request;
         });
     };
@@ -294,7 +394,7 @@ humhub.module('stream.Stream', function (module, require, $) {
         var that = this;
         request.forEachResult(function(key) {
             var $entry = that.entry(key);
-            if ($entry.length) {
+            if ($entry) {
                 $entry.remove();
             }
         });
@@ -304,10 +404,12 @@ humhub.module('stream.Stream', function (module, require, $) {
      * Prepends the given entry html to the stream and respects pinned posts if the respectPinnedPosts is set to true.
      *
      * @param html
-     * @param respectPinnedPosts
+     * @param respectPinned
      */
-    Stream.prototype.prependEntry = function (html, respectPinnedPosts) {
-        if (respectPinnedPosts) {
+    Stream.prototype.prependEntry = function (html, respectPinned) {
+        // Some streams do not support pinned posts order e.g. dashboard, in this case we can ignore pinned post order
+        respectPinned = respectPinned && this.options.pinSupport;
+        if (respectPinned) {
             var $pinned = this.$.find('[data-stream-pinned="1"]:last');
             if ($pinned.length) {
                 return this.after(html, $pinned);
@@ -336,8 +438,14 @@ humhub.module('stream.Stream', function (module, require, $) {
      * @param html
      */
     Stream.prototype.appendEntry = function (html) {
+        var that = this;
         return this._streamEntryAnimation(html, function ($html) {
-            this.$content.append($html);
+            var $streamEnd = that.$content.find('.stream-end:first');
+            if($streamEnd.length) {
+                $streamEnd.before($html)
+            } else {
+                this.$content.append($html);
+            }
         });
     };
 
@@ -467,7 +575,7 @@ humhub.module('stream.Stream', function (module, require, $) {
      * @returns {boolean}
      */
     Stream.prototype.isShowSingleEntry = function () {
-        return  this.state.lastRequest && this.state.lastRequest.isSingleEntryRequest();
+        return this.state.lastRequest && this.state.lastRequest.isSingleEntryRequest();
     };
 
     /**
@@ -480,7 +588,7 @@ humhub.module('stream.Stream', function (module, require, $) {
     };
 
     Stream.prototype.hasActiveFilters = function () {
-        return this.filter.getActiveFilterCount({exclude: 'sort'}) > 0;
+        return this.filter && this.filter.getActiveFilterCount({exclude: 'sort'}) > 0;
     };
 
     /**
@@ -551,17 +659,37 @@ humhub.module('stream.Stream', function (module, require, $) {
 
     /**
      * Returns a StreamEntry instance for a given content id.
+     * @returns StreamEntry
+     * @param ignorePinned
+     */
+    Stream.prototype.firstEntry = function(ignorePinned) {
+        return ignorePinned
+            ? this.entry(this.$.find('[data-stream-entry]:not([data-stream-pinned="1"]):first'))
+            : this.entry(this.$.find('[data-stream-entry]:first'));
+    };
+
+    /**
+     * Returns a StreamEntry instance for a given content id.
      * @param {type} key
-     * @returns {humhub_stream_L5.StreamEntry}
+     * @returns StreamEntry
      */
     Stream.prototype.entry = function (key) {
-        return new this.options.streamEntryClass(this.$.find(StreamEntry.SELECTOR + '[data-content-key="' + key + '"]'));
+        var $entryNode = object.isString(key) || object.isNumber(key)
+            ? this.$.find(StreamEntry.SELECTOR + '[data-content-key="' + key + '"]')
+            : $(key);
+
+        if(!$entryNode.length) {
+            return null;
+        }
+
+        return new this.options.streamEntryClass($entryNode);
     };
 
     /**
      * Creates a new StreamEntry out of the given childNode.
      * @param {type} $childNode
-     * @returns {humhub_stream_L5.StreamEntry}
+     * @returns StreamEntry
+     * @deprecated since 1.5 use entry() instead
      */
     Stream.prototype.getEntryByNode = function ($childNode) {
         return new this.cfg.streamEntryClass($childNode.closest(StreamEntry.SELECTOR));
