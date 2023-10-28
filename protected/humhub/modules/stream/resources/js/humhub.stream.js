@@ -313,7 +313,7 @@ humhub.module('stream', function (module, require, $) {
         this.loader();
         client.post(evt.url).then(function (response) {
             if (response.success) {
-                // Either just remove entry or reload it in case the stream includes arhcived entries
+                // Either just remove entry or reload it in case the stream includes archived entries
                 if (that.stream().hasFilter(FILTER_INCLUDE_ARCHIVED)) {
                     that.reload().then(function () {
                         module.log.success('success.archive', true);
@@ -817,6 +817,7 @@ humhub.module('stream', function (module, require, $) {
      * @returns {humhub_stream_L5.StreamEntry}
      */
     Stream.prototype.getEntryByNode = function ($childNode) {
+        debugger;
         return new this.cfg.streamEntryClass($childNode.closest(DATA_STREAM_ENTRY_SELECTOR));
     };
 
@@ -905,11 +906,21 @@ humhub.module('stream', function (module, require, $) {
      */
     var SimpleStream = function (container, cfg) {
         Stream.call(this, container, cfg);
+        this.$content = this.$;
+        this.setFilter(FILTER_INCLUDE_ARCHIVED);
     };
 
     object.inherits(SimpleStream, WallStream);
-    
+
+    SimpleStream.prototype.init = function () {
+        this.reloadEntry();
+    };
+
     SimpleStream.prototype.reloadEntry = function (entry) {
+        if(!entry) {
+            var entry = Component.instance(this.$.find('[data-stream-entry]:first'));
+        }
+
         entry.loader();
         var contentId = entry.getKey();
         return client.get(contentModule.config.reloadUrl, {data: {id: contentId}}).then(function (response) {
@@ -922,6 +933,15 @@ humhub.module('stream', function (module, require, $) {
         });
     };
 
+    SimpleStream.prototype.loadEntry = function (contentId) {
+        var that = this;
+
+        return client.get(contentModule.config.reloadUrl, {data: {id: contentId}}).then(function (response) {
+            debugger;
+            that.appendEntry(response.output);
+            return response;
+        });
+    };
 
     /**
      * Initializes wall stream
