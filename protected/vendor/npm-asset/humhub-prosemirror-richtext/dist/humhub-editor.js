@@ -19051,6 +19051,16 @@ var SelectField = /*@__PURE__*/(function (Field) {
     return SelectField;
 }(Field));const prompt=/*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({__proto__:null,openPrompt,Field,TextField,SelectField},Symbol.toStringTag,{value:'Module'}));// TODO: enable global default config e.g. for emoji, locale, etc
 
+var isHumhub = function () {
+    return humhub && humhub.modules;
+};
+
+var showSuccessNotify = function (message) {
+    if (isHumhub) {
+        humhub.modules.ui.status.success(message);
+    }
+};
+
 function getEmojiConfig() {
     if (!window.humhub || !window.humhub.config) {
         return {};
@@ -19064,7 +19074,7 @@ function isSmallView() {
         return getClientWidth() <= 767;
     }
 
-    return humhub.modules ? humhub.modules.ui.view.isSmall() : null;
+    return isHumhub() ? humhub.modules.ui.view.isSmall() : null;
 }
 
 var getClientWidth = function () {
@@ -19076,7 +19086,7 @@ function getUserLocale() {
         return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.language;
     }
 
-    return humhub.modules ? humhub.modules.user.config.locale.split("-")[0] : null;
+    return isHumhub() ? humhub.modules.user.config.locale.split("-")[0] : null;
 }
 
 function filterFileUrl(url) {
@@ -19084,7 +19094,7 @@ function filterFileUrl(url) {
         return {url: url, guid: null};
     }
 
-    return humhub.modules ? humhub.modules.file.filterFileUrl(url) : url;
+    return isHumhub() ? humhub.modules.file.filterFileUrl(url) : url;
 }
 
 function getLoaderWidget() {
@@ -19107,7 +19117,7 @@ function encode$2(str) {
         return $('<div/>').text(str).html();
     }
 
-    return humhub.modules ? humhub.modules.util.string.encode(str) : str;
+    return isHumhub() ? humhub.modules.util.string.encode(str) : str;
 }
 
 // TODO: Implement oembed provider interface
@@ -32213,18 +32223,18 @@ var doc$1 = {
     schema: schema$k
 };var schema$j = {
     nodes: {
-        blockquote : {
+        blockquote: {
             sortOrder: 200,
             content: "block+",
             group: "block",
             marks: "",
             parseDOM: [{tag: "blockquote"}],
-            toDOM: function toDOM() {
+            toDOM: function () {
                 return ["blockquote", 0]
             },
             parseMarkdown: {block: "blockquote"},
             toMarkdown: function (state, node) {
-                if(state.table) { return state.renderContent(node); }
+                if (state.table) { return state.renderContent(node); }
                 state.wrapBlock("> ", null, node, function () { return state.renderContent(node); });
             }
         }
@@ -32232,13 +32242,10 @@ var doc$1 = {
 };// : (NodeType) → InputRule
 // Given a blockquote node type, returns an input rule that turns `"> "`
 // at the start of a textblock into a blockquote.
-var blockquoteRule = function (schema) {
-    return wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote)
-};/*
+var blockquoteRule = function (schema) { return wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote); };/*
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
 function wrapBlockQuote(context) {
@@ -32251,26 +32258,25 @@ function wrapBlockQuote(context) {
 }
 
 function menu$k(context) {
-    return [
-        {
-            id: 'wrapBlockQuote',
-            node: 'blockquote',
-            group: 'format',
-            item: wrapBlockQuote(context)
-        }
-    ]
+    return [{
+        id: 'wrapBlockQuote',
+        node: 'blockquote',
+        group: 'format',
+        item: wrapBlockQuote(context)
+    }];
 }/*
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
 var blockquote = {
     id: 'blockquote',
     schema: schema$j,
     menu: function (context) { return menu$k(context); },
-    inputRules: function (schema) {return [blockquoteRule(schema)]}
+    inputRules: function (schema) {
+        return [blockquoteRule(schema)]
+    }
 };/*
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
@@ -32464,7 +32470,7 @@ var code_block$1 = {
         preserveWhitespace: true,
     }],
     toDOM: function () {
-        return ["pre"];
+        return ["pre", 0];
     },
     parseMarkdown: {block: "code_block"},
     toMarkdown: function (state, node) {
@@ -32521,12 +32527,9 @@ function menu$h(context) {
 }function arrowHandler(dir) {
     return function (state, dispatch, view) {
         if (state.selection.empty && view.endOfTextblock(dir)) {
-            var side = dir === "left" || dir === "up" ? -1 : 1,
-                $head = state.selection.$head;
-            var nextPos = Selection.near(
-                state.doc.resolve(side > 0 ? $head.after() : $head.before()),
-                side
-            );
+            var side = dir === "left" || dir === "up" ? -1 : 1, $head = state.selection.$head;
+            var pos = side > 0 ? $head.after() : $head.before();
+            var nextPos = Selection.near(state.doc.resolve(pos), side);
             if (nextPos.$head && nextPos.$head.parent.type.name === "code_block") {
                 dispatch(state.tr.setSelection(nextPos));
                 return true;
@@ -54455,11 +54458,7 @@ CodeBlockView.prototype.codeMirrorKeymap = function codeMirrorKeymap () {
         {key: "ArrowLeft", run: function () { return this$1$1.maybeEscape("char", -1); }},
         {key: "ArrowDown", run: function () { return this$1$1.maybeEscape("line", 1); }},
         {key: "ArrowRight", run: function () { return this$1$1.maybeEscape("char", 1); }},
-        {key: "Ctrl-Enter", run: function () {
-                if (!exitCode(view.state, view.dispatch)) { return false; }
-                view.focus();
-                return true;
-            }},
+        {key: "Ctrl-Enter", run: function () { return this$1$1.escapeBlock(); }},
         {key: "Ctrl-z", mac: "Cmd-z",
             run: function () { return undo(view.state, view.dispatch); }},
         {key: "Shift-Ctrl-z", mac: "Shift-Cmd-z",
@@ -54467,6 +54466,12 @@ CodeBlockView.prototype.codeMirrorKeymap = function codeMirrorKeymap () {
         {key: "Ctrl-y", mac: "Cmd-y",
             run: function () { return redo(view.state, view.dispatch); }}
     ];
+};
+
+CodeBlockView.prototype.escapeBlock = function escapeBlock () {
+    if (!exitCode(this.view.state, this.view.dispatch)) { return false; }
+    this.view.focus();
+    return true;
 };
 
 CodeBlockView.prototype.maybeEscape = function maybeEscape (unit, dir) {
@@ -54478,6 +54483,9 @@ CodeBlockView.prototype.maybeEscape = function maybeEscape (unit, dir) {
     if (unit === "line") { main = state.doc.lineAt(main.head); }
     if (dir < 0 ? main.from > 0 : main.to < state.doc.length) { return false; }
     var targetPos = this.getPos() + (dir < 0 ? 0 : this.node.nodeSize);
+    if (dir > 0 && main.to === state.doc.length && targetPos === this.view.state.doc.content.size) {
+        this.escapeBlock();
+    }
     var selection = Selection.near(this.view.state.doc.resolve(targetPos), dir);
     var tr = this.view.state.tr.setSelection(selection).scrollIntoView();
     this.view.dispatch(tr);
@@ -54558,7 +54566,6 @@ var code_block = {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
 var schema$f = {
@@ -54568,7 +54575,7 @@ var schema$f = {
             parseDOM: [{tag: "i"}, {tag: "em"},
                 {
                     style: "font-style", getAttrs: function (value) {
-                    return value == "italic" && null;
+                    return value === "italic" && null;
                 }
                 }],
             toDOM: function () {
@@ -79940,15 +79947,15 @@ var historyPlugin = {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
+
 var schema$b = {
     nodes: {
         horizontal_rule: {
             sortOrder: 300,
             group: "block",
             parseDOM: [{tag: "hr"}],
-            toDOM: function toDOM() {
+            toDOM: function () {
                 return ["div", ["hr"]]
             },
             parseMarkdown: {hr: {node: "horizontal_rule"}},
@@ -80143,7 +80150,7 @@ var schema$a = {
                     }
                 }
             }],
-            toDOM: function toDOM(node) {
+            toDOM: function (node) {
                 return ['img', node.attrs];
             },
             parseMarkdown: {
@@ -80778,7 +80785,6 @@ var image = {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
 var schema$9 = {
@@ -81099,8 +81105,8 @@ var link = {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
+
 var schema$8 = {
     nodes: {
         list_item: {
@@ -81108,7 +81114,7 @@ var schema$8 = {
             content: "paragraph block*",
             defining: true,
             parseDOM: [{tag: "li"}],
-            toDOM: function toDOM() {
+            toDOM: function () {
                 return ["li", 0]
             },
             parseMarkdown: {block: "list_item"},
@@ -81692,49 +81698,47 @@ var oembed_plugin = createLinkExtension('oembed', {node : 'div'});/*
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
 var oembed = {
     id: 'oembed',
     schema: schema$6,
     init: function (context, isEdit) {
-        if(!isEdit) {
+        if (!isEdit) {
             return;
         }
 
         context.event.on('linkified', function (evt, urls) {
             var doc = context.editor.view.state.doc;
-            if($node(doc).find('oembed').size() >= context.getPluginOption('oembed', 'max', 5)) {
+            if ($node(doc).find('oembed').size() >= context.getPluginOption('oembed', 'max', 5)) {
                 return;
             }
 
             loadOembeds(urls).then(function (result) {
-                $.each(result, function(url, oembed) {
+                $.each(result, function (url, oembed) {
                     var $links = $node(context.editor.view.state.doc).find().mark('link').where(function (node) {
                         return $node(node).getMark('link').attrs.href === url;
                     });
 
-                    $links.replaceWith(context.schema.nodes.oembed.create({href:url}), context.editor.view);
+                    $links.replaceWith(context.schema.nodes.oembed.create({href: url}), context.editor.view);
 
                     // We only allow a single oembed per copy/paste
                     return false;
                 });
             });
-
         });
     },
     registerMarkdownIt: function (markdownIt) {
-        markdownIt.inline.ruler.before('link','oembed', oembed_plugin);
+        markdownIt.inline.ruler.before('link', 'oembed', oembed_plugin);
 
-        markdownIt.renderer.rules.oembed = function(token, idx) {
+        markdownIt.renderer.rules.oembed = function (token, idx) {
             var oembed = token[idx];
             var href = oembed.attrGet('href');
             var $oembed = humhub
                 .require('oembed')
                 .get(href);
 
-            if(!$oembed || !$oembed.length) {
+            if (!$oembed || !$oembed.length) {
                 return buildLink(href);
             }
 
@@ -81795,8 +81799,8 @@ var focus = {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
+
 var schema$5 = {
     nodes: {
         ordered_list: {
@@ -81813,19 +81817,19 @@ var schema$5 = {
                     }
                 }
             }],
-            toDOM: function toDOM(node) {
+            toDOM: function (node) {
                 return ["ol", {
                     start: node.attrs.order == 1 ? null : node.attrs.order,
                     "data-tight": node.attrs.tight ? "true" : null
                 }, 0]
             },
-            parseMarkdown:  {
+            parseMarkdown: {
                 block: "ordered_list", getAttrs: function (tok) {
                     return ({order: +tok.attrGet("start") || 1});
                 }
             },
             toMarkdown: function (state, node) {
-                if(state.table) {
+                if (state.table) {
                     state.text(node.textContent);
                     return;
                 }
@@ -81896,7 +81900,7 @@ var ordered_list = {
             content: "inline*",
             group: "block",
             parseDOM: [{tag: "p"}],
-            toDOM: function toDOM() {
+            toDOM: function () {
                 return ["p", 0]
             },
             parseMarkdown: {block: "paragraph"},
@@ -82136,7 +82140,7 @@ nodes = Object.assign(nodes, {
         isolating: false,
         group: "block",
         parseDOM: [{tag: "table"}],
-        toDOM: function toDOM() {
+        toDOM: function () {
             return ["table", ["tbody", 0]]
         },
         toMarkdown: function (state, node) {
@@ -82148,7 +82152,7 @@ nodes = Object.assign(nodes, {
         content: "table_row*",
         tableRole: "head",
         parseDOM: [{tag: "thead"}],
-        toDOM: function toDOM() {
+        toDOM: function () {
             return ["thead", 0]
         },
         parseMarkdown: {thead: {block: "table_head"}}
@@ -82157,7 +82161,7 @@ nodes = Object.assign(nodes, {
         content: "table_row*",
         tableRole: "body",
         parseDOM: [{tag: "tbody"}],
-        toDOM: function toDOM() {
+        toDOM: function () {
             return ["tbody", 0]
         },
         parseMarkdown: {tbody: {block: "table_body"}}
@@ -82166,7 +82170,7 @@ nodes = Object.assign(nodes, {
         content: "table_row*",
         tableRole: "foot",
         parseDOM: [{tag: "tfoot"}],
-        toDOM: function toDOM() {
+        toDOM: function () {
             return ["tfoot", 0]
         },
         parseMarkdown: {tfoot: {block: "table_foot"}}
@@ -82578,14 +82582,14 @@ var table = {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
+
 var schema = {
     nodes: {
         text: {
             sortOrder: 900,
             group: "inline",
-            toDOM: function toDOM(node) {
+            toDOM: function (node) {
                 return node.text
             },
             toMarkdown: function (state, node) {
@@ -82828,26 +82832,25 @@ var upload = {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
 var clipboardPlugin = function (context) {
-
     var parser = getParser(context);
+
     return new Plugin({
         props: {
             clipboardTextParser: $.proxy(parser.parse, parser),
             transformPasted: function (slice) {
-                if(slice && slice instanceof Node$1 && slice.type == context.schema.nodes.doc) {
+                if (slice && slice instanceof Node$1 && slice.type === context.schema.nodes.doc) {
                     return new Slice(slice.content, 0, 0)
                 } else {
                     try {
                         var selectionMarks = getSelectionMarks(context);
 
-                        if(selectionMarks && selectionMarks.length) {
+                        if (selectionMarks && selectionMarks.length) {
                             applyMarksToRawText(slice, selectionMarks);
                         }
-                    } catch(e) {
+                    } catch (e) {
                         console.warn(e);
                     }
                 }
@@ -82856,7 +82859,7 @@ var clipboardPlugin = function (context) {
             },
             handleDOMEvents: {
                 paste: function (view, e) {
-                    if(e.clipboardData.files && e.clipboardData.files.length) {
+                    if (e.clipboardData.files && e.clipboardData.files.length) {
                         triggerUpload(view.state, view, context, e.clipboardData.files);
                         e.preventDefault();
                     }
@@ -82867,7 +82870,7 @@ var clipboardPlugin = function (context) {
 };
 
 function getSelectionMarks(context) {
-    if(context.editor.view.state.storedMarks && context.editor.view.state.storedMarks.length) {
+    if (context.editor.view.state.storedMarks && context.editor.view.state.storedMarks.length) {
         return context.editor.view.state.storedMarks
     }
 
@@ -82876,20 +82879,18 @@ function getSelectionMarks(context) {
     return nodeBefore ? nodeBefore.marks : null;
 }
 
-function applyMarksToRawText(slice, marks)
-{
+function applyMarksToRawText(slice, marks) {
     var fragment = slice.content;
     var firstChild = fragment.firstChild;
 
-    if(!firstChild) {
+    if (!firstChild) {
         return;
-
     }
 
     var texts = $node(firstChild).find('text');
-    if(texts.flat.length) {
+    if (texts.flat.length) {
         var firstText = texts.flat[0];
-        if(firstText.isPlain()) {
+        if (firstText.isPlain()) {
             firstText.addMarks(marks);
         }
     }
@@ -82914,22 +82915,30 @@ var clipboard = {
  * @license https://www.humhub.com/licences
  */
 
+var copyHrefToClipboard = function (target, context) {
+    var href = target.href || target.parentElement.href;
+    if (href) {
+        var successMsg = context.translate('Link has been copied to clipboard');
+        navigator.clipboard.writeText(href).then(function (r) { return showSuccessNotify(successMsg); });
+    }
+};
+
 var anchors = {
     id: 'anchor',
     renderOnly: true,
     init: function (context, isEdit) {
         if (!isEdit) {
             context.editor.$.on('mouseenter', ':header', function () {
-                $(this).find('.header-anchor').show();
+                $(this).find('.header-anchor').show().on('click', function (e) { return copyHrefToClipboard(e.target, context); });
             }).on('mouseleave', ':header', function () {
-                $(this).find('.header-anchor').hide();
+                $(this).find('.header-anchor').hide().off('click');
             });
         }
     },
     registerMarkdownIt: function (markdownIt) {
         var anchorOptions = {
             permalink: p.permalink.linkInsideHeader({
-                symbol: '¶',
+                symbol: '<i class="fa fa-chain"></i>',
                 placement: 'after',
                 ariaHidden: true,
                 renderAttrs: function (slug, state) {
@@ -84757,25 +84766,24 @@ function setupPlugins(context) {
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
-var MentionProvider = function(options) {
+var MentionProvider = function (options) {
     this.event = $({});
     this.options = options;
     if (typeof this.options.minInput === 'undefined') {
         this.options.minInput = 2;
     }
-    this.options.minInputText = this.options.minInputText || 'Please type at least '+this.options.minInput+' characters';
+    this.options.minInputText = this.options.minInputText || 'Please type at least ' + this.options.minInput + ' characters';
 };
 
-MentionProvider.prototype.query = function(state, node) {
+MentionProvider.prototype.query = function (state, node) {
     var this$1$1 = this;
 
     this.state = state;
     this.$node = $(node);
 
-    if(this.options.minInput > 0 && this.state.query.length < this.options.minInput) {
+    if (this.options.minInput > 0 && this.state.query.length < this.options.minInput) {
         this.result = {text: this.options.minInputText};
         this.update();
         return;
@@ -84784,7 +84792,7 @@ MentionProvider.prototype.query = function(state, node) {
     this.loading();
     var queryResult = this.find(this.state.query, node);
 
-    if(queryResult.then) {
+    if (queryResult.then) {
         queryResult.then(function (result) {
             this$1$1.updateResult(result);
         });
@@ -84793,54 +84801,54 @@ MentionProvider.prototype.query = function(state, node) {
     }
 };
 
-MentionProvider.prototype.loading = function() {
+MentionProvider.prototype.loading = function () {
     this.result = {loader: true};
     this.update();
 };
 
-MentionProvider.prototype.updateResult = function(result) {
+MentionProvider.prototype.updateResult = function (result) {
     this.result = result;
     this.update();
 };
 
-MentionProvider.prototype.find = function(query, node) {
+MentionProvider.prototype.find = function (query, node) {
     // Abstract method has to be implemented by subclasses
 };
 
-MentionProvider.prototype.reset = function(query, node) {
-    if(this.$container) {
+MentionProvider.prototype.reset = function (query, node) {
+    if (this.$container) {
         this.$container.remove();
         this.$container = null;
         this.event.trigger('closed');
     }
 };
 
-MentionProvider.prototype.prev = function() {
+MentionProvider.prototype.prev = function () {
     var $cur = this.$container.find('.cur');
     var $prev = $cur.prev();
-    if($prev.length) {
+    if ($prev.length) {
         $prev.addClass('cur');
         $cur.removeClass('cur');
     }
 };
 
-MentionProvider.prototype.next = function() {
+MentionProvider.prototype.next = function () {
     var $cur = this.$container.find('.cur');
     var $next = $cur.next();
-    if($next.length) {
+    if ($next.length) {
         $next.addClass('cur');
         $cur.removeClass('cur');
     }
 };
 
-MentionProvider.prototype.select = function() {
+MentionProvider.prototype.select = function () {
     var $cur = this.$container.find('.cur');
     this.state.addMention($cur.data('item'));
     this.reset();
 };
 
-MentionProvider.prototype.update = function(loading) {
-    if(!this.$container) {
+MentionProvider.prototype.update = function (loading) {
+    if (!this.$container) {
         this.$container = $('<div class="atwho-view humhub-richtext-provider">').css({'margin-top': '5px'});
     } else {
         this.$container.empty();
@@ -84857,7 +84865,7 @@ MentionProvider.prototype.update = function(loading) {
     if (this.result && this.result.length) {
         var $list = $('<ul style="list-style-type: none;padding:0px;margin:0px;">');
         this.result.forEach(function (item) {
-            var name = humhub.modules.util.string.encode(item.name);
+            var name = encode$2(item.name);
             var $li = (item.image) ? $('<li>' + item.image + ' ' + name + '</li>') : $('<li>' + name + '</li>');
 
             $li.data('item', item).on('click', function () {
@@ -84872,10 +84880,10 @@ MentionProvider.prototype.update = function(loading) {
         $list.find('li').first().addClass('cur');
 
         this.$container.append($list);
-    } else if(this.result.text) {
+    } else if (this.result.text) {
         var name = encode$2(this.result.text);
-        this.$container.append($('<span>'+name+'</span>'));
-    } else if(this.result.loader) {
+        this.$container.append($('<span>' + name + '</span>'));
+    } else if (this.result.loader) {
         var $loader = getLoaderWidget();
 
         this.$container.append($('<div style="text-align:center;">').append($loader));
