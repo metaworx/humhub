@@ -13,7 +13,7 @@ Yii::setAlias('@config', '@app/config');
 
 $config = [
     'name' => 'HumHub',
-    'version' => '1.2.0-beta.4',
+    'version' => '1.2.0',
     'basePath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR,
     'bootstrap' => ['log', 'humhub\components\bootstrap\ModuleAutoLoader', 'queue'],
     'sourceLanguage' => 'en',
@@ -126,11 +126,7 @@ $config = [
             'clients' => [],
         ],
         'queue' => [
-            'class' => 'humhub\components\queue\Queue',
-            'driver' => [
-                //'class' => 'humhub\components\queue\driver\MySQL',
-                'class' => 'humhub\components\queue\driver\Sync',
-            ],
+            'class' => 'humhub\components\queue\driver\Sync',
         ],
         'live' => [
             'class' => 'humhub\modules\live\components\Sender',
