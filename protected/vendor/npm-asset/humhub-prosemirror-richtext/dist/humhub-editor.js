@@ -6579,6 +6579,7 @@
 	  result.chrome = !!chrome;
 	  result.chrome_version = chrome && +chrome[1];
 	  result.ios = !ie && /AppleWebKit/.test(navigator.userAgent) && /Mobile\/\w+/.test(navigator.userAgent);
+	  result.android = /Android \d/.test(navigator.userAgent);
 	  result.webkit = !ie && 'WebkitAppearance' in document.documentElement.style;
 	  result.safari = /Apple Computer/.test(navigator.vendor);
 	  result.webkit_version = result.webkit && +(/\bAppleWebKit\/(\d+)/.exec(navigator.userAgent) || [0, 0])[1];
@@ -7507,7 +7508,7 @@
 
 	  MarkViewDesc.create = function create (parent, mark, inline, view) {
 	    var custom = customNodeViews(view)[mark.type.name];
-	    var spec = custom && custom(mark, view);
+	    var spec = custom && custom(mark, view, inline);
 	    if (!spec || !spec.dom)
 	      { spec = dist$1.DOMSerializer.renderSpec(document, mark.type.spec.toDOM(mark, inline)); }
 	    return new MarkViewDesc(parent, mark, spec.dom, spec.contentDOM || spec.dom)
@@ -7595,6 +7596,8 @@
 	  NodeViewDesc.prototype.parseRule = function parseRule () {
 	    var this$1 = this;
 
+	    // Experimental kludge to allow opt-in re-parsing of nodes
+	    if (this.node.type.spec.reparseInView) { return null }
 	    // FIXME the assumption that this can always return the current
 	    // attrs means that if the user somehow manages to change the
 	    // attrs in the dom, that won't be picked up. Not entirely sure
@@ -8260,6 +8263,10 @@
 	  var node = sel.focusNode, offset = sel.focusOffset;
 	  if (!node) { return }
 	  var moveNode, moveOffset, force = false;
+	  // Gecko will do odd things when the selection is directly in front
+	  // of a non-editable node, so in that case, move it into the next
+	  // node if possible. Issue prosemirror/prosemirror#832.
+	  if (result.gecko && node.nodeType == 1 && offset < nodeLen(node) && isIgnorable(node.childNodes[offset])) { force = true; }
 	  for (;;) {
 	    if (offset > 0) {
 	      if (node.nodeType != 1) {
@@ -8497,6 +8504,7 @@
 	  this.lastAnchorNode = this.lastHeadNode = this.lastAnchorOffset = this.lastHeadOffset = null;
 	  this.lastSelection = view.state.selection;
 	  this.ignoreUpdates = false;
+	  this.suppressUpdates = false;
 	  this.poller = poller(this);
 
 	  view.dom.addEventListener("focus", function () { return this$1.poller.start(hasFocusAndSelection(this$1.view)); });
@@ -8534,16 +8542,17 @@
 	  this.lastAnchorNode = this.lastSelection = null;
 	};
 
-	// : (?string) → bool
+	// : (?string)
 	// When the DOM selection changes in a notable manner, modify the
 	// current selection state to match.
 	SelectionReader.prototype.readFromDOM = function readFromDOM (origin) {
 	  if (this.ignoreUpdates || !this.domChanged() || !hasFocusAndSelection(this.view)) { return }
+	  if (this.suppressUpdates) { return selectionToDOM(this.view) }
 	  if (!this.view.inDOMChange) { this.view.domObserver.flush(); }
 	  if (this.view.inDOMChange) { return }
 
 	  var domSel = this.view.root.getSelection(), doc = this.view.state.doc;
-	  var nearestDesc = this.view.docView.nearestDesc(domSel.focusNode), inWidget = nearestDesc.size == 0;
+	  var nearestDesc = this.view.docView.nearestDesc(domSel.focusNode), inWidget = nearestDesc && nearestDesc.size == 0;
 	  var head = this.view.docView.posFromDOM(domSel.focusNode, domSel.focusOffset);
 	  var $head = doc.resolve(head), $anchor, selection;
 	  if (selectionCollapsed(domSel)) {
@@ -8561,14 +8570,11 @@
 	    var bias = origin == "pointer" || (this.view.state.selection.head < $head.pos && !inWidget) ? 1 : -1;
 	    selection = selectionBetween(this.view, $anchor, $head, bias);
 	  }
-	  var preserve = !inWidget && head == selection.head && $anchor.pos == selection.anchor &&
-	      (!this.view.cursorWrapper || domSel.isCollapsed && origin != "pointer");
-	  if (preserve) { this.storeDOMState(selection); }
 	  if (!this.view.state.selection.eq(selection)) {
 	    var tr = this.view.state.tr.setSelection(selection);
 	    if (origin == "pointer") { tr.setMeta("pointer", true); }
 	    this.view.dispatch(tr);
-	  } else if (!preserve) {
+	  } else {
 	    selectionToDOM(this.view);
 	  }
 	};
@@ -8788,7 +8794,8 @@
 	    // Firefox will raise 'permission denied' errors when accessing
 	    // properties of `sel.anchorNode` when it's in a generated CSS
 	    // element.
-	    return view.dom.contains(sel.anchorNode.nodeType == 3 ? sel.anchorNode.parentNode : sel.anchorNode)
+	    return view.dom.contains(sel.anchorNode.nodeType == 3 ? sel.anchorNode.parentNode : sel.anchorNode) &&
+	      (view.editable || view.dom.contains(sel.focusNode.nodeType == 3 ? sel.focusNode.parentNode : sel.focusNode))
 	  } catch(_) {
 	    return false
 	  }
@@ -8929,6 +8936,15 @@
 	    if (!selectionCollapsed(domSel))
 	      { find.push({node: domSel.focusNode, offset: domSel.focusOffset}); }
 	  }
+	  // Work around issue in Chrome where backspacing sometimes replaces
+	  // the deleted content with a random BR node (issues #799, #831)
+	  if (result.chrome && view.lastKeyCode === 8) {
+	    for (var off = toOffset; off > fromOffset; off--) {
+	      var node = parent.childNodes[off - 1], desc = node.pmViewDesc;
+	      if (node.nodeType == "BR" && !desc) { toOffset = off; break }
+	      if (!desc || desc.size) { break }
+	    }
+	  }
 	  var startDoc = oldState.doc;
 	  var parser = view.someProp("domParser") || dist$1.DOMParser.fromSchema(view.state.schema);
 	  var $from = startDoc.resolve(from);
@@ -9058,8 +9074,13 @@
 	  // Same for backspace
 	  if (oldState.selection.anchor > change.start &&
 	      looksLikeJoin(doc, change.start, change.endA, $from, $to) &&
-	      view.someProp("handleKeyDown", function (f) { return f(view, keyEvent(8, "Backspace")); }))
-	    { return }
+	      view.someProp("handleKeyDown", function (f) { return f(view, keyEvent(8, "Backspace")); })) {
+	    if (result.android && result.chrome) { // #820
+	      view.selectionReader.suppressUpdates = true;
+	      setTimeout(function () { return view.selectionReader.suppressUpdates = false; }, 50);
+	    }
+	    return
+	  }
 
 	  var from = mapping.map(change.start), to = mapping.map(change.endA, -1);
 
@@ -9506,7 +9527,7 @@
 	}
 
 	editHandlers.keydown = function (view, event) {
-	  if (event.keyCode == 16) { view.shiftKey = true; }
+	  view.shiftKey = event.keyCode == 16 || event.shiftKey;
 	  if (view.inDOMChange) {
 	    if (view.inDOMChange.composing) { return }
 	    view.inDOMChange.finish();
@@ -9661,6 +9682,7 @@
 	var selectNodeModifier = result.mac ? "metaKey" : "ctrlKey";
 
 	handlers.mousedown = function (view, event) {
+	  view.shiftKey = event.shiftKey;
 	  var flushed = forceDOMFlush(view);
 	  var now = Date.now(), type;
 	  if (now - lastClick.time >= 500 || !isNear(event, lastClick) || event[selectNodeModifier]) { type = "singleClick"; }
@@ -10997,7 +11019,7 @@
 	// easily passed around.
 	EditorView.prototype.dispatch = function dispatch (tr) {
 	  var dispatchTransaction = this._props.dispatchTransaction;
-	  if (dispatchTransaction) { dispatchTransaction(tr); }
+	  if (dispatchTransaction) { dispatchTransaction.call(this, tr); }
 	  else { this.updateState(this.state.apply(tr)); }
 	};
 
@@ -11166,9 +11188,11 @@
 	//   Allows you to pass custom rendering and behavior logic for nodes
 	//   and marks. Should map node and mark names to constructor
 	//   functions that produce a [`NodeView`](#view.NodeView) object
-	//   implementing the node's display behavior. `getPos` is a function
-	//   that can be called to get the node's current position, which can
-	//   be useful when creating transactions to update it.
+	//   implementing the node's display behavior. For nodes, the third
+	//   argument `getPos` is a function that can be called to get the
+	//   node's current position, which can be useful when creating
+	//   transactions to update it. For marks, the third argument is a
+	//   boolean that indicates whether the mark's content is inline.
 	//
 	//   `decorations` is an array of node or inline decorations that are
 	//   active around the node. They are automatically drawn in the
@@ -11229,7 +11253,8 @@
 	//   make sure this ends up calling the view's
 	//   [`updateState`](#view.EditorView.updateState) method with a new
 	//   state that has the transaction
-	//   [applied](#state.EditorState.apply).
+	//   [applied](#state.EditorState.apply). The callback will be bound to have
+	//   the view instance as its `this` binding.
 
 	exports.EditorView = EditorView;
 	exports.Decoration = Decoration;
@@ -46913,7 +46938,6 @@ var full$1 = Object.freeze({
 
 	    if (!this.active) {
 	        return this.reset();
-
 	    }
 
 	    var $query = this.findQueryNode();
@@ -46942,7 +46966,13 @@ var full$1 = Object.freeze({
 	};
 
 	MentionState.prototype.reset = function reset () {
-	    this.state.storedMarks = [];
+	    var ref = this.state.schema.marks;
+	        var mentionQuery = ref.mentionQuery;
+
+	    if(this.state.storedMarks && this.state.storedMarks.length) {
+	        this.state.storedMarks = mentionQuery.removeFromSet(this.state.storedMarks);
+	    }
+	    //this.state.storedMarks = [];
 	    this.active = false;
 	    this.query = null;
 	    this.provider.reset();
@@ -55464,7 +55494,57 @@ var full$1 = Object.freeze({
 	 *
 	 */
 
-	// We don't use the official repo https://github.com/valeriangalliat/markdown-it-anchor/issues/39
+	var MaxHeightState = function MaxHeightState(state, options) {
+	    this.state = state;
+	    this.context = options.context;
+	    this.oldStageHeight = 0;
+	    this.scrollActive = false;
+	    this.niceScrollInit = false;
+	    this.initialized = false;
+	};
+
+	MaxHeightState.prototype.update = function update () {
+	    var stageHeight = this.context.editor.getStage().innerHeight();
+
+	    if(stageHeight === this.oldStageHeight) {
+	        return;
+	    }
+
+	    this.oldStageHeight = stageHeight;
+
+	    if(!this.scrollActive && this.context.editor.getStage()[0].scrollHeight > stageHeight) {
+	        if(!this.niceScrollInit) {
+	            this.context.editor.getStage().niceScroll({
+	                cursorwidth: "7",
+	                cursorborder: "",
+	                cursorcolor: "#606572",
+	                cursoropacitymax: "0.3",
+	                nativeparentscrolling: false,
+	                autohidemode: false,
+	                railpadding: {top: 2, right: 3, left: 0, bottom: 2}
+	            });
+	        }
+
+	        this.niceScrollInit = true;
+	        this.scrollActive = true;
+	        this.context.editor.trigger('scrollActive');
+	    } else if(!this.initialized || this.scrollActive) {
+	        this.scrollActive = false;
+	        this.context.editor.trigger('scrollInactive');
+	    }
+
+	    this.initialized = true;
+	};
+
+	/*
+	 * @link https://www.humhub.org/
+	 * @copyright Copyright (c) 2018 HumHub GmbH & Co. KG
+	 * @license https://www.humhub.com/licences
+	 *
+	 */
+
+	var pluginKey$2 = new dist_9('max_height');
+
 	var maxHeight = {
 	    id: 'max-height',
 	    init: function (context, isEdit) {
@@ -55474,47 +55554,28 @@ var full$1 = Object.freeze({
 
 	        context.editor.on('afterInit', function () {
 	            if(context.options.maxHeight) {
-	                context.editor.getStage().css({'max-height': context.options.maxHeight,'overflow': 'auto'});
+	                context.editor.getStage().css({'max-height': context.options.maxHeight, 'overflow': 'auto'});
+	                var maxHeightState = pluginKey$2.getState(context.editor.view.state);
+	                maxHeightState.update();
 	            }
 	        });
 	    },
 	    plugins: function (context) {
-	        var oldStageHeight = 0;
-	        var scrollActive = false;
-	        var initialized = false;
 	        return [new dist_8({
+	            state: {
+	                init: function init(config, state) {
+	                    return new MaxHeightState(state, {context: context});
+	                },
+	                apply: function apply(tr, prevPluginState, newState) {
+	                    return prevPluginState;
+	                }
+	            },
+	            key: pluginKey$2,
 	            view: function (view) {
 	                return {
 	                    update: function (view, prevState) {
-	                        var stageHeight = context.editor.getStage().innerHeight();
-
-	                        if(stageHeight === oldStageHeight) {
-	                            return;
-	                        }
-
-	                        oldStageHeight = stageHeight;
-
-	                        if(!scrollActive && context.editor.getStage()[0].scrollHeight > stageHeight) {
-	                            if(!initialized) {
-	                                context.editor.getStage().niceScroll({
-	                                    cursorwidth: "7",
-	                                    cursorborder: "",
-	                                    cursorcolor: "#606572",
-	                                    cursoropacitymax: "0.3",
-	                                    nativeparentscrolling: false,
-	                                    autohidemode: false,
-	                                    railpadding: {top: 2, right: 3, left: 0, bottom: 2}
-	                                });
-	                            }
-
-	                            initialized = true;
-	                            scrollActive = true;
-	                            context.editor.trigger('scrollActive');
-	                        } else if(scrollActive) {
-	                            scrollActive = false;
-	                            context.editor.trigger('scrollInactive');
-
-	                        }
+	                        var maxHeightState = pluginKey$2.getState(view.state);
+	                        maxHeightState.update();
 	                    },
 	                    destroy: function () {}
 	                }
@@ -56748,6 +56809,10 @@ var full$1 = Object.freeze({
 	    getSchema(this);
 	};
 
+	Context.prototype.clear = function clear () {
+	    this.event.trigger('clear');
+	};
+
 	Context.prototype.getPluginOption = function getPluginOption (id, option, defaultValue) {
 	    var pluginOptions =  this.options[id];
 
@@ -56840,7 +56905,8 @@ var full$1 = Object.freeze({
 
 	MarkdownEditor.prototype.clear = function clear () {
 	    this.view.destroy();
-	    this.context.event.trigger('clear');
+	    this.context.clear();
+	    this.$stage = null;
 	    this.init();
 	};
 

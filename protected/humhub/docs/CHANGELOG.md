@@ -1,6 +1,14 @@
 HumHub Change Log
 =================
 
+1.3.6  (October 11, 2018)
+---------------------------
+- Fix: Richtext loses mark state
+- Fix: New comment scroll behavior not used in edit comment
+- Chng: Updated `humhub-prosemirror-richtext` to v1.0.12
+- Fix #3322: Disabled users still receive emails notifications
+
+
 1.3.5  (October 10, 2018)
 ---------------------------
 
