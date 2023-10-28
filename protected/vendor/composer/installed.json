@@ -1,23 +1,23 @@
 [
     {
         "name": "yiisoft/yii2-composer",
-        "version": "2.0.3",
-        "version_normalized": "2.0.3.0",
+        "version": "2.0.4",
+        "version_normalized": "2.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/yiisoft/yii2-composer.git",
-            "reference": "ca8d23707ae47d20b0454e4b135c156f6da6d7be"
+            "reference": "7452fd908a5023b8bb5ea1b123a174ca080de464"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/ca8d23707ae47d20b0454e4b135c156f6da6d7be",
-            "reference": "ca8d23707ae47d20b0454e4b135c156f6da6d7be",
+            "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/7452fd908a5023b8bb5ea1b123a174ca080de464",
+            "reference": "7452fd908a5023b8bb5ea1b123a174ca080de464",
             "shasum": ""
         },
         "require": {
-            "composer-plugin-api": "1.0.0"
+            "composer-plugin-api": "^1.0"
         },
-        "time": "2015-03-01 06:22:44",
+        "time": "2016-02-06 00:49:24",
         "type": "composer-plugin",
         "extra": {
             "class": "yii\\composer\\Plugin",
@@ -50,37 +50,23 @@
     },
     {
         "name": "bower-asset/jquery",
-        "version": "2.1.4",
-        "version_normalized": "2.1.4.0",
+        "version": "2.2.1",
+        "version_normalized": "2.2.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/jquery/jquery.git",
-            "reference": "7751e69b615c6eca6f783a81e292a55725af6b85"
+            "url": "https://github.com/jquery/jquery-dist.git",
+            "reference": "788eaba2f83e7b7445c7a83a50c81c0704423874"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/jquery/jquery/zipball/7751e69b615c6eca6f783a81e292a55725af6b85",
-            "reference": "7751e69b615c6eca6f783a81e292a55725af6b85",
+            "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/788eaba2f83e7b7445c7a83a50c81c0704423874",
+            "reference": "788eaba2f83e7b7445c7a83a50c81c0704423874",
             "shasum": ""
-        },
-        "require-dev": {
-            "bower-asset/qunit": "1.14.0",
-            "bower-asset/requirejs": "2.1.10",
-            "bower-asset/sinon": "1.8.1",
-            "bower-asset/sizzle": "2.1.1-patch2"
         },
         "type": "bower-asset-library",
         "extra": {
             "bower-asset-main": "dist/jquery.js",
             "bower-asset-ignore": [
-                "**/.*",
-                "build",
-                "dist/cdn",
-                "speed",
-                "test",
-                "*.md",
-                "AUTHORS.txt",
-                "Gruntfile.js",
                 "package.json"
             ]
         },
@@ -89,6 +75,7 @@
             "MIT"
         ],
         "keywords": [
+            "browser",
             "javascript",
             "jquery",
             "library"
@@ -161,17 +148,17 @@
     },
     {
         "name": "bower-asset/jquery.inputmask",
-        "version": "3.1.63",
-        "version_normalized": "3.1.63.0",
+        "version": "3.2.7",
+        "version_normalized": "3.2.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/RobinHerbots/jquery.inputmask.git",
-            "reference": "c40c7287eadc31e341ebbf0c02352eb55b9cbc48"
+            "reference": "5a72c563b502b8e05958a524cdfffafe9987be38"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/RobinHerbots/jquery.inputmask/zipball/c40c7287eadc31e341ebbf0c02352eb55b9cbc48",
-            "reference": "c40c7287eadc31e341ebbf0c02352eb55b9cbc48",
+            "url": "https://api.github.com/repos/RobinHerbots/jquery.inputmask/zipball/5a72c563b502b8e05958a524cdfffafe9987be38",
+            "reference": "5a72c563b502b8e05958a524cdfffafe9987be38",
             "shasum": ""
         },
         "require": {
@@ -180,23 +167,17 @@
         "type": "bower-asset-library",
         "extra": {
             "bower-asset-main": [
-                "./dist/inputmask/jquery.inputmask.js",
-                "./dist/inputmask/jquery.inputmask.extensions.js",
-                "./dist/inputmask/jquery.inputmask.date.extensions.js",
-                "./dist/inputmask/jquery.inputmask.numeric.extensions.js",
-                "./dist/inputmask/jquery.inputmask.phone.extensions.js",
-                "./dist/inputmask/jquery.inputmask.regex.extensions.js"
+                "./dist/inputmask/inputmask.js"
             ],
             "bower-asset-ignore": [
-                "**/.*",
-                "qunit/",
-                "nuget/",
-                "tools/",
-                "js/",
-                "*.md",
-                "build.properties",
-                "build.xml",
-                "jquery.inputmask.jquery.json"
+                "**/*",
+                "!dist/*",
+                "!dist/inputmask/*",
+                "!dist/min/*",
+                "!dist/min/inputmask/*",
+                "!extra/bindings/*",
+                "!extra/dependencyLibs/*",
+                "!extra/phone-codes/*"
             ]
         },
         "installation-source": "dist",
@@ -323,32 +304,33 @@
     },
     {
         "name": "yiisoft/yii2",
-        "version": "2.0.6",
-        "version_normalized": "2.0.6.0",
+        "version": "2.0.7",
+        "version_normalized": "2.0.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/yiisoft/yii2-framework.git",
-            "reference": "f42b2eb80f61992438661b01d0d74c6738e2ff38"
+            "reference": "f45651582cb853b4326730d9d187a0f7a44a45a3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/f42b2eb80f61992438661b01d0d74c6738e2ff38",
-            "reference": "f42b2eb80f61992438661b01d0d74c6738e2ff38",
+            "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/f45651582cb853b4326730d9d187a0f7a44a45a3",
+            "reference": "f45651582cb853b4326730d9d187a0f7a44a45a3",
             "shasum": ""
         },
         "require": {
-            "bower-asset/jquery": "2.1.*@stable | 1.11.*@stable",
-            "bower-asset/jquery.inputmask": "3.1.*",
+            "bower-asset/jquery": "2.2.*@stable | 2.1.*@stable | 1.11.*@stable",
+            "bower-asset/jquery.inputmask": "~3.2.2",
             "bower-asset/punycode": "1.3.*",
-            "bower-asset/yii2-pjax": ">=2.0.1",
+            "bower-asset/yii2-pjax": "~2.0.1",
             "cebe/markdown": "~1.0.0 | ~1.1.0",
+            "ext-ctype": "*",
             "ext-mbstring": "*",
             "ezyang/htmlpurifier": "4.6.*",
             "lib-pcre": "*",
             "php": ">=5.4.0",
-            "yiisoft/yii2-composer": "*"
+            "yiisoft/yii2-composer": "~2.0.4"
         },
-        "time": "2015-08-05 22:00:30",
+        "time": "2016-02-14 14:45:55",
         "bin": [
             "yii"
         ],
@@ -401,6 +383,11 @@
             {
                 "name": "Paul Klimov",
                 "email": "klimov.paul@gmail.com",
+                "role": "Core framework development"
+            },
+            {
+                "name": "Dmitry Naumenko",
+                "email": "d.naumenko.a@gmail.com",
                 "role": "Core framework development"
             }
         ],
@@ -552,6 +539,90 @@
         "keywords": [
             "lucene",
             "zf2"
+        ]
+    },
+    {
+        "name": "bower-asset/bootstrap",
+        "version": "v3.3.5",
+        "version_normalized": "3.3.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twbs/bootstrap.git",
+            "reference": "16b48259a62f576e52c903c476bd42b90ab22482"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/twbs/bootstrap/zipball/16b48259a62f576e52c903c476bd42b90ab22482",
+            "reference": "16b48259a62f576e52c903c476bd42b90ab22482",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jquery": ">=1.9.1"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "less/bootstrap.less",
+                "dist/js/bootstrap.js"
+            ],
+            "bower-asset-ignore": [
+                "/.*",
+                "_config.yml",
+                "CNAME",
+                "composer.json",
+                "CONTRIBUTING.md",
+                "docs",
+                "js/tests",
+                "test-infra"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+        "keywords": [
+            "css",
+            "framework",
+            "front-end",
+            "js",
+            "less",
+            "mobile-first",
+            "responsive",
+            "web"
+        ]
+    },
+    {
+        "name": "bower-asset/bootstrap-markdown",
+        "version": "v2.10.0",
+        "version_normalized": "2.10.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/toopay/bootstrap-markdown.git",
+            "reference": "3f69bb3db5020d29182c2092040f0ad8d390bda7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/toopay/bootstrap-markdown/zipball/3f69bb3db5020d29182c2092040f0ad8d390bda7",
+            "reference": "3f69bb3db5020d29182c2092040f0ad8d390bda7",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/bootstrap": "~3"
+        },
+        "require-dev": {
+            "bower-asset/markdown": "~0.4.0"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "./js/bootstrap-markdown.js",
+                "./css/bootstrap-markdown.min.css"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "Apache-2.0"
         ]
     },
     {
@@ -1126,17 +1197,17 @@
     },
     {
         "name": "bower-asset/jquery-nicescroll",
-        "version": "3.6.6",
-        "version_normalized": "3.6.6.0",
+        "version": "v3.6.7",
+        "version_normalized": "3.6.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/inuyaksa/jquery.nicescroll.git",
-            "reference": "f599466737ca88d4413014f9d30485d1e7720572"
+            "reference": "2da0f87d55ab5ab8930707647cf9523fc9478c81"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/inuyaksa/jquery.nicescroll/zipball/f599466737ca88d4413014f9d30485d1e7720572",
-            "reference": "f599466737ca88d4413014f9d30485d1e7720572",
+            "url": "https://api.github.com/repos/inuyaksa/jquery.nicescroll/zipball/2da0f87d55ab5ab8930707647cf9523fc9478c81",
+            "reference": "2da0f87d55ab5ab8930707647cf9523fc9478c81",
             "shasum": ""
         },
         "require": {
@@ -1230,17 +1301,17 @@
     },
     {
         "name": "bower-asset/blueimp-canvas-to-blob",
-        "version": "v3.1.0",
-        "version_normalized": "3.1.0.0",
+        "version": "v3.3.0",
+        "version_normalized": "3.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/blueimp/JavaScript-Canvas-to-Blob.git",
-            "reference": "28258354628fe0aca67e9d13ba60fe75a6dd13c0"
+            "reference": "cb5add6fd18abba567c4824a601f57b9a9e30e04"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/28258354628fe0aca67e9d13ba60fe75a6dd13c0",
-            "reference": "28258354628fe0aca67e9d13ba60fe75a6dd13c0",
+            "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/cb5add6fd18abba567c4824a601f57b9a9e30e04",
+            "reference": "cb5add6fd18abba567c4824a601f57b9a9e30e04",
             "shasum": ""
         },
         "type": "bower-asset-library",
@@ -1248,17 +1319,17 @@
     },
     {
         "name": "bower-asset/blueimp-load-image",
-        "version": "v2.1.0",
-        "version_normalized": "2.1.0.0",
+        "version": "v2.6.0",
+        "version_normalized": "2.6.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/blueimp/JavaScript-Load-Image.git",
-            "reference": "dfadfa3b9a471b941040c33675a527f24a6db827"
+            "reference": "eca5709e8d8ee037800e924b6ccb828bcfa82a6d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/dfadfa3b9a471b941040c33675a527f24a6db827",
-            "reference": "dfadfa3b9a471b941040c33675a527f24a6db827",
+            "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/eca5709e8d8ee037800e924b6ccb828bcfa82a6d",
+            "reference": "eca5709e8d8ee037800e924b6ccb828bcfa82a6d",
             "shasum": ""
         },
         "type": "bower-asset-library",
@@ -1266,17 +1337,17 @@
     },
     {
         "name": "bower-asset/blueimp-tmpl",
-        "version": "v3.1.0",
-        "version_normalized": "3.1.0.0",
+        "version": "v3.3.0",
+        "version_normalized": "3.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/blueimp/JavaScript-Templates.git",
-            "reference": "42c8c31428d70d0f53ca1ab31b5c2b3a68af4c8a"
+            "reference": "14d8b68c1175033d4080600b907390cc89263380"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/42c8c31428d70d0f53ca1ab31b5c2b3a68af4c8a",
-            "reference": "42c8c31428d70d0f53ca1ab31b5c2b3a68af4c8a",
+            "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/14d8b68c1175033d4080600b907390cc89263380",
+            "reference": "14d8b68c1175033d4080600b907390cc89263380",
             "shasum": ""
         },
         "type": "bower-asset-library",
@@ -1431,57 +1502,6 @@
         "keywords": [
             "codeception",
             "yii2"
-        ]
-    },
-    {
-        "name": "bower-asset/bootstrap",
-        "version": "v3.3.5",
-        "version_normalized": "3.3.5.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/twbs/bootstrap.git",
-            "reference": "16b48259a62f576e52c903c476bd42b90ab22482"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/twbs/bootstrap/zipball/16b48259a62f576e52c903c476bd42b90ab22482",
-            "reference": "16b48259a62f576e52c903c476bd42b90ab22482",
-            "shasum": ""
-        },
-        "require": {
-            "bower-asset/jquery": ">=1.9.1"
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": [
-                "less/bootstrap.less",
-                "dist/js/bootstrap.js"
-            ],
-            "bower-asset-ignore": [
-                "/.*",
-                "_config.yml",
-                "CNAME",
-                "composer.json",
-                "CONTRIBUTING.md",
-                "docs",
-                "js/tests",
-                "test-infra"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
-        "keywords": [
-            "css",
-            "framework",
-            "front-end",
-            "js",
-            "less",
-            "mobile-first",
-            "responsive",
-            "web"
         ]
     },
     {
