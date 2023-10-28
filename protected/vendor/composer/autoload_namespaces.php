@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
-    'ZendSearch' => array($vendorDir . '/nqxcode/zendsearch/library'),
+    'ZendSearch' => array($vendorDir . '/matthewbdaly/zendsearch/src'),
     'URLify' => array($vendorDir . '/jbroadway/urlify'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'Imagine' => array($vendorDir . '/imagine/imagine/lib'),

@@ -78,6 +78,7 @@ return array (
   'Port number' => 'Número de puerto',
   'Prevent client caching of following scripts' => 'Evitar el almacenamiento en caché del cliente de los siguientes scripts',
   'Redis' => 'Redis',
+  'Reported database time: {dateTime}' => 'Hora de la base de datos informada: {dateTime}',
   'SMTP Options' => 'Opciones SMTP',
   'Save' => 'Guardar',
   'Save & Flush Caches' => 'Guardar y vaciar cachés',
