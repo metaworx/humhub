@@ -16,7 +16,7 @@ use humhub\modules\user\models\Follow;
  *
  * @author luke
  */
-class Events extends \yii\base\Object
+class Events extends \yii\base\BaseObject
 {
 
     /**
@@ -128,15 +128,6 @@ class Events extends \yii\base\Object
             }
         }
 
-        $integrityController->showTestHeadline("User Module - Modules (" . models\Module::find()->count() . " entries)");
-        foreach (models\Module::find()->joinWith(['user'])->each() as $module) {
-            if ($module->user == null && !empty($module->user_id)) {
-                if ($integrityController->showFix("Deleting user-module " . $module->id . " of non existing user!")) {
-                    $module->delete();
-                }
-            }
-        }
-
         $userIds = User::find()->select('id')->asArray()->all();
         foreach ($userIds as $key => $id) {
             $userIds[$key] = $id['id'];
@@ -158,19 +149,8 @@ class Events extends \yii\base\Object
      */
     public static function onHourlyCron($event)
     {
-        foreach (Yii::$app->authClientCollection->getClients() as $authClient) {
-            if ($authClient instanceof authclient\interfaces\AutoSyncUsers) {
-                /**
-                 * @var authclient\interfaces\AutoSyncUsers $authClient
-                 */
-                $authClient->syncUsers();
-            }
-        }
-
-        // Delete expired session
-        foreach (models\Session::find()->where(['<', 'expire', time()])->all() as $session) {
-            $session->delete();
-        }
+        Yii::$app->queue->push(new jobs\SyncUsers());
+        Yii::$app->queue->push(new jobs\DeleteExpiredSessions());
     }
 
 }

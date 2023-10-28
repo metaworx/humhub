@@ -10,7 +10,6 @@ return array(
     'ZendSearch' => array($vendorDir . '/nqxcode/zendsearch/library'),
     'URLify' => array($vendorDir . '/jbroadway/urlify'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
-    'PHPParser' => array($vendorDir . '/nikic/php-parser/lib'),
     'MikeVanRiel' => array($vendorDir . '/mikevanriel/text-to-latex/src', $vendorDir . '/mikevanriel/text-to-latex/tests/unit'),
     'Imagine' => array($vendorDir . '/imagine/imagine/lib'),
     'Highlight\\' => array($vendorDir . '/scrivo/highlight.php'),
