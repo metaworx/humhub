@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37
+class ComposerStaticInit2d163fb1c29416dcff2bd0e9ded03f20
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -74,7 +74,6 @@ class ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37
         'ac9e33ce6841aa5bf5d16d465a2f03a7' => __DIR__ . '/..' . '/markbaker/complex/classes/src/operations/divideinto.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        '6013e3235c7163c4e6546fe29b52afdf' => __DIR__ . '/..' . '/facebook/webdriver/lib/Exception/TimeoutException.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
     );
 
@@ -84,6 +83,7 @@ class ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37
             'yii\\swiftmailer\\' => 16,
             'yii\\redis\\' => 10,
             'yii\\queue\\sync\\' => 15,
+            'yii\\queue\\stomp\\' => 16,
             'yii\\queue\\sqs\\' => 14,
             'yii\\queue\\redis\\' => 16,
             'yii\\queue\\gearman\\' => 18,
@@ -239,6 +239,10 @@ class ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37
         'yii\\queue\\sync\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-queue/src/drivers/sync',
+        ),
+        'yii\\queue\\stomp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-queue/src/drivers/stomp',
         ),
         'yii\\queue\\sqs\\' => 
         array (
@@ -1210,10 +1214,10 @@ class ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitc3cbe51cbaeb1e77bae1de178067aa37::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2d163fb1c29416dcff2bd0e9ded03f20::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2d163fb1c29416dcff2bd0e9ded03f20::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit2d163fb1c29416dcff2bd0e9ded03f20::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit2d163fb1c29416dcff2bd0e9ded03f20::$classMap;
 
         }, null, ClassLoader::class);
     }

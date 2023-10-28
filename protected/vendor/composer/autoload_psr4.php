@@ -9,6 +9,7 @@ return array(
     'yii\\swiftmailer\\' => array($vendorDir . '/yiisoft/yii2-swiftmailer'),
     'yii\\redis\\' => array($vendorDir . '/yiisoft/yii2-redis/src'),
     'yii\\queue\\sync\\' => array($vendorDir . '/yiisoft/yii2-queue/src/drivers/sync'),
+    'yii\\queue\\stomp\\' => array($vendorDir . '/yiisoft/yii2-queue/src/drivers/stomp'),
     'yii\\queue\\sqs\\' => array($vendorDir . '/yiisoft/yii2-queue/src/drivers/sqs'),
     'yii\\queue\\redis\\' => array($vendorDir . '/yiisoft/yii2-queue/src/drivers/redis'),
     'yii\\queue\\gearman\\' => array($vendorDir . '/yiisoft/yii2-queue/src/drivers/gearman'),

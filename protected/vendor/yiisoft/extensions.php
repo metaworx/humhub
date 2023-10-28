@@ -231,7 +231,7 @@ return array (
   'yiisoft/yii2-queue' => 
   array (
     'name' => 'yiisoft/yii2-queue',
-    'version' => '2.1.0.0',
+    'version' => '2.3.0.0',
     'alias' => 
     array (
       '@yii/queue' => $vendorDir . '/yiisoft/yii2-queue/src',
@@ -244,6 +244,7 @@ return array (
       '@yii/queue/redis' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/redis',
       '@yii/queue/sync' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/sync',
       '@yii/queue/sqs' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/sqs',
+      '@yii/queue/stomp' => $vendorDir . '/yiisoft/yii2-queue/src/drivers/stomp',
     ),
   ),
   'yiisoft/yii2-redis' => 
