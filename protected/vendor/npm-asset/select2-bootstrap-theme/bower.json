@@ -1,19 +1,30 @@
 {
   "name": "select2-bootstrap-theme",
-  "version": "0.1.0-beta.4",
-  "main": [
-    "dist/select2-bootstrap.css",
-    "dist/select2-bootstrap.min.css"
+  "description": "A theme for Select2 v4 and Bootstrap 3.",
+  "keywords": [
+    "bootstrap",
+    "select2",
+    "css",
+    "sass",
+    "less"
   ],
+  "homepage": "https://select2.github.io/select2-bootstrap-theme",
+  "main": [
+    "src/build.scss",
+    "src/build.less"
+  ],
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
     "components"
   ],
-  "devDependencies": {
-    "bootstrap": "~3.3.5",
-    "bootstrap-sass-official": "~3.3.5",
-    "respond": "~1.4.2",
-    "anchor-js": "~1.1.1"
+  "dependencies": {
+    "bootstrap": "^3.3.4",
+    "select2": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:select2/select2-bootstrap-theme.git"
   }
 }

@@ -2,7 +2,6 @@
  * @link https://www.humhub.org/
  * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
- *
  */
 
 // Process [link](oembed:<to> "stuff")
@@ -13,7 +12,6 @@ let inst = new MarkdownIt();
 let isSpace = inst.utils.isSpace;
 
 function createLinkExtension(id, options) {
-
     options = options || {};
 
     options.node = options.node || 'a';
@@ -32,7 +30,7 @@ function createLinkExtension(id, options) {
             title,
             token,
             href = '',
-            prefix = id+':',
+            prefix = id + ':',
             oldPos = state.pos,
             max = state.posMax,
             start = state.pos;
@@ -51,9 +49,7 @@ function createLinkExtension(id, options) {
 
         pos = labelEnd + 1;
         if (pos < max && state.src.charCodeAt(pos) === 0x28/* ( */) {
-            //
             // Inline link
-            //
 
             // [link](  <id>:<href>  "title"  )
             //        ^^ skipping these spaces
@@ -70,8 +66,8 @@ function createLinkExtension(id, options) {
 
             // [link](  <id>:<href>  "title"  )
             //          ^^^^ parsing prefix
-            for(let i = 0;i < prefix.length; i++) {
-                if(state.src.charAt(pos++) !== prefix.charAt(i)) {
+            for (let i = 0; i < prefix.length; i++) {
+                if (state.src.charAt(pos++) !== prefix.charAt(i)) {
                     return false;
                 }
             }
@@ -127,10 +123,8 @@ function createLinkExtension(id, options) {
             return false;
         }
 
-        //
         // We found the end of the link, and know for a fact it's a valid link;
         // so all that's left to do is to call tokenizer.
-        //
         if (!silent) {
             state.pos = labelStart;
             state.posMax = labelEnd;
@@ -140,7 +134,7 @@ function createLinkExtension(id, options) {
             token = state.push(id, options.node, 0);
             token.attrs = attrs = [[options.hrefAttr, href]];
 
-            if(label) {
+            if (label) {
                 attrs.push([options.labelAttr, label]);
             }
 
@@ -152,8 +146,8 @@ function createLinkExtension(id, options) {
                 state.pos++;
             }
 
-        // NOTE linkExtensions currently do not support inline formatting:
-        // TODO: make _open, _close behavior optional in order to support inline label format state.md.inline.tokenize(state);
+            // NOTE linkExtensions currently do not support inline formatting:
+            // TODO: make _open, _close behavior optional in order to support inline label format state.md.inline.tokenize(state);
         }
 
         state.pos = pos;
@@ -161,4 +155,5 @@ function createLinkExtension(id, options) {
         return true;
     };
 }
-export {createLinkExtension}
+
+export {createLinkExtension};

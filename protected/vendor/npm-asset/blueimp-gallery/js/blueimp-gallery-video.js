@@ -11,7 +11,7 @@
 
 /* global define */
 
-;(function(factory) {
+;(function (factory) {
   'use strict'
   if (typeof define === 'function' && define.amd) {
     // Register as an anonymous AMD module:
@@ -20,10 +20,12 @@
     // Browser globals:
     factory(window.blueimp.helper || window.jQuery, window.blueimp.Gallery)
   }
-})(function($, Gallery) {
+})(function ($, Gallery) {
   'use strict'
 
-  $.extend(Gallery.prototype.options, {
+  var galleryPrototype = Gallery.prototype
+
+  $.extend(galleryPrototype.options, {
     // The class for video content elements:
     videoContentClass: 'video-content',
     // The class for video when it is loading:
@@ -36,17 +38,17 @@
     videoSourcesProperty: 'sources'
   })
 
-  var handleSlide = Gallery.prototype.handleSlide
+  var handleSlide = galleryPrototype.handleSlide
 
-  $.extend(Gallery.prototype, {
-    handleSlide: function(index) {
+  $.extend(galleryPrototype, {
+    handleSlide: function (index) {
       handleSlide.call(this, index)
       if (this.playingVideo) {
         this.playingVideo.pause()
       }
     },
 
-    videoFactory: function(obj, callback, videoInterface) {
+    videoFactory: function (obj, callback, videoInterface) {
       var that = this
       var options = this.options
       var videoContainerNode = this.elementPrototype.cloneNode(false)
@@ -107,10 +109,10 @@
       if (video.src) {
         video.controls = true
         ;(videoInterface || $(video))
-          .on('error', function() {
+          .on('error', function () {
             that.setTimeout(callback, errorArgs)
           })
-          .on('pause', function() {
+          .on('pause', function () {
             if (video.seeking) return
             isLoading = false
             videoContainer
@@ -124,7 +126,7 @@
               that.play()
             }
           })
-          .on('playing', function() {
+          .on('playing', function () {
             isLoading = false
             videoContainer
               .removeClass(that.options.videoLoadingClass)
@@ -136,13 +138,13 @@
               hasControls = false
             }
           })
-          .on('play', function() {
+          .on('play', function () {
             window.clearTimeout(that.timeout)
             isLoading = true
             videoContainer.addClass(that.options.videoLoadingClass)
             that.playingVideo = video
           })
-        $(playMediaControl).on('click', function(event) {
+        $(playMediaControl).on('click', function (event) {
           that.preventDefault(event)
           if (isLoading) {
             video.pause()
