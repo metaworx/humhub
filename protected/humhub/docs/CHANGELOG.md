@@ -1,6 +1,29 @@
 HumHub Change Log
 =================
 
+1.3.0-beta.3  (July 30, 2018)
+-----------------------------
+
+- Fix: prevent user serialization for SocialActivity
+- Fix: wrong return value for `Content::move()`
+- Fix: space archive activity wrong originator assignment
+- Fix: suppress "unable to determine dataType" error for aborted xhr requests
+- Enh: added `FunctionalTester::loginBySpaceUserGroup()` and `FunctionalTest::assertSpaceAccessStatus()` for ACL testing
+- Fix #2721 delete space button not visible for system admin
+- Enh: added `humhub\modules\space\behaviors\SpaceModelMembership::canDelete()`
+- Fix #3221: Popover Space title "&" to "&amp;"
+- Fix invalid translation syntax used in croatian language
+- Enh added highligh.js as ui addition
+- Fix: ui.addition.applyTo with filter ignores first filter index
+- Fix: introduction tour not working
+- Chng: Moved static js dependencies from `static/resources` into `static/js`
+- Fix: Comment edit cancel edit context item not shown
+- Fix  #2700: Prevent GroupManager access to system admin group management
+- Enh: Styled user deletion view
+- Fixed: Space and User Admin Filterbar padding
+- Fix: Source serialization of Notification ActiveJob
+- Enh: Added 'requireSource' & 'requireOriginator' flags in SocialActivities
+
 
 1.3.0-beta.2  (July 18, 2018)
 -----------------------------
