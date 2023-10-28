@@ -90,10 +90,21 @@ class EmojiChooser {
             this.initCategory(this.categoryOrder[0]);
         }
 
-        this.$.css({
-            top: position.top + provider.$node.outerHeight() - 5,
-            left: position.left,
-        }).show();
+        if(!humhub.require('ui.view').isSmall()) {
+            this.$.css({
+                top: position.top + provider.$node.outerHeight() - 5,
+                left: position.left,
+            }).show();
+        } else {
+            this.$.css({
+                top: 5,
+                position: 'fixed',
+                left: 0,
+                right: 0,
+                margin: 'auto'
+            }).show();
+        }
+
 
         if(focus) {
             this.$.find('.humhub-emoji-chooser-search').focus();
@@ -137,7 +148,10 @@ class EmojiChooser {
                     break;
             }
         }).on('keyup', function(e) {
-            if (e.which !== 8 && !/[a-z0-9\d]/i.test(String.fromCharCode(e.which))) {
+            let keyCode = e.keyCode || e.which;
+            // This line should prevent processing in case user presses down/up on desktop, android chrome does not send
+            // always send keyCode 229 so we can skip this check in this case
+            if (keyCode !== 229 && keyCode !== 8 && !/[a-z0-9\d]/i.test(String.fromCharCode(keyCode))) {
                 return;
             }
 

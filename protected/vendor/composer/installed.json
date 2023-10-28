@@ -94,7 +94,7 @@
         "version_normalized": "3.3.11.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/RobinHerbots/Inputmask.git",
+            "url": "git@github.com:RobinHerbots/Inputmask.git",
             "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
         },
         "dist": {
@@ -1211,17 +1211,17 @@
     },
     {
         "name": "firebase/php-jwt",
-        "version": "v5.2.0",
-        "version_normalized": "5.2.0.0",
+        "version": "v5.2.1",
+        "version_normalized": "5.2.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/firebase/php-jwt.git",
-            "reference": "feb0e820b8436873675fd3aca04f3728eb2185cb"
+            "reference": "f42c9110abe98dd6cfe9053c49bc86acc70b2d23"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/feb0e820b8436873675fd3aca04f3728eb2185cb",
-            "reference": "feb0e820b8436873675fd3aca04f3728eb2185cb",
+            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/f42c9110abe98dd6cfe9053c49bc86acc70b2d23",
+            "reference": "f42c9110abe98dd6cfe9053c49bc86acc70b2d23",
             "shasum": ""
         },
         "require": {
@@ -1230,7 +1230,7 @@
         "require-dev": {
             "phpunit/phpunit": ">=4.8 <=9"
         },
-        "time": "2020-03-25T18:49:23+00:00",
+        "time": "2021-02-12T00:02:00+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1262,7 +1262,7 @@
         ],
         "support": {
             "issues": "https://github.com/firebase/php-jwt/issues",
-            "source": "https://github.com/firebase/php-jwt/tree/master"
+            "source": "https://github.com/firebase/php-jwt/tree/v5.2.1"
         }
     },
     {
@@ -4199,11 +4199,11 @@
     },
     {
         "name": "npm-asset/humhub-prosemirror-richtext",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "1.1.2",
+        "version_normalized": "1.1.2.0",
         "dist": {
             "type": "tar",
-            "url": "https://registry.npmjs.org/humhub-prosemirror-richtext/-/humhub-prosemirror-richtext-1.1.0.tgz"
+            "url": "https://registry.npmjs.org/humhub-prosemirror-richtext/-/humhub-prosemirror-richtext-1.1.2.tgz"
         },
         "type": "npm-asset",
         "installation-source": "dist",
@@ -7303,8 +7303,8 @@
     },
     {
         "name": "symfony/polyfill-ctype",
-        "version": "v1.22.0",
-        "version_normalized": "1.22.0.0",
+        "version": "v1.22.1",
+        "version_normalized": "1.22.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -7365,22 +7365,22 @@
             "portable"
         ],
         "support": {
-            "source": "https://github.com/symfony/polyfill-ctype/tree/v1.22.0"
+            "source": "https://github.com/symfony/polyfill-ctype/tree/v1.22.1"
         }
     },
     {
         "name": "symfony/polyfill-mbstring",
-        "version": "v1.22.0",
-        "version_normalized": "1.22.0.0",
+        "version": "v1.22.1",
+        "version_normalized": "1.22.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-mbstring.git",
-            "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13"
+            "reference": "5232de97ee3b75b0360528dae24e73db49566ab1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
-            "reference": "f377a3dd1fde44d37b9831d68dc8dea3ffd28e13",
+            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/5232de97ee3b75b0360528dae24e73db49566ab1",
+            "reference": "5232de97ee3b75b0360528dae24e73db49566ab1",
             "shasum": ""
         },
         "require": {
@@ -7389,7 +7389,7 @@
         "suggest": {
             "ext-mbstring": "For best performance"
         },
-        "time": "2021-01-07T16:49:33+00:00",
+        "time": "2021-01-22T09:19:47+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -7433,13 +7433,13 @@
             "shim"
         ],
         "support": {
-            "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.22.0"
+            "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.22.1"
         }
     },
     {
         "name": "symfony/polyfill-php73",
-        "version": "v1.22.0",
-        "version_normalized": "1.22.0.0",
+        "version": "v1.22.1",
+        "version_normalized": "1.22.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php73.git",
@@ -7500,13 +7500,13 @@
             "shim"
         ],
         "support": {
-            "source": "https://github.com/symfony/polyfill-php73/tree/v1.22.0"
+            "source": "https://github.com/symfony/polyfill-php73/tree/v1.22.1"
         }
     },
     {
         "name": "symfony/polyfill-php80",
-        "version": "v1.22.0",
-        "version_normalized": "1.22.0.0",
+        "version": "v1.22.1",
+        "version_normalized": "1.22.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php80.git",
@@ -7571,7 +7571,7 @@
             "shim"
         ],
         "support": {
-            "source": "https://github.com/symfony/polyfill-php80/tree/v1.22.0"
+            "source": "https://github.com/symfony/polyfill-php80/tree/v1.22.1"
         }
     },
     {
@@ -7970,23 +7970,23 @@
     },
     {
         "name": "web-token/jwt-checker",
-        "version": "v2.2.7",
-        "version_normalized": "2.2.7.0",
+        "version": "v2.2.8",
+        "version_normalized": "2.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/web-token/jwt-checker.git",
-            "reference": "d2026ff6f9cc0d74107c1bddfe730b84a0f14cf7"
+            "reference": "568c801ebf4209da3747e5df1b0c0aef443aa5b9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/web-token/jwt-checker/zipball/d2026ff6f9cc0d74107c1bddfe730b84a0f14cf7",
-            "reference": "d2026ff6f9cc0d74107c1bddfe730b84a0f14cf7",
+            "url": "https://api.github.com/repos/web-token/jwt-checker/zipball/568c801ebf4209da3747e5df1b0c0aef443aa5b9",
+            "reference": "568c801ebf4209da3747e5df1b0c0aef443aa5b9",
             "shasum": ""
         },
         "require": {
             "web-token/jwt-core": "^2.1"
         },
-        "time": "2020-12-13T16:35:27+00:00",
+        "time": "2021-01-21T19:18:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -8029,22 +8029,22 @@
             "symfony"
         ],
         "support": {
-            "source": "https://github.com/web-token/jwt-checker/tree/v2.2.7"
+            "source": "https://github.com/web-token/jwt-checker/tree/v2.2.8"
         }
     },
     {
         "name": "web-token/jwt-core",
-        "version": "v2.2.7",
-        "version_normalized": "2.2.7.0",
+        "version": "v2.2.8",
+        "version_normalized": "2.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/web-token/jwt-core.git",
-            "reference": "e68c4940da62682426e78eafb1e3a3ba4c7cbabe"
+            "reference": "1365422ff1f147d2d4c5cb4473c28c9996fca84b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/web-token/jwt-core/zipball/e68c4940da62682426e78eafb1e3a3ba4c7cbabe",
-            "reference": "e68c4940da62682426e78eafb1e3a3ba4c7cbabe",
+            "url": "https://api.github.com/repos/web-token/jwt-core/zipball/1365422ff1f147d2d4c5cb4473c28c9996fca84b",
+            "reference": "1365422ff1f147d2d4c5cb4473c28c9996fca84b",
             "shasum": ""
         },
         "require": {
@@ -8058,7 +8058,7 @@
         "conflict": {
             "spomky-labs/jose": "*"
         },
-        "time": "2020-12-13T16:35:27+00:00",
+        "time": "2021-01-21T19:18:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -8101,22 +8101,22 @@
             "symfony"
         ],
         "support": {
-            "source": "https://github.com/web-token/jwt-core/tree/v2.2.7"
+            "source": "https://github.com/web-token/jwt-core/tree/v2.2.8"
         }
     },
     {
         "name": "web-token/jwt-signature",
-        "version": "v2.2.7",
-        "version_normalized": "2.2.7.0",
+        "version": "v2.2.8",
+        "version_normalized": "2.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/web-token/jwt-signature.git",
-            "reference": "cad4f3c51d9e3537c5f45f26ae2c61d08fd5ffd2"
+            "reference": "de624b8384b6c1bcbd699de95656181ce255fe39"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/web-token/jwt-signature/zipball/cad4f3c51d9e3537c5f45f26ae2c61d08fd5ffd2",
-            "reference": "cad4f3c51d9e3537c5f45f26ae2c61d08fd5ffd2",
+            "url": "https://api.github.com/repos/web-token/jwt-signature/zipball/de624b8384b6c1bcbd699de95656181ce255fe39",
+            "reference": "de624b8384b6c1bcbd699de95656181ce255fe39",
             "shasum": ""
         },
         "require": {
@@ -8130,7 +8130,7 @@
             "web-token/jwt-signature-algorithm-none": "None Signature Algorithm",
             "web-token/jwt-signature-algorithm-rsa": "RSA Based Signature Algorithms"
         },
-        "time": "2020-12-13T16:35:27+00:00",
+        "time": "2021-01-21T19:18:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -8173,29 +8173,29 @@
             "symfony"
         ],
         "support": {
-            "source": "https://github.com/web-token/jwt-signature/tree/v2.2.7"
+            "source": "https://github.com/web-token/jwt-signature/tree/v2.2.8"
         }
     },
     {
         "name": "web-token/jwt-signature-algorithm-ecdsa",
-        "version": "v2.2.7",
-        "version_normalized": "2.2.7.0",
+        "version": "v2.2.8",
+        "version_normalized": "2.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/web-token/jwt-signature-algorithm-ecdsa.git",
-            "reference": "92f9f19ed9a9428d9835e564a2b9fdd7f8a4bd89"
+            "reference": "44cbbb4374c51f1cf48b82ae761efbf24e1a8591"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/web-token/jwt-signature-algorithm-ecdsa/zipball/92f9f19ed9a9428d9835e564a2b9fdd7f8a4bd89",
-            "reference": "92f9f19ed9a9428d9835e564a2b9fdd7f8a4bd89",
+            "url": "https://api.github.com/repos/web-token/jwt-signature-algorithm-ecdsa/zipball/44cbbb4374c51f1cf48b82ae761efbf24e1a8591",
+            "reference": "44cbbb4374c51f1cf48b82ae761efbf24e1a8591",
             "shasum": ""
         },
         "require": {
             "ext-openssl": "*",
             "web-token/jwt-signature": "^2.0"
         },
-        "time": "2020-12-13T16:35:27+00:00",
+        "time": "2021-01-21T19:18:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -8238,28 +8238,28 @@
             "symfony"
         ],
         "support": {
-            "source": "https://github.com/web-token/jwt-signature-algorithm-ecdsa/tree/v2.2.7"
+            "source": "https://github.com/web-token/jwt-signature-algorithm-ecdsa/tree/v2.2.8"
         }
     },
     {
         "name": "web-token/jwt-signature-algorithm-hmac",
-        "version": "v2.2.7",
-        "version_normalized": "2.2.7.0",
+        "version": "v2.2.8",
+        "version_normalized": "2.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/web-token/jwt-signature-algorithm-hmac.git",
-            "reference": "4b397256c883cf2143fe5658e277cf0f26559e10"
+            "reference": "d208b1c50b408fa711bfeedeed9fb5d9be1d3080"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/web-token/jwt-signature-algorithm-hmac/zipball/4b397256c883cf2143fe5658e277cf0f26559e10",
-            "reference": "4b397256c883cf2143fe5658e277cf0f26559e10",
+            "url": "https://api.github.com/repos/web-token/jwt-signature-algorithm-hmac/zipball/d208b1c50b408fa711bfeedeed9fb5d9be1d3080",
+            "reference": "d208b1c50b408fa711bfeedeed9fb5d9be1d3080",
             "shasum": ""
         },
         "require": {
             "web-token/jwt-signature": "^2.1"
         },
-        "time": "2020-12-13T16:35:27+00:00",
+        "time": "2021-01-21T19:18:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -8302,22 +8302,22 @@
             "symfony"
         ],
         "support": {
-            "source": "https://github.com/web-token/jwt-signature-algorithm-hmac/tree/v2.2.7"
+            "source": "https://github.com/web-token/jwt-signature-algorithm-hmac/tree/v2.2.8"
         }
     },
     {
         "name": "web-token/jwt-signature-algorithm-rsa",
-        "version": "v2.2.7",
-        "version_normalized": "2.2.7.0",
+        "version": "v2.2.8",
+        "version_normalized": "2.2.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/web-token/jwt-signature-algorithm-rsa.git",
-            "reference": "96588136dd01cf842b0c7107fc63aebc8332d97f"
+            "reference": "513ad90eb5ef1886ff176727a769bda4618141b0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/web-token/jwt-signature-algorithm-rsa/zipball/96588136dd01cf842b0c7107fc63aebc8332d97f",
-            "reference": "96588136dd01cf842b0c7107fc63aebc8332d97f",
+            "url": "https://api.github.com/repos/web-token/jwt-signature-algorithm-rsa/zipball/513ad90eb5ef1886ff176727a769bda4618141b0",
+            "reference": "513ad90eb5ef1886ff176727a769bda4618141b0",
             "shasum": ""
         },
         "require": {
@@ -8329,7 +8329,7 @@
             "ext-bcmath": "GMP or BCMath is highly recommended to improve the library performance",
             "ext-gmp": "GMP or BCMath is highly recommended to improve the library performance"
         },
-        "time": "2020-12-13T16:35:27+00:00",
+        "time": "2021-01-21T19:18:03+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -8372,7 +8372,7 @@
             "symfony"
         ],
         "support": {
-            "source": "https://github.com/web-token/jwt-signature-algorithm-rsa/tree/v2.2.7"
+            "source": "https://github.com/web-token/jwt-signature-algorithm-rsa/tree/v2.2.8"
         }
     },
     {
