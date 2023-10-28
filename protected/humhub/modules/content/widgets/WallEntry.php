@@ -2,7 +2,7 @@
 
 /**
  * @link https://www.humhub.org/
- * @copyright Copyright (c) 2016 HumHub GmbH & Co. KG
+ * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
  * @license https://www.humhub.com/licences
  */
 
@@ -11,6 +11,8 @@ namespace humhub\modules\content\widgets;
 use Yii;
 use humhub\components\Widget;
 use humhub\modules\space\models\Space;
+use humhub\modules\user\models\User;
+use humhub\modules\content\components\ContentContainerController;
 
 /**
  * WallEntry is responsible to show a content inside a stream/wall.
@@ -89,7 +91,7 @@ class WallEntry extends Widget
             /* @var $widget Widget */
             $config['class'] = get_called_class();
             $widget = Yii::createObject($config);
-            $out = $widget->render($widget->wallEntryLayout, ['content' => $widget->run(), 'object' => $widget->contentObject, 'wallEntryWidget' => $widget]);
+            $out = $widget->render($widget->wallEntryLayout, $widget->getWallEntryViewParams());
         } catch (\Exception $e) {
             ob_end_clean();
             throw $e;
@@ -152,17 +154,48 @@ class WallEntry extends Widget
         ob_start();
         ob_implicit_flush(false);
         try {
-            $out = $this->render($this->wallEntryLayout, [
-                'content' => $this->run(),
-                'object' => $this->contentObject,
-                'wallEntryWidget' => $this
-            ]);
+            $out = $this->render($this->wallEntryLayout, $this->getWallEntryViewParams());
         } catch (\Exception $e) {
             ob_end_clean();
             throw $e;
         }
 
         return ob_get_clean() . $out;
+    }
+
+    /**
+     * Returns the view paramters for the wall entry layout
+     * 
+     * @return array the view parameter array
+     */
+    public function getWallEntryViewParams()
+    {
+        $showContentContainer = false;
+        $content = $this->contentObject->content;
+        $user = $content->createdBy;
+        $container = $content->container;
+
+        // In case of e.g. dashboard, show contentContainer of this content
+        if (!Yii::$app->controller instanceof ContentContainerController && !($container instanceof User && $container->id == $user->id)) {
+            $showContentContainer = true;
+        }
+
+        $createdAt = $content->created_at;
+        $updatedAt = null;
+        if ($createdAt !== $content->updated_at && $content->updated_at != '') {
+            $updatedAt = $content->updated_at;
+        }
+
+        return [
+            'content' => $this->run(),
+            'object' => $this->contentObject,
+            'wallEntryWidget' => $this,
+            'showContentContainer' => $showContentContainer,
+            'user' => $user,
+            'container' => $container,
+            'createdAt' => $createdAt,
+            'updatedAt' => $updatedAt
+        ];
     }
 
 }
