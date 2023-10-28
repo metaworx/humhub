@@ -17,9 +17,7 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  '<strong>Latest</strong> updates' => '',
-  'Delete' => '@@Usuń@@',
-  'Email settings' => '@@Ustawienia email@@',
+  '<strong>Latest</strong> updates' => '<strong>Najnowsze</strong> aktualizacje',
   'Account settings' => 'Ustawienia konta',
   'Administration' => 'Administracja',
   'Back to dashboard' => 'Powrót do pulpitu',
@@ -44,10 +42,10 @@ return array (
   'Oooops...' => 'Oooops...',
   'Results' => 'Wyniki',
   'Search' => 'Szukaj',
-  'Search for users and spaces' => 'Szukaj użytkowników i obszarów',
+  'Search for users and spaces' => 'Szukaj użytkowników i stref',
   'Show more results' => 'Pokaż więcej wyników',
   'Sorry, nothing found!' => 'Przepraszam, nic nie znaleziono!',
-  'Space not found!' => 'Nie znaleziono obszaru!',
+  'Space not found!' => 'Nie znaleziono strefy!',
   'User Approvals' => 'Akceptacja nowych użytkowników',
   'User not found!' => 'Użytkownik nie został znaleziony',
   'Welcome to %appName%' => 'Witaj w %appName%',

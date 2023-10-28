@@ -17,9 +17,10 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  '<strong>Confirm</strong> comment deleting' => '',
-  'Cancel' => '',
-  'Do you really want to delete this comment?' => '',
-  'Updated :timeago' => '',
+  'Edit' => '',
+  '<strong>Confirm</strong> comment deleting' => '<strong>Bestätige</strong> die Löschung des Kommentars',
+  'Cancel' => 'Abbrechen',
   'Delete' => 'Löschen',
+  'Do you really want to delete this comment?' => 'Möchtest Du diesen Kommentar wirklich löschen?',
+  'Updated :timeago' => 'Aktualisiert vor :timeago',
 );

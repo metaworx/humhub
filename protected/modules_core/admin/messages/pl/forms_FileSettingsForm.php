@@ -17,11 +17,10 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Allowed file extensions' => '',
-  'Convert command not found!' => '',
-  'Got invalid image magick response! - Correct command?' => '',
-  'Image Magick convert command (optional)' => '',
-  'Maximum upload file size (in MB)' => '',
-  'Use X-Sendfile for File Downloads' => '',
-  'Forbidden file extensions' => '@@@@',
+  'Allowed file extensions' => 'Dozwolone rozszerzenia ',
+  'Convert command not found!' => 'Polecenie konwertujące nie znalezione! ',
+  'Got invalid image magick response! - Correct command?' => 'Otrzymano nieprawidłową odpowiedź image magick! - Czy prawidłowe polecenie? ',
+  'Image Magick convert command (optional)' => 'Polecenie konwersji Image Magick (opcjonalne) ',
+  'Maximum upload file size (in MB)' => 'Maksymalny rozmiar wgrywanego pliku (w MB) ',
+  'Use X-Sendfile for File Downloads' => 'Użyj X-Sendfile przy pobieraniu plików ',
 );

@@ -17,8 +17,7 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Allowed file extensions' => '',
-  'Forbidden file extensions' => '@@Kayıp dosya uzantıları@@',
+  'Allowed file extensions' => 'İzin verilen dosya Uzantıları',
   'Convert command not found!' => 'Dönüştürme komutu bulunamadı!',
   'Got invalid image magick response! - Correct command?' => 'Boş image magick karşılığı! - Doğru komut?',
   'Image Magick convert command (optional)' => 'Image Magick dönüştürme komutu (isteğe bağlı)',
