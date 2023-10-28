@@ -53,23 +53,16 @@ class SelfTest
 
         // Checks PHP Version
         $title = 'PHP - Version - ' . PHP_VERSION;
-        # && version_compare(PHP_VERSION, '5.9.0', '<')
-        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
             $checks[] = array(
                 'title' => Yii::t('base', $title),
                 'state' => 'OK'
-            );
-        } elseif (version_compare(PHP_VERSION, '5.4.0', '<=')) {
-            $checks[] = array(
-                'title' => Yii::t('base', $title),
-                'state' => 'WARNING',
-                'hint' => 'Untested on this version!'
             );
         } else {
             $checks[] = array(
                 'title' => Yii::t('base', $title),
                 'state' => 'ERROR',
-                'hint' => 'Minimum 5.3'
+                'hint' => 'Minimum 5.4'
             );
         }
 
@@ -88,6 +81,20 @@ class SelfTest
             );
         }
 
+        $title = 'PHP - INTL Extension';
+        if (function_exists('collator_create')) {
+            $checks[] = array(
+                'title' => Yii::t('base', $title),
+                'state' => 'OK'
+            );
+        } else {
+            $checks[] = array(
+                'title' => Yii::t('base', $title),
+                'state' => 'ERROR',
+                'hint' => 'Install INTL Extension'
+            );
+        }
+        
         // Checks GD Extension
         $title = 'PHP - EXIF Extension';
         if (function_exists('exif_read_data')) {
@@ -261,7 +268,8 @@ class SelfTest
 
         // Check Custom Modules Directory
         $title = 'Permissions - Module Directory';
-        $path = Yii::getAlias('@app/modules');
+        
+        $path = Yii::getAlias(Yii::$app->params['moduleMarketplacePath']);
         if (is_writeable($path)) {
             $checks[] = array(
                 'title' => Yii::t('base', $title),

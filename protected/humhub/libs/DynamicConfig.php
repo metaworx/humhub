@@ -115,6 +115,14 @@ class DynamicConfig extends \yii\base\Object
             $config['components']['cache'] = [
                 'class' => $cacheClass,
             ];
+
+            // Prefix APC Cache Keys
+            if ($cacheClass == 'yii\caching\ApcCache') {
+                $config['components']['cache'] = [
+                    'keyPrefix' => Yii::$app->id
+                ];
+            }
+            
         }
         // Add User settings
         $config['components']['user'] = array();
@@ -160,8 +168,10 @@ class DynamicConfig extends \yii\base\Object
         $theme = Setting::Get('theme');
         if ($theme && $theme != "") {
             $config['components']['view']['theme']['name'] = $theme;
+            $config['components']['mailer']['view']['theme']['name'] = $theme;
         } else {
             unset($config['components']['view']['theme']['name']);
+            unset($config['components']['mailer']['view']['theme']['name']);
         }
         $config['params']['config_created_at'] = time();
 

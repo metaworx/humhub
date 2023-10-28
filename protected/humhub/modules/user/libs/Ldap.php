@@ -86,8 +86,8 @@ class Ldap extends Object
      */
     public function authenticate($username, $password)
     {
-        $username = $this->ldap->getCanonicalAccountName($username, \Zend\Ldap\Ldap::ACCTNAME_FORM_DN);
         try {
+            $username = $this->ldap->getCanonicalAccountName($username, \Zend\Ldap\Ldap::ACCTNAME_FORM_DN);
             $this->ldap->bind($username, $password);
 
             // Update Users Data
@@ -145,8 +145,18 @@ class Ldap extends Object
     public function handleLdapUser($node)
     {
 
-        $username = $node->getAttribute(Setting::Get('usernameAttribute', 'authentication_ldap'), 0);
-        $email = $node->getAttribute('mail', 0);
+        $usernameAttribute = Setting::Get('usernameAttribute', 'authentication_ldap');
+        if ($usernameAttribute == '') {
+            $usernameAttribute = 'sAMAccountName';
+        }        
+        
+        $emailAttribute = Setting::Get('emailAttribute', 'authentication_ldap');
+        if ($emailAttribute == '') {
+            $emailAttribute = 'mail';
+        }        
+        
+        $username = $node->getAttribute($usernameAttribute, 0);
+        $email = $node->getAttribute($emailAttribute, 0);
         $guid = $this->binToStrGuid($node->getAttribute('objectGUID', 0));
 
         // Try to load User:
@@ -209,7 +219,7 @@ class Ldap extends Object
 
                 // Update Space Mapping
                 foreach (Space::find()->andWhere(['!=', 'ldap_dn', ''])->all() as $space) {
-                    if (in_array($space->ldap_dn, $node->getAttribute('memberOf'))) {
+                    if (in_array($space->ldap_dn, $node->getAttribute('memberOf')) || strpos($node->getDn(), $space->ldap_dn) !== false) {
                         $space->addMember($user->id);
                     }
                 }

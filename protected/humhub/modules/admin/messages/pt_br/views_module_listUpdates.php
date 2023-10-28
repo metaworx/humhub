@@ -4,4 +4,5 @@ return array (
   'Installed version:' => 'Versão instalada:',
   'Latest compatible Version:' => 'Última versão compatível:',
   'Update' => 'Atualizar',
+  'Updating module...' => 'Atualizando módulo...',
 );

@@ -47,6 +47,7 @@ class ZendLuceneSearch extends Search
             $doc->addField(\ZendSearch\Lucene\Document\Field::Text($key, $val, 'UTF-8'));
         }
 
+        // Add comments - if record is content
         if ($obj instanceof ContentActiveRecord) {
             $comments = "";
             foreach (Comment::findAll(['object_id' => $obj->getPrimaryKey(), 'object_model' => $obj->className()]) as $comment) {
@@ -67,7 +68,6 @@ class ZendLuceneSearch extends Search
     {
         $this->delete($object);
         $this->add($object);
-        $this->optimize();
     }
 
     public function delete(Searchable $obj)
@@ -100,11 +100,10 @@ class ZendLuceneSearch extends Search
 
     public function find($keyword, Array $options)
     {
-
         $options = $this->setDefaultFindOptions($options);
 
         $index = $this->getIndex();
-        $keyword = str_replace(array('*', '?', '_', '$'), ' ', strtolower($keyword));
+        $keyword = str_replace(array('*', '?', '_', '$'), ' ', mb_strtolower($keyword));
 
         if (!isset($options['sortField']) || $options['sortField'] == "") {
             $hits = new \ArrayObject($index->find($this->buildQuery($keyword, $options)));
@@ -134,14 +133,19 @@ class ZendLuceneSearch extends Search
 
     protected function buildQuery($keyword, $options)
     {
+
+        // Allow *Token*
+        \ZendSearch\Lucene\Search\Query\Wildcard::setMinPrefixLength(0);
+
         $query = new \ZendSearch\Lucene\Search\Query\Boolean();
         foreach (explode(" ", $keyword) as $k) {
             // Require at least 3 non-wildcard characters
             if (strlen($k) > 2) {
-                $term = new \ZendSearch\Lucene\Index\Term($k . "*");
+                $term = new \ZendSearch\Lucene\Index\Term("*" . $k . "*");
                 $query->addSubquery(new \ZendSearch\Lucene\Search\Query\Wildcard($term), true);
             }
         }
+
         // Add model filter
         if (isset($options['model']) && $options['model'] != "") {
             if (is_array($options['model'])) {
