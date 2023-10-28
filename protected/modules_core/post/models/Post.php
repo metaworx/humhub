@@ -19,6 +19,7 @@ class Post extends HActiveRecordContent implements ISearchable
 {
 
     public $autoAddToWall = true;
+    public $wallEditRoute = '//post/post/edit';
 
     /**
      * Returns the static model of the specified AR class.
@@ -70,7 +71,7 @@ class Post extends HActiveRecordContent implements ISearchable
 
         // Prebuild Previews for URLs in Message
         UrlOembed::preload($this->message);
-
+        
         // Check if Post Contains an Url
         if (preg_match('/http(.*?)(\s|$)/i', $this->message)) {
             // Set Filter Flag
@@ -98,6 +99,9 @@ class Post extends HActiveRecordContent implements ISearchable
             $activity->fire();
         }
 
+        // Handle mentioned users
+        UserMentioning::parse($this, $this->message);
+        
         return true;
     }
 
@@ -167,7 +171,7 @@ class Post extends HActiveRecordContent implements ISearchable
      */
     public function getContentTitle()
     {
-        return Yii::t('PostModule.models_Post', 'Post') . " \"" . Helpers::truncateText(CHtml::encode($this->message), 25) . "\"";
+        return Yii::t('PostModule.models_Post', 'Post') . " \"" . Helpers::truncateText($this->message, 60) . "\"";
     }
 
 }

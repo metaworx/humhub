@@ -50,13 +50,56 @@ class PostController extends Controller
 
             // Experimental: Auto attach found images urls in message as files
             if (isset(Yii::app()->params['attachFilesByUrlsToContent']) && Yii::app()->params['attachFilesByUrlsToContent'] == true) {
-                File::attachFilesByUrlsToContent($post, $post->message);
+                Yii::import('application.modules_core.file.libs.*');
+                RemoteFileDownloader::attachFiles($post, $post->message);
             }
 
             $this->renderJson(array('wallEntryId' => $post->content->getFirstWallEntryId()));
         } else {
             $this->renderJson(array('errors' => $post->getErrors()), false);
         }
+    }
+
+    public function actionEdit()
+    {
+        $id = Yii::app()->request->getParam('id');
+
+        // Current wall type we are in (Dashboard, Space, User)
+        // Used to properly render the result wall item.
+        $wallType = Yii::app()->request->getParam('wallType');
+        
+        $edited = false;
+        $model = Post::model()->findByPk($id);
+
+        if ($model->content->canWrite()) {
+
+            if (isset($_POST['Post'])) {
+                $_POST['Post'] = Yii::app()->input->stripClean($_POST['Post']);
+                $model->attributes = $_POST['Post'];
+                if ($model->validate()) {
+                    $model->save();
+
+                    // Reload record to get populated updated_at field
+                    $model = Post::model()->findByPk($id);
+                    
+                    // Set current wall type
+                    Wall::$currentType = $wallType;
+                    
+                    // Return the new post
+                    $output = $this->widget('application.modules_core.post.widgets.PostWidget', array('post' => $model, 'justEdited' => true), true);
+                    Yii::app()->clientScript->render($output);
+                    echo $output;
+                    return;
+
+                }
+            }
+
+            $this->renderPartial('edit', array('post' => $model, 'edited' => $edited, 'wallType' => $wallType), false, true);
+
+        } else {
+            throw new CHttpException(403, Yii::t('PostModule.controllers_PostController', 'Access denied!'));
+        }
+
     }
 
 }

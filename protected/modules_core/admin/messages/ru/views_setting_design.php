@@ -17,8 +17,10 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  '<strong>Design</strong> settings' => '',
-  'Firstname Lastname (e.g. John Doe)' => '',
-  'Save' => '',
-  'Username (e.g. john)' => '',
+  'Alphabetical' => '',
+  'Last visit' => '',
+  '<strong>Design</strong> settings' => '<strong>Настройки</strong> внешнего вида',
+  'Firstname Lastname (e.g. John Doe)' => 'Имя Фамилия (например, Василий Иванов)',
+  'Save' => 'Сохранить',
+  'Username (e.g. john)' => 'Логин',
 );

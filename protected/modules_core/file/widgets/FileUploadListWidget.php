@@ -11,25 +11,37 @@
  * @package humhub.modules_core.file.widgets
  * @since 0.5
  */
-class FileUploadListWidget extends HWidget {
+class FileUploadListWidget extends HWidget
+{
 
     /**
      * @var String unique id of this uploader
      */
-    public $uploaderId = "fileUploader";
+    public $uploaderId = "";
 
     /**
-     * @var String Hidden Form Field where to attach the uploaded file guids (e.g. guid1, guid2, guid3)
+     * If object is set, display also already uploaded files
+     * 
+     * @var HActiveRecord
      */
-    public $bindToFormFieldId = "fileUploader";
+    public $object = null;
 
     /**
      * Draw the widget
      */
-    public function run() {
+    public function run()
+    {
+
+        $files = array();
+        if ($this->object !== null) {
+            $files = File::getFilesOfObject($this->object);
+        }
+
+        Yii::app()->clientScript->setJavaScriptVariable('file_delete_url', $this->createUrl('//file/file/delete'));
+        
         $this->render('fileUploadList', array(
             'uploaderId' => $this->uploaderId,
-            'bindToFormFieldId' => $this->bindToFormFieldId,
+            'files' => $files
         ));
     }
 

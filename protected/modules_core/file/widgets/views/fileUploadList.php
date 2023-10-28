@@ -1,6 +1,7 @@
 <?php
 /**
  * Displays a list of uploaded files by FileUploadButtonWidget.
+ * 
  * The data will be updated via javascript by FileUploadButtonWidget.
  * This view is used by FileUploadListWidget.
  *
@@ -11,16 +12,19 @@
  * @since 0.5
  */
 ?>
-<div id="<?php echo $uploaderId; ?>_details" style="display:none">
-
-    <div class="progress contentForm-upload-progress" id="<?php echo $uploaderId; ?>_progress" style="">
-        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-             aria-valuemax="100" style="width: 0%">
-        </div>
+<div class="progress" id="fileUploaderProgressbar_<?php echo $uploaderId; ?>" style="display:none">
+    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+         aria-valuemax="100" style="width: 0%">
     </div>
-
-
-    <?php //echo Yii::t('FileModule.widgets_views_fileUploadList', 'List of already uploaded files:'); ?>
-    <ul style="list-style: none; display:none; margin: 0; padding-top: 10px;" id="<?php echo $uploaderId; ?>_list">
-    </ul>
 </div>
+
+<div id="fileUploaderList_<?php echo $uploaderId; ?>" >
+    <ul style="list-style: none; margin: 0;" class="contentForm-upload-list" id="fileUploaderListUl_<?php echo $uploaderId; ?>"></ul>
+</div>
+
+
+<script>
+<?php foreach ($files as $file): ?>
+    addToUploadList("<?php echo $uploaderId; ?>", "<?php echo $file->guid; ?>", "<?php echo $file->file_name; ?>", "<?php echo HHtml::getMimeIconClassByExtension($file->getExtension()); ?>");    
+<?php endforeach; ?>
+</script>

@@ -17,6 +17,7 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
+  'OEmbed Provider' => '',
   '<strong>Administration</strong> menu' => '<strong>Administrations-</strong> Menü',
   'About' => 'Über',
   'Authentication' => 'Authentifizierung',
@@ -34,7 +35,7 @@ return array (
   'Settings' => 'Einstellungen',
   'Spaces' => 'Spaces',
   'Statistics' => 'Statistiken',
-  'User approval' => 'Benutzer Freigaben',
+  'User approval' => 'Benutzerfreigaben',
   'User profiles' => 'Benutzer Profile',
   'Users' => 'Benutzer',
 );

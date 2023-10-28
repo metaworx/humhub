@@ -188,7 +188,6 @@ class HHtml extends CHtml
         $maxOembedCount = 3; // Maximum OEmbeds
         $oembedCount = 0; // OEmbeds used
 
-
         $text = preg_replace_callback('/http(.*?)(\s|$)/i', function ($match) use (&$oembedCount, &$maxOembedCount) {
 
             // Try use oembed
@@ -203,57 +202,67 @@ class HHtml extends CHtml
             return HHtml::link($match[0], $match[0], array('target' => '_blank'));
         }, $text);
 
+        // get user and space details from guids
+        $text = self::translateMentioning($text, true);
 
-        # breaks links!?
-        #$text = nl2br($text);
+        // create image tag for emojis
+        $text = self::translateEmojis($text);
 
-        $text = str_replace("\n", "<br />\n", $text);
-
-        // get user details from guids
-        $text = self::translateUserMentioning($text, true);
-
-        return $text;
+        return nl2br($text);
     }
 
     /**
      * Translate guids from users to username
+     * 
      * @param strint $text Contains the complete message
      * @param boolean $buildAnchors Wrap the username with a link to the profile, if it's true
-     *
      */
-    public static function translateUserMentioning($text, $buildAnchors = true)
+    public static function translateMentioning($text, $buildAnchors = true)
     {
-        // save hits of @ char
-        $hits = substr_count($text, ' @');
-
-        // loop for every founded @ char
-        for ($i = 0; $i < $hits; $i++) {
-
-            // extract user guid
-            $guid = substr($text, strpos($text, ' @'), 38);
-
-            // load user row from database
-            $user = User::model()->findByAttributes(array('guid' => substr($guid, 2)));
-
-            if ($user !== null) {
-                // make user clickable if Html is allowed
-                if ($buildAnchors == true) {
-                    $link = ' <a href="' . $user->getProfileUrl() . '" target="_self">' . $user->getDisplayName() . '</a>';
-                } else {
-                    $link = " " . $user->getDisplayName();
+        return preg_replace_callback('@\@\-([us])([\w\-]*?)($|\s|\.)@', function($hit) use(&$buildAnchors) {
+            if ($hit[1] == 'u') {
+                $user = User::model()->findByAttributes(array('guid' => $hit[2]));
+                if ($user !== null) {
+                    if ($buildAnchors) {
+                        return ' <span contenteditable="false"><a href="' . $user->getProfileUrl() . '" target="_self" class="atwho-user" data-user-guid="@-u' . $user->guid . '">@' . $user->getDisplayName() . '</a></span>' . $hit[3];
+                    }
+                    return " @" . $user->getDisplayName() . $hit[3];
                 }
-
-                // replace guid with profile link and username
-                $text = str_replace($guid, $link, $text);
+            } elseif ($hit[1] == 's') {
+                $space = Space::model()->findByAttributes(array('guid' => $hit[2]));
+                if ($space !== null) {
+                    if ($buildAnchors) {
+                        return ' <span contenteditable="false"><a href="' . $space->getUrl() . '" target="_self" class="atwho-user" data-user-guid="@-s' . $space->guid . '">@' . $space->name . '</a></span>' . $hit[3];
+                    }
+                    return " @" . $space->name . $hit[3];
+                }
             }
-        }
+            return $hit[0];
+        }, $text);
+    }
 
-        return $text;
+    /**
+     * Replace emojis from text to img tag
+     * 
+     * @param string $text Contains the complete message
+     * @param string $show show smilies or remove it (for activities and notifications)
+     */
+    public static function translateEmojis($text, $show = true)
+    {
+        $emojis = array('Ambivalent', 'Angry', 'Confused', 'Cool', 'Frown', 'Gasp', 'Grin', 'Heart', 'Hearteyes', 'Laughing', 'Naughty', 'Slant', 'Smile', 'Wink', 'Yuck');
+        return preg_replace_callback('@;(.*?);@', function($hit) use(&$show, &$emojis) {
+            if (in_array($hit[1], $emojis)) {
+                if ($show) {
+                    return HHtml::image(Yii::app()->baseUrl . '/img/emoji/' . $hit[1] . '.png', $hit[1], array('data-emoji-name' => $hit[0], 'class' => 'atwho-emoji'));
+                }
+                return '';
+            }
+        }, $text);
     }
 
     /**
      * ActiveForm Variant of DateTime Field
-     * 
+     *
      * @param type $model
      * @param type $attribute
      * @param type $htmlOptions
@@ -274,18 +283,18 @@ class HHtml extends CHtml
 
     /**
      * Standalone DateTime Field.
-     * Internal Format: 2017-01-01 00:00:00 
-     * 
+     * Internal Format: 2017-01-01 00:00:00
+     *
      * Picker Options Attributes:
      *      pickDate = TRUE/false
-     *      pickTime = true/FALSE   
+     *      pickTime = true/FALSE
      *      displayFormat = Default: DD.MM.YYYY[ - HH:mm]
-     * 
+     *
      * @param String $name
      * @param String $value
      * @param Array $htmlOptions
      * @param Array $pickerOptions
-     * 
+     *
      * @return String datetimeField HTML
      */
     public static function dateTimeField($name, $value = "", $htmlOptions = array(), $pickerOptions = array())
@@ -321,6 +330,49 @@ class HHtml extends CHtml
         }
 
         return self::textField($name, $value, $htmlOptions);
+    }
+
+    /**
+     * Returns Stylesheet Classname based on file extension
+     *
+     * @return string CSS Class
+     */
+    public static function getMimeIconClassByExtension($ext)
+    {
+        // Word
+        if ($ext == 'doc' || $ext == 'docx') {
+            return "mime-word";
+            // Excel
+        } else if ($ext == 'xls' || $ext == 'xlsx') {
+            return "mime-excel";
+            // Powerpoint
+        } else if ($ext == 'ppt' || $ext == 'pptx') {
+            return "mime-excel";
+            // PDF
+        } else if ($ext == 'pdf') {
+            return "mime-pdf";
+            // Archive
+        } else if ($ext == 'zip' || $ext == 'rar' || $ext == 'tar' || $ext == '7z') {
+            return "mime-zip";
+            // Audio
+        } else if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif') {
+            return "mime-image";
+            // Audio
+        } else if ($ext == 'mp3' || $ext == 'aiff' || $ext == 'wav') {
+            return "mime-audio";
+            // Video
+        } else if ($ext == 'avi' || $ext == 'mp4' || $ext == 'mov' || $ext == 'mpeg' || $ext == 'wma') {
+            return "mime-video";
+            // Adobe Photoshop
+        } else if ($ext == 'psd') {
+            return "mime-photoshop";
+            // Adobe Illustrator
+        } else if ($ext == 'ai') {
+            return "mime-illustrator";
+            // other file formats
+        } else {
+            return "mime-file";
+        }
     }
 
 }

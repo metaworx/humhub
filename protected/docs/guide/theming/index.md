@@ -3,14 +3,16 @@ Theming
 
 With **HumHub** you can easily create your own themes. Regardless of whether you want to build a complete new looking interface or you only want to do some small changes to fit the platform better to your needs. **HumHub** gives you the options you need. 
 
+``Note:`` If you want to update an existing theme to a newer version of HumHub, please read the [Theming Migration Guide](migrate.md).
+
 ### What you need to know about theming in HumHub
 1. **HumHub** was build within the **yiiframework** (<http://www.yiiframework.com>). This framework implements the MVC (Model-View-Controller) design pattern. If this is new for you, please visit <http://www.yiiframework.com/doc/guide/1.1/en/basics.mvc> for more information.
 
 2. The interface of **HumHub** is using the **Twitter Bootstrap Framework** (<http://www.getbootstrap.com>) to building the interface. Currently in version 3.0.2.
 
-3. If you created or installed a new theme inside the **themes folder**, you can switch to the new theme through your account menu **Administration > Design > Theme**. 
+3. If you created or installed a new theme inside the **themes folder**, you can switch to the new theme through your account menu **Administration > Design > Theme**.
+4. To migrate a theme created before Version 0.10
 
-4. **HumHub** comes already with a **Sample-Theme**, which you can use as template for your own theme (what we highly recommend).
 
 ---
 
@@ -38,7 +40,7 @@ The principle of theming in **HumHub** is overwriting. To build a new theme, you
 ---
 
 ## Custom CSS
-If your theme is activated, you have to tell **HumHub**, where he find new **CSS** or **JavaScript** files. To do that, you have to copy the **head.php** from:
+If your theme is activated, you have to tell **HumHub**, where to find new **CSS** or **JavaScript** files. To do that, you have to copy the **head.php** from:
 
     /protected/views/layout/
 

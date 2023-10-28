@@ -33,7 +33,7 @@
  *  - ...
  * (See Content Model for more details.)
  *
- * Note: Comments, Likes or Files are NOT Content Objects. 
+ * Note: Comments, Likes or Files are NOT Content Objects.
  * These objects are ContentAddons which always belongs to one Content Object.
  *
  * @author Lucas Bartholemy <lucas@bartholemy.com>
@@ -67,14 +67,29 @@ class HActiveRecordContent extends HActiveRecord
     public $content = null;
 
     /**
+     * If this content is display inside the wall and should be editable
+     * there, specify a edit route here.
+     *
+     * The primary key (id) will automatically added to the url.
+     *
+     * @var string the route to edit this content
+     */
+    public $wallEditRoute = "";
+
+    /**
      * Constructor
-     * 
+     *
      * @param type $scenario
      */
     public function __construct($scenario = 'insert')
     {
-        $this->content = new Content($scenario);
+        $this->content = new Content();
+        $this->content->setUnderlyingObject($this);
         parent::__construct($scenario);
+
+        $this->attachBehavior('HFollowableBehavior', array(
+            'class' => 'application.modules_core.user.behaviors.HFollowableBehavior',
+        ));
     }
 
     /**
@@ -111,28 +126,39 @@ class HActiveRecordContent extends HActiveRecord
     public function afterFind()
     {
         $this->content = Content::model()->findByAttributes(array('object_model' => get_class($this), 'object_id' => $this->getPrimaryKey()));
+        
+        if ($this->content !== null) {
+            $this->content->setUnderlyingObject($this);
+       }
+ 
         parent::afterFind();
     }
 
     public function afterDelete()
     {
-        $this->content->delete();
+        if ($this->content !== null) {
+            $this->content->delete();
+        }
         parent::afterDelete();
     }
 
     /**
      * After Saving of records of type content, automatically add/bind the
      * corresponding content to it.
-     * 
+     *
      * If the automatic wall adding (autoAddToWall) is enabled, also create
      * wall entry for this content.
-     * 
+     *
      * NOTE: If you overwrite this method, e.g. for creating activities ensure
      * this (parent) implementation is invoked BEFORE your implementation. Otherwise
      * the Content Object is not available.
      */
     public function afterSave()
     {
+        // Auto follow this content
+        if (get_class($this) != 'Activity') {
+            $this->follow($this->created_by);
+        }
 
         if ($this->isNewRecord) {
             $this->content->user_id = $this->created_by;
@@ -159,6 +185,7 @@ class HActiveRecordContent extends HActiveRecord
                 $membership->updateLastVisit();
             }
         }
+
     }
 
     public function beforeValidate()
@@ -206,7 +233,7 @@ class HActiveRecordContent extends HActiveRecord
     /**
      * Scope to limit returned content to given content container.
      * It also respects visibility of content against current user.
-     * 
+     *
      * @param HActiveRecordContentContainer $container
      */
     public function contentContainer($container)
@@ -237,7 +264,7 @@ class HActiveRecordContent extends HActiveRecord
 
     /**
      * Scope to find user related content accross content containers.
-     * 
+     *
      * @since 0.9
      * @param array $includes Array of self::SCOPE_USER_RELATED_*.
      */
@@ -260,10 +287,10 @@ class HActiveRecordContent extends HActiveRecord
             $selectorSql[] = 'content.space_id IN (SELECT space_id FROM space_membership sm WHERE sm.user_id=' . Yii::app()->user->id . ' AND sm.status =' . SpaceMembership::STATUS_MEMBER . ')';
         }
         if (in_array(self::SCOPE_USER_RELEATED_FOLLOWED_SPACES, $includes)) {
-            $selectorSql[] = 'content.visibility=1 AND content.space_id IN (SELECT object_id FROM follow sf WHERE sf.object_model="Space" AND sf.user_id=' . Yii::app()->user->id . ')';
+            $selectorSql[] = 'content.visibility=1 AND content.space_id IN (SELECT object_id FROM user_follow sf WHERE sf.object_model="Space" AND sf.user_id=' . Yii::app()->user->id . ')';
         }
         if (in_array(self::SCOPE_USER_RELEATED_FOLLOWED_USERS, $includes)) {
-            $selectorSql[] = 'content.visibility=1 AND content.space_id IS NULL AND content.user_id IN (SELECT object_id FROM follow uf WHERE uf.object_model="User" AND uf.user_id=' . Yii::app()->user->id . ')';
+            $selectorSql[] = 'content.visibility=1 AND content.space_id IS NULL AND content.user_id IN (SELECT object_id FROM user_follow uf WHERE uf.object_model="User" AND uf.user_id=' . Yii::app()->user->id . ')';
         }
 
         if (count($selectorSql) != 0) {
@@ -277,6 +304,7 @@ class HActiveRecordContent extends HActiveRecord
         $this->getDbCriteria()->mergeWith($criteria);
         return $this;
     }
+
 
 }
 

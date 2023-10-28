@@ -17,9 +17,10 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  '(comma separated)' => '',
-  '<strong>File</strong> settings' => '',
-  'Current Image Libary: {currentImageLibary}' => '',
-  'PHP reported a maximum of {maxUploadSize} MB' => '',
-  'Save' => '',
+  'Comma separated list. Leave empty to allow all.' => '',
+  '(comma separated)' => '@@(separati da virgola)@@',
+  '<strong>File</strong> settings' => 'Impostazioni <strong>File</strong>',
+  'Current Image Libary: {currentImageLibary}' => 'Image Libary corrente: {currentImageLibary}',
+  'PHP reported a maximum of {maxUploadSize} MB' => 'PHP impostato ad un massimo di {maxUploadSize} MB',
+  'Save' => 'Salva',
 );
