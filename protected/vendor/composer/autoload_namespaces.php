@@ -9,7 +9,6 @@ return array(
     'ZendSearch' => array($vendorDir . '/matthewbdaly/zendsearch/src'),
     'URLify' => array($vendorDir . '/jbroadway/urlify'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'Imagine' => array($vendorDir . '/imagine/imagine/lib'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Codeception\\' => array($vendorDir . '/codeception/specify/src'),

@@ -13,7 +13,7 @@ For license information check the [LICENSE](LICENSE.md)-file.
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-imagine/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-imagine)
 [![Total Downloads](https://poser.pugx.org/yiisoft/yii2-imagine/downloads.png)](https://packagist.org/packages/yiisoft/yii2-imagine)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-imagine.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-imagine)
+[![Build Status](https://github.com/yiisoft/yii2-imagine/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-imagine/actions)
 
 
 Installation
@@ -24,13 +24,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-imagine
+composer require --prefer-dist yiisoft/yii2-imagine
 ```
 
 or add
 
 ```json
-"yiisoft/yii2-imagine": "~2.1.0"
+"yiisoft/yii2-imagine": "~2.2.0"
 ```
 
 to the `require` section of your composer.json.
