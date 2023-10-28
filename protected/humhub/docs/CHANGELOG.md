@@ -2,6 +2,19 @@ HumHub Change Log
 =================
 
 
+
+1.3.8  (December 10, 2018)
+---------------------------
+
+- Fix #3359: Weekly summary e-mails are not sent in default configuration
+- Fix #3365: Legacy richtext emojis not parsed in richtext preview
+- Fix: Friendship button adds additional spaces
+- Fix: SpaceController::actionHome throws 403 Http error for guests
+- Enh: New `humhub\modules\user\components\User::EVENT_BEFORE_SWITCH_IDENTITY`
+- Fix: Administration menu item visible after user impersonation
+- Enh: Added PermissionManager findUsersByPermission feature
+
+
 1.3.7  (October 23, 2018)
 ---------------------------
 
