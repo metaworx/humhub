@@ -1,6 +1,24 @@
 HumHub Change Log
 =================
 
+1.3.11  (March 06, 2019)
+---------------------------
+- Fix: Disabled module notification category visible in notification settings.
+- Enh: Added `ModuleManager::getEnabledModules()`
+- Enh: `LikeAsset` is now part of `AppAsset` and does not need further registration
+- Fix (CVE-2019-9093) and (CVE-2019-9094): Reflective XSS in file post upload and cfiles upload (thanks to **Rubal Jain** for testing and reporting)
+- Enh: Added further upload file name validation
+- Enh: Added `ContentContainerModuleManager::flushCache()`
+- Fix: Bootstrap modal blocks richtext prompt focus
+- Fix: Richtext images with dimension setting not attached
+- Fix: `Stream::renderEntry()` overwrite does not work
+- Fix: Removed markdown line breaks from richtext preview
+- Fix: WallEntry of global content throws error
+- Fix: `ActivityAsset` does not depend on `StreamAsset`
+- Fix: Uploaded png preview files lose transparency
+- Fix: Modal options `backdrop` and `keyboard` deactivation has no effect
+
+
 1.3.10  (February 22, 2019)
 ---------------------------
 - Fix: Removed ContentTag logging in search update
