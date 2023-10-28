@@ -12,6 +12,7 @@ use Yii;
 use yii\base\Exception;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\user\components\ActiveQueryUser;
+use humhub\modules\user\events\UserEvent;
 use humhub\modules\friendship\models\Friendship;
 use humhub\modules\space\models\Space;
 use humhub\modules\content\models\Content;
@@ -33,6 +34,7 @@ use humhub\modules\content\models\Content;
  * @property string $updated_at
  * @property integer $updated_by
  * @property string $last_login
+ * @property string $authclient_id
  * @property integer $visibility
  * @property integer $contentcontainer_id
  * @property Profile $profile
@@ -62,6 +64,11 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
     const USERGROUP_GUEST = 'u_guest';
 
     /**
+     * @event Event an event that is triggered when the user visibility is checked via [[isVisible()]].
+     */
+    const EVENT_CHECK_VISIBILITY = 'checkVisibility';
+
+    /**
      * A initial group for the user assigned while registration.
      * @var type
      */
@@ -85,19 +92,25 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
      */
     public function rules()
     {
+        /* @var $userModule \humhub\modules\user\Module */
+        $userModule = Yii::$app->getModule('user');
+
         return [
-            [['username', 'email'], 'required'],
+            [['username'], 'required'],
             [['status', 'created_by', 'updated_by', 'visibility'], 'integer'],
             [['status', 'visibility'], 'integer'],
             [['tags'], 'string'],
             [['guid'], 'string', 'max' => 45],
-            [['username'], 'string', 'max' => 50, 'min' => Yii::$app->getModule('user')->minimumUsernameLength],
+            [['username'], 'string', 'max' => 50, 'min' => $userModule->minimumUsernameLength],
             [['time_zone'], 'in', 'range' => \DateTimeZone::listIdentifiers()],
             [['auth_mode'], 'string', 'max' => 10],
             [['language'], 'string', 'max' => 5],
             [['email'], 'unique'],
             [['email'], 'email'],
             [['email'], 'string', 'max' => 100],
+            [['email'], 'required', 'when' => function($model, $attribute) use ($userModule) {
+                    return $userModule->emailRequired;
+                }],
             [['username'], 'unique'],
             [['guid'], 'unique'],
         ];
@@ -304,6 +317,22 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
     }
 
     /**
+     * Specifies whether the user should appear in user lists or in the search.
+     * 
+     * @since 1.2.3
+     * @return boolean is visible
+     */
+    public function isVisible()
+    {
+        $event = new UserEvent(['user' => $this, 'result' => ['isVisible' => true]]);
+        $this->trigger(self::EVENT_CHECK_VISIBILITY, $event);
+        if ($event->result['isVisible'] && $this->isActive()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Before Delete of a User
      *
      */
@@ -313,7 +342,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
         // We don't allow deletion of users who owns a space - validate that
         foreach (\humhub\modules\space\models\Membership::GetUserSpaces($this->id) as $space) {
             if ($space->isSpaceOwner($this->id)) {
-                throw new Exception("Tried to delete a user which is owner of a space!");
+                throw new Exception('Tried to delete a user (' . $this->id . ') which is owner of a space!');
             }
         }
 
@@ -386,7 +415,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
         // (e.g. not UserEditForm) for search rebuild
         $user = User::findOne(['id' => $this->id]);
 
-        if ($this->status == User::STATUS_ENABLED) {
+        if ($user->isVisible()) {
             Yii::$app->search->update($user);
         } else {
             Yii::$app->search->delete($user);
@@ -461,7 +490,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
      */
     public function isCurrentUser()
     {
-        if(Yii::$app->user->isGuest) {
+        if (Yii::$app->user->isGuest) {
             return false;
         }
 
@@ -477,7 +506,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
      */
     public function is(User $user)
     {
-        if(!$user) {
+        if (!$user) {
             return false;
         }
         return $user->id === $this->id;
@@ -491,7 +520,7 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
         $user = !$user && !Yii::$app->user->isGuest ? Yii::$app->user->getIdentity() : $user;
 
         // Guest
-        if(!$user) {
+        if (!$user) {
             return false;
         }
 
@@ -656,4 +685,5 @@ class User extends ContentContainerActiveRecord implements \yii\web\IdentityInte
         // TODO: Implement same logic as for Spaces
         return Content::VISIBILITY_PUBLIC;
     }
+
 }

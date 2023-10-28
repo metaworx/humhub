@@ -37,6 +37,10 @@ use yii\rbac\Permission;
  * @property string $updated_at
  * @property integer $updated_by
  * @property ContentContainer $contentContainer
+ * @property string $stream_sort_date
+ * @property string $stream_channel
+ * @property integer $contentcontainer_id;
+ * @property ContentContainerActiveRecord $container
  *
  * @since 0.5
  */
@@ -69,6 +73,12 @@ class Content extends ContentDeprecated
      * @var ContentContainerActiveRecord the Container (e.g. Space or User) where this content belongs to.
      */
     protected $_container = null;
+    
+    /**
+     * @var bool flag to disable the creation of default social activities like activity and notifications in afterSave() at content creation.
+     * @deprecated since v1.2.3 use ContentActiveRecord::silentContentCreation instead.
+     */
+    public $muteDefaultSocialActivities = false;
 
     /**
      * @inheritdoc
@@ -133,7 +143,6 @@ class Content extends ContentDeprecated
             throw new Exception("Could not save content with object_model or object_id!");
         }
 
-
         // Set some default values
         if (!$this->archived) {
             $this->archived = 0;
@@ -165,38 +174,59 @@ class Content extends ContentDeprecated
      */
     public function afterSave($insert, $changedAttributes)
     {
+        /* @var $contentSource ContentActiveRecord */
         $contentSource = $this->getPolymorphicRelation();
 
         foreach ($this->notifyUsersOfNewContent as $user) {
             $contentSource->follow($user->id);
         }
 
-        if ($insert && !$contentSource instanceof \humhub\modules\activity\models\Activity) {
+        // TODO: handle ContentCreated notifications and live events for global content
+        if ($insert && !$this->isMuted()) {
+            $this->notifyContentCreated();
+        }
 
-            if ($this->container !== null) {
-                $notifyUsers = array_merge($this->notifyUsersOfNewContent, Yii::$app->notification->getFollowers($this));
-
-                \humhub\modules\content\notifications\ContentCreated::instance()
-                        ->from($this->user)
-                        ->about($contentSource)
-                        ->sendBulk($notifyUsers);
-
-                \humhub\modules\content\activities\ContentCreated::instance()
-                        ->about($contentSource)->save();
-
-
-                Yii::$app->live->send(new \humhub\modules\content\live\NewContent([
-                    'sguid' => ($this->container instanceof Space) ? $this->container->guid : null,
-                    'uguid' => ($this->container instanceof User) ? $this->container->guid : null,
-                    'originator' => $this->user->guid,
-                    'contentContainerId' => $this->container->contentContainerRecord->id,
-                    'visibility' => $this->visibility,
-                    'contentId' => $this->id
-                ]));
-            }
+        if($this->container) {
+            Yii::$app->live->send(new \humhub\modules\content\live\NewContent([
+                'sguid' => ($this->container instanceof Space) ? $this->container->guid : null,
+                'uguid' => ($this->container instanceof User) ? $this->container->guid : null,
+                'originator' => $this->user->guid,
+                'contentContainerId' => $this->container->contentContainerRecord->id,
+                'visibility' => $this->visibility,
+                'sourceClass' => $contentSource->className(),
+                'sourceId' => $contentSource->getPrimaryKey(),
+                'silent' => $this->isMuted(),
+                'contentId' => $this->id
+            ]));
         }
 
         return parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * @return bool checks if the given content allows content creation notifications and activities
+     */
+    private function isMuted()
+    {
+        return $this->getPolymorphicRelation()->silentContentCreation || $this->muteDefaultSocialActivities || !$this->container;
+    }
+
+    /**
+     * Notifies all followers and manually set $notifyUsersOfNewContent of the creation of this content and creates an activity.
+     */
+    private function notifyContentCreated()
+    {
+        $contentSource = $this->getPolymorphicRelation();
+        $notifyUsers = array_merge($this->notifyUsersOfNewContent, Yii::$app->notification->getFollowers($this));
+
+        \humhub\modules\content\notifications\ContentCreated::instance()
+            ->from($this->user)
+            ->about($contentSource)
+            ->sendBulk($notifyUsers);
+
+        \humhub\modules\content\activities\ContentCreated::instance()
+            ->from($this->user)
+            ->about($contentSource)->save();
     }
 
     /**
@@ -259,7 +289,7 @@ class Content extends ContentDeprecated
     public function pin()
     {
         $this->pinned = 1;
-        //This prevents the call of beforesave, and the setting of update_at
+        //This prevents the call of beforeSave, and the setting of update_at
         $this->updateAttributes(['pinned']);
     }
 
@@ -384,7 +414,7 @@ class Content extends ContentDeprecated
     {
         $this->contentcontainer_id = $container->contentContainerRecord->id;
         $this->_container = $container;
-        if($container instanceof Space && $this->visibility === null) {
+        if ($container instanceof Space && $this->visibility === null) {
             $this->visibility = $container->getDefaultContentVisibility();
         }
     }
@@ -451,11 +481,11 @@ class Content extends ContentDeprecated
      */
     public function addTag(ContentTag $tag)
     {
-        if(!empty($tag->contentcontainer_id) && $tag->contentcontainer_id != $this->contentcontainer_id) {
+        if (!empty($tag->contentcontainer_id) && $tag->contentcontainer_id != $this->contentcontainer_id) {
             throw new InvalidParamException(Yii::t('ContentModule.base', 'Content Tag with invalid contentcontainer_id assigned.'));
         }
 
-        if(ContentTagRelation::findBy($this, $tag)->count()) {
+        if (ContentTagRelation::findBy($this, $tag)->count()) {
             return true;
         }
 
@@ -464,7 +494,6 @@ class Content extends ContentDeprecated
         $contentRelation = new ContentTagRelation($this, $tag);
         return $contentRelation->save();
     }
-
 
     /**
      * Checks if the given user can edit this content.
@@ -546,6 +575,11 @@ class Content extends ContentDeprecated
             $user = Yii::$app->user->getIdentity();
         }
 
+        // User cann access own content
+        if ($user !== null && $this->created_by == $user->id) {
+            return true;
+        }
+
         // Check Guest Visibility
         if (!$user) {
             return $this->checkGuestAccess();
@@ -560,8 +594,8 @@ class Content extends ContentDeprecated
         if ($user->isSystemAdmin() && Yii::$app->getModule('content')->adminCanViewAllContent) {
             return true;
         }
-
-        if ($this->isPrivate() && $this->getContainer()->canAccessPrivateContent($user)) {
+        
+        if ($this->isPrivate() && $this->getContainer() !== null && $this->getContainer()->canAccessPrivateContent($user)) {
             return true;
         }
 
@@ -580,13 +614,12 @@ class Content extends ContentDeprecated
      */
     public function checkGuestAccess()
     {
-        if(!$this->isPublic() || !Yii::$app->getModule('user')->settings->get('auth.allowGuestAccess')) {
+        if (!$this->isPublic() || !Yii::$app->getModule('user')->settings->get('auth.allowGuestAccess')) {
             return false;
         }
 
         // Check container visibility for guests
-        return ($this->container instanceof Space && $this->container->visibility == Space::VISIBILITY_ALL)
-            || ($this->container instanceof User && $this->container->visibility == User::VISIBILITY_ALL);
+        return ($this->container instanceof Space && $this->container->visibility == Space::VISIBILITY_ALL) || ($this->container instanceof User && $this->container->visibility == User::VISIBILITY_ALL);
     }
 
     /**

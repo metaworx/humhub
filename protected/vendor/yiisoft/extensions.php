@@ -24,7 +24,7 @@ return array (
   'yiisoft/yii2-bootstrap' => 
   array (
     'name' => 'yiisoft/yii2-bootstrap',
-    'version' => '2.0.6.0',
+    'version' => '2.0.7.0',
     'alias' => 
     array (
       '@yii/bootstrap' => $vendorDir . '/yiisoft/yii2-bootstrap',
@@ -33,7 +33,7 @@ return array (
   'yiisoft/yii2-debug' => 
   array (
     'name' => 'yiisoft/yii2-debug',
-    'version' => '2.0.9.0',
+    'version' => '2.0.12.0',
     'alias' => 
     array (
       '@yii/debug' => $vendorDir . '/yiisoft/yii2-debug',
@@ -93,10 +93,19 @@ return array (
       '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine',
     ),
   ),
+  'yiisoft/yii2-httpclient' => 
+  array (
+    'name' => 'yiisoft/yii2-httpclient',
+    'version' => '2.0.4.0',
+    'alias' => 
+    array (
+      '@yii/httpclient' => $vendorDir . '/yiisoft/yii2-httpclient',
+    ),
+  ),
   'kartik-v/yii2-krajee-base' => 
   array (
     'name' => 'kartik-v/yii2-krajee-base',
-    'version' => '1.8.8.0',
+    'version' => '1.8.9.0',
     'alias' => 
     array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
@@ -159,7 +168,7 @@ return array (
   'kartik-v/yii2-widget-select2' => 
   array (
     'name' => 'kartik-v/yii2-widget-select2',
-    'version' => '2.0.9.0',
+    'version' => '2.1.0.0',
     'alias' => 
     array (
       '@kartik/select2' => $vendorDir . '/kartik-v/yii2-widget-select2',
@@ -222,7 +231,7 @@ return array (
   'kartik-v/yii2-widget-datepicker' => 
   array (
     'name' => 'kartik-v/yii2-widget-datepicker',
-    'version' => '1.4.2.0',
+    'version' => '1.4.3.0',
     'alias' => 
     array (
       '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker',
@@ -240,7 +249,7 @@ return array (
   'kartik-v/yii2-widget-alert' => 
   array (
     'name' => 'kartik-v/yii2-widget-alert',
-    'version' => '1.1.0.0',
+    'version' => '1.1.1.0',
     'alias' => 
     array (
       '@kartik/alert' => $vendorDir . '/kartik-v/yii2-widget-alert',
