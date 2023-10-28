@@ -17,9 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Password reset' => '',
-    '<strong>Password</strong> reset' => '@@<strong>Passwort </strong> zurücksetzen@@',
     '<strong>Change</strong> your password' => '<strong>Ändere</strong> dein Passwort',
     'Back' => 'Zurück',
     'Change password' => 'Passwort ändern',
+    'Password reset' => 'Psswort zurücksetzen',
 ];

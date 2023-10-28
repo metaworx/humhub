@@ -17,8 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'No modules found!' => '',
-    'search for available modules online' => '',
-    'Installed' => 'Installato',
+    'No purchased modules found!' => '',
+    'Register' => '',
+    'Installed' => '@@Installato@@',
+    'No modules found!' => 'Nessun modulo trovato!',
     'Search' => 'Cerca',
+    'search for available modules online' => 'cerca moduli disponibili online',
 ];

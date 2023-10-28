@@ -19,13 +19,6 @@
 return [
     'No matches with your selected filters!' => '',
     'Nothing here yet!' => '',
-    '<b>Nobody wrote something yet.</b><br>Make the beginning and post something...' => '@@<strong>Bisher hat niemand etwas geschrieben.</strong><br />Mache den Anfang und schreibe etwas...@@',
-    '<b>This profile stream is still empty</b>' => '@@<strong>Dieser Stream ist noch leer</strong>@@',
-    '<b>This space is still empty!</b><br>Start by posting something here...' => '@@<strong>Dieser Space ist noch leer!</strong><br />Mache den Anfang und schreibe etwas...@@',
-    '<b>Your dashboard is empty!</b><br>Post something on your profile or join some spaces!' => '@@<strong>Deine Übersicht ist leer!</strong><br />Schreibe etwas in deinem Profil oder trete Spaces bei!@@',
-    '<b>Your profile stream is still empty</b><br>Get started and post something...' => '@@<strong>Dein Stream ist noch leer!</strong><br />Mache den Anfang und schreibe etwas...@@',
-    'Nothing found which matches your current filter(s)!' => '@@Nichts gefunden, was den aktuellen Filtern entspricht!@@',
-    'Show all' => '@@Alle anzeigen@@',
     'Back to stream' => 'Zurück zum Stream',
     'Content with attached files' => 'Inhalt mit angehängten Dateien',
     'Created by me' => 'Von mir erstellt',

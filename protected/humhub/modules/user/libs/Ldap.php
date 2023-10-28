@@ -106,6 +106,8 @@ class Ldap extends \yii\base\Component
             $this->handleLdapUser($node);
 
             return true;
+        } catch (\Zend\Ldap\Exception\LdapException $ex) {
+            return false;
         } catch (Exception $ex) {
             return false;
         }
@@ -221,7 +223,7 @@ class Ldap extends \yii\base\Component
                 Yii::error('Could not create or update ldap user profile! (' . print_r($user->profile->getErrors(), true) . ")");
             }
         } else {
-            Yii::error('Could not create or update ldap user! (' . print_r($user->getErrors(), true) . ")");
+            Yii::error('Could not create or update ldap user '.$user->username.'! (' . print_r($user->getErrors(), true) . ")");
         }
 
         return $user;

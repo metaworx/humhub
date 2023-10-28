@@ -17,9 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    '<strong>Search </strong> results' => '',
-    'All' => '',
-    'Content' => '',
-    'Spaces' => '',
-    'Users' => '',
+    'Advanced search settings' => '',
+    'Search for user, spaces and content' => '',
+    '<strong>Search </strong> results' => '<strong>Arama </strong>sonuçları',
+    'All' => 'Hepsi',
+    'Content' => 'İçerik',
+    'Spaces' => 'Mekanlar',
+    'Users' => 'Kullanıcılar',
 ];

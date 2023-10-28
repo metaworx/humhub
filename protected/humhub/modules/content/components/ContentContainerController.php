@@ -9,6 +9,7 @@
 namespace humhub\modules\content\components;
 
 use Yii;
+use yii\web\HttpException;
 use humhub\components\Controller;
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
@@ -54,6 +55,10 @@ class ContentContainerController extends Controller
      */
     public function init()
     {
+        // Directly redirect guests to login page - if guest access isn't enabled
+        if (Yii::$app->user->isGuest && \humhub\models\Setting::Get('allowGuestAccess', 'authentication_internal') != 1) {
+            return Yii::$app->user->loginRequired();
+        }
 
         $spaceGuid = Yii::$app->request->get('sguid', '');
         $userGuid = Yii::$app->request->get('uguid', '');
@@ -99,7 +104,7 @@ class ContentContainerController extends Controller
         }
 
         if (!$this->checkModuleIsEnabled()) {
-            throw new CHttpException(405, Yii::t('base', 'Module is not on this content container enabled!'));
+            throw new HttpException(405, Yii::t('base', 'Module is not on this content container enabled!'));
         }
 
 
@@ -120,17 +125,16 @@ class ContentContainerController extends Controller
 
     /**
      * Checks if current module is enabled on this content container.
-     *
-     * @return boolean
+     * 
+     * @todo Also support submodules
+     * @return boolean is current module enabled
      */
     public function checkModuleIsEnabled()
     {
-        /*
-          $module = $this->getModule();
-          if ($module != null && $module instanceof HWebModule && !$module->isCoreModule) {
-          return $this->contentContainer->isModuleEnabled($module->getId());
-          }
-         */
+        if ($this->module instanceof ContentContainerModule && $this->contentContainer !== null) {
+            return $this->contentContainer->isModuleEnabled($this->module->id);
+        }
+
         return true;
     }
 
