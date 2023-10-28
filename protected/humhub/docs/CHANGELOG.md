@@ -2,6 +2,54 @@ HumHub Change Log
 =================
 
 
+1.3.0-beta.2  (July 18, 2018)
+-----------------------------
+
+Please read the [Update Guide](http://docs.humhub.org/beta/admin-updating-130.html) before updating!
+
+> If you're using the sources directly from GitHub, you need to build the required assets manually. Please see the chapter [Build production assets](http://docs.humhub.org/dev-environment.html#build-production-assets) for more details.
+
+- Enh: Added CounterSet Widget to handle Space/Profile header statistic counts
+- Fix: UI addition mutation observer interfering with new rich-text mutation logic
+- Fix: ThemeLoader publishes assets on CLI requests
+- Enh: Add possibility to delete an invitation [#2980](https://github.com/humhub/humhub/issues/2980)
+- Enh: Moved search index tasks (add, update & delete) into asynchronous tasks
+- Enh: Added search index rebuild button
+- Fix #3200: wall stream scroll not working after single entry load request
+- Fix added missing required validation of target space for move content feature
+- Enh: Added `humhub.modules.stream.StreamState.firstRequest` in order to determine the initial request
+- Fix #3204: invalid russian translation in module overview
+- Fix #3169: post markdown not stripped in mails and activities
+- Fix #3157: invalid use of relative space target link in MailContentEntry widget 
+- Fix force invite not working on space creation
+- Enh: Enable invite all instead of force membership in case force invite checkbox is not selected
+- Fix: prevent MembersAdded activity when using force space membership
+- Enh: added `humhub.modules.ui.picker.Picker.disable()` in order to disable/enable userpicker fields
+- Enh: topic labels now redirect to space stream with active topic filter if clicked outside of space stream
+- Fix: #3123: unbalanced html tags leads to broken comment after load more
+- Fix: #3211: escaped html rendered on space list modal
+- Fix: invalid userpicker translation syntax in czech language
+- Fix: added missing layout-snippet-container class in space and profile layout
+- Fix: move profile content not possible
+- Fix: Stream wall scroll event not detached on pjax call
+- Fix: Error thrown for empty url links in `humhub\libs\Markdown` when used in console environment
+- Fix: UserUrlRule double User model import
+- Fix: Skip soft delete validation
+- Fix: Added user dn to ldap attributes on login
+- Enh: Added Twig template engine for usage in modules
+- Enh: Added id data attribute on contentcontainer links
+- Fix: Wrong permission check on force invite check
+- Fix: Space homepage doesn't allow custom pages on first position
+- Enh: Added integrity check for notification originator
+- Enh: Use of new richtext version 1.0.4 see https://github.com/humhub/humhub-prosemirror/blob/master/docs/CHANGELOG.md 
+- Enh: Added max-height for post/comment/edit richtext
+- Enh: Richtext style enhancements (dashed selection)
+- Fix: Upload preview for comments not cleared after submit
+- Fix: Profile/Space image upload not working after full page reloads
+- Fix: File upload errors not handled by richtext
+- Enh: Removed built and compressed assets from GitHub sources
+
+
 1.3.0-beta.1  (July 4, 2018)
 ----------------------------
 

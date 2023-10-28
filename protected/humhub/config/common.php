@@ -13,7 +13,7 @@ Yii::setAlias('@themes', '@webroot/themes');
 
 $config = [
     'name' => 'HumHub',
-    'version' => '1.3.0-beta.1',
+    'version' => '1.3.0-beta.2',
     'basePath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR,
     'bootstrap' => ['log', 'humhub\components\bootstrap\ModuleAutoLoader', 'queue', 'humhub\modules\ui\view\bootstrap\ThemeLoader'],
     'sourceLanguage' => 'en',
@@ -58,13 +58,13 @@ $config = [
                 ],
             ],
         ],
-        'search' => array(
+        'search' => [
             'class' => 'humhub\modules\search\engine\ZendLuceneSearch',
-        ),
-        'settings' => array(
+        ],
+        'settings' => [
             'class' => 'humhub\components\SettingsManager',
             'moduleId' => 'base',
-        ),
+        ],
         'i18n' => [
             'class' => 'humhub\components\i18n\I18N',
             'translations' => [
