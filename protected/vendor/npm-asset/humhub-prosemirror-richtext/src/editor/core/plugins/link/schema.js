@@ -5,6 +5,8 @@
  *
  */
 
+import {validateHref, DEFAULT_LINK_REL} from "../../util/linkUtil";
+
 const schema = {
     marks: {
         sortOrder: 300,
@@ -14,14 +16,14 @@ const schema = {
                 title: {default: null},
                 target: {default: '_blank'},
                 fileGuid: { default: null},
-                rel: {default: 'noopener'}
+                rel: {default: DEFAULT_LINK_REL}
             },
             inclusive: false,
             parseDOM:
                 [{
                     tag: "a[href]", getAttrs: function getAttrs(dom) {
                         let href = dom.getAttribute("href");
-                        if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
+                        if (!validateHref(href))  {
                             href = '#';
                         }
 
@@ -33,27 +35,12 @@ const schema = {
                         }
                     }
                 }],
-            toDOM: (node) => {
-                let href = (window.humhub && node.attrs.fileGuid) ? humhub.modules.file.getFileUrl(node.attrs.fileGuid)  : node.attrs.href;
-
-                if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
-                    href = '#';
-                }
-
-                return ["a", {
-                    href: href,
-                    title: node.attrs.title || null,
-                    target: node.attrs.target || '_blank',
-                    rel: 'noopener',
-                    'data-file-guid': node.attrs.fileGuid || null
-                }]
-            },
             parseMarkdown: {
                 mark: "link", getAttrs: function (tok) {
                     let href = (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("href")).url : tok.attrGet("href");
                     let fileGuid = (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("href")).guid : null;
 
-                    if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
+                    if (!validateHref(href))  {
                         href = '#';
                     }
 

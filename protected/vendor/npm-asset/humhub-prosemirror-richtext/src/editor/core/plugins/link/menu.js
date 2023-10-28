@@ -5,10 +5,12 @@
  *
  */
 
-import {MenuItem, icons, markActive} from "../../menu/menu"
-import { TextSelection } from 'prosemirror-state'
-import {openPrompt, TextField} from "../../prompt"
-import {toggleMark} from "prosemirror-commands"
+import {MenuItem, icons, markActive, canInsertLink} from "../../menu/menu"
+import { TextSelection } from 'prosemirror-state';
+import {openPrompt, TextField} from "../../prompt";
+import {toggleMark} from "prosemirror-commands";
+import {validateHref} from "../../util/linkUtil";
+import {escapeHtml} from "markdown-it/lib/common/utils";
 
 function linkItem(context) {
     let mark = context.schema.marks.link;
@@ -24,17 +26,7 @@ function linkItem(context) {
                 return false;
             }
 
-            var allowLink = true;
-            state.doc.nodesBetween(state.selection.$from.pos, state.selection.$to.pos, function(node, start, parent, index) {
-                node.marks.forEach(function(mark) {
-                    let spec = mark.type.spec;
-                    if(spec.preventMarks && $.inArray('link', spec.preventMarks) >= 0) {
-                        allowLink = false;
-                    }
-                });
-            });
-
-            return allowLink;
+            return canInsertLink(state);
         },
         run(state, dispatch, view) {
             if (markActive(state, mark)) {
@@ -64,39 +56,27 @@ export function editNode(dom, context) {
 
     let mark = getLinkMark(node, context);
 
-    promt(context.translate("Edit link"), context, $.extend({}, mark.attrs, {text: node.text}), node, mark)
+    promt(context.translate("Edit link"), context, $.extend({}, mark.attrs, {text: node.text}), node, mark);
 }
 
 export function promt(title, context, attrs, node, mark) {
     let view = context.editor.view;
-    let doc = context.editor.view.state.doc;
 
     let fields =  {
-        text:  new TextField({label: "Text", value: attrs && attrs.text, clean: clean}),
+        text:  new TextField({label: "Text", value: attrs && attrs.text}),
         href: new TextField({
             label: context.translate("Link target"),
             value: attrs && attrs.href,
             required: true,
             clean: (val) => {
-                let validate = context.getPluginOption('link', 'validate');
-                let tested = (validate) ? validate(val) : false;
-
-                if(tested) {
-                    return (typeof tested === 'string') ? tested : val;
-                }
-
-                if(validate &&  validate(val)) {
-                    return val;
-                }
-
-                if (!/^https?:\/\//i.test(val) && !/^mailto:/i.test(val) && !/^ftps?:\/\//i.test(val))  {
-                    return 'http://' + val;
+                if (!validateHref(val))  {
+                    return 'https://' + val;
                 }
 
                 return val;
             }
         }),
-        title: new TextField({label: "Title", value: attrs && attrs.title, clean: clean})
+        title: new TextField({label: "Title", value: attrs && attrs.title})
     };
 
     if(!node) {
@@ -129,10 +109,6 @@ export function promt(title, context, attrs, node, mark) {
         }
     })
 }
-
-let clean = (val) => {
-    return val.replace(/(["'])/g, '');
-};
 
 function getLinkMark(node, context) {
     let result = null;

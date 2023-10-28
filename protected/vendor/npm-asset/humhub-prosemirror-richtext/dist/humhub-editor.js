@@ -13793,6 +13793,24 @@
       return false
   }
 
+  function canInsertLink(state) {
+      var allowLink = true;
+      state.doc.nodesBetween(state.selection.$from.pos, state.selection.$to.pos, function(node) {
+          if(node.type.spec.code) {
+              allowLink = false;
+          } else {
+              node.marks.forEach(function(mark) {
+                  var spec = mark.type.spec;
+                  if(spec.preventMarks && $.inArray('link', spec.preventMarks) >= 0) {
+                      allowLink = false;
+                  }
+              });
+          }
+      });
+
+      return allowLink;
+  }
+
   var prefix$2 = "ProseMirror-menubar";
 
   function buildMenuItems(context) {
@@ -13910,6 +13928,12 @@
       var dom = this.groupItem.render(this.editorView);
 
       this.menu.appendChild(dom);
+
+      $(this.menu).on('mousedown', function(evt) {
+          // Prevent focusout if we click outside of a menu item, but still inside menu container
+          evt.preventDefault();
+      });
+
       this.update();
 
       if (options.floating && !isIOS()) {
@@ -14020,7 +14044,8 @@
     redoItem: redoItem,
     wrapItem: wrapItem,
     blockTypeItem: blockTypeItem,
-    canInsert: canInsert
+    canInsert: canInsert,
+    canInsertLink: canInsertLink
   });
 
   var SVG$1 = "http://www.w3.org/2000/svg";
@@ -59407,7 +59432,6 @@
       this.query = null;
       if(this.view) {
           this.provider.reset();
-          this.view.focus();
       }
   };
 
@@ -60555,7 +60579,7 @@
           icon: icons.emoji,
           sortOrder: 350,
           enable: function enable(state) {
-              return canInsert(state, context.schema.nodes.image)
+              return canInsert(state, context.schema.nodes.image) && canInsertLink(state)
           },
           run: function run(state, _, view, e) {
               if (!$('.humhub-richtext-provider:visible').length) {
@@ -72813,7 +72837,7 @@
           heading:  {
               sortOrder: 400,
               attrs: {level: {default: 1}},
-              content: "inline*",
+              content: "(text | image)*",
               group: "block",
               defining: true,
               parseDOM: [{tag: "h1", attrs: {level: 1}},
@@ -73008,18 +73032,6 @@
                       }
                   }
               }],
-              toDOM: function (node) {
-                  var src = (window.humhub && node.attrs.fileGuid) ? humhub.modules.file.getFileUrl(node.attrs.fileGuid)  : node.attrs.src;
-
-                  return ["img", {
-                      src: src,
-                      title: node.attrs.title || null,
-                      width: node.attrs.width || null,
-                      height: node.attrs.height || null,
-                      alt: node.attrs.alt || null,
-                      'data-file-guid': node.attrs.fileGuid || null
-                  }]
-              },
               parseMarkdown: {
                   node: "image", getAttrs: function (tok) {
                       var src =  (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("src")).url : tok.attrGet("src");
@@ -73332,6 +73344,45 @@
       md.inline.ruler.before('emphasis', 'image', image_with_size(md, options));
   };
 
+  var DEFAULT_LINK_REL = 'noopener noreferrer nofollow';
+
+  function validateHref(href, cfg) {
+      cfg = cfg || {};
+
+      return /^https?:\/\//i.test(href) //http:/https:
+          || /^mailto:/i.test(href) //mailto:
+          || /^ftps?:\/\//i.test(href) //ftp:/ftps:
+          || (cfg.anchor && validateAnchor(href)) //anchor
+          || (cfg.relative && validateRelative(href)); //relative
+  }
+
+  function validateRelative(href) {
+      return /^\/[^\/].*$/i.test(href);
+  }
+
+  function validateAnchor(href) {
+      return /^#((?:[!$&()*+,;=._~:@?-]|%[0-9a-fA-F]{2}|[a-zA-Z0-9])+)$/i.test(href);
+  }
+
+  function buildLink(href, attrs, text, validate) {
+      attrs = attrs || {};
+
+      if(validate !== false) {
+          href = validateHref(href, validate) ? href : '#';
+      }
+
+      text = text || href;
+
+      var defaultAttrs = {href: href};
+
+      if(href !== '#') {
+          defaultAttrs.target = '_blank';
+          defaultAttrs.rel = DEFAULT_LINK_REL;
+      }
+
+      return $('<div>').append($('<a>').attr($.extend(defaultAttrs, attrs)).text(text)).html();
+  }
+
   /*
    * @link https://www.humhub.org/
    * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
@@ -73345,7 +73396,7 @@
           label: context.translate("Image"),
           sortOrder: 100,
           enable: function enable(state) {
-              return canInsert(state, context.schema.nodes.image)
+              return canInsert(state, context.schema.nodes.image) && canInsertLink(state);
           },
           run: function run(state, _, view) {
               if (state.selection instanceof NodeSelection && state.selection.node.type === context.schema.nodes.image) {
@@ -73405,12 +73456,18 @@
           }
       };
 
+      var validateSource = function(val) {
+          if(!validateHref(val)) {
+              return context.translate('Invalid image source.')
+          }
+      };
+
       openPrompt({
           title: title,
           fields: {
-              src: new TextField({label: context.translate("Location"), required: true, value: attrs && attrs.src, clean: clean}),
-              title: new TextField({label: context.translate("Title"), value: attrs && attrs.title, clean: clean}),
-              alt: new TextField({label: context.translate("Description"), value: attrs ? attrs.alt : state.doc.textBetween(from, to, " "), clean: clean}),
+              src: new TextField({label: context.translate("Location"), required: true, value: attrs && attrs.src, validate: validateSource}),
+              title: new TextField({label: context.translate("Title"), value: attrs && attrs.title}),
+              alt: new TextField({label: context.translate("Description"), value: attrs ? attrs.alt : state.doc.textBetween(from, to, " ")}),
               width: new TextField({label: context.translate("Width"), value: attrs && attrs.width, clean: cleanDimension, validate: validateDimension }),
               height: new TextField({label: context.translate("Height"),  value: attrs && attrs.height, clean: cleanDimension, validate: validateDimension})
           },
@@ -73423,10 +73480,6 @@
           }
       });
   }
-
-  var clean = function (val) {
-      return val.replace(/(["'])/g, '');
-  };
 
   function menu$9(context) {
       return [
@@ -73517,18 +73570,16 @@
   };
 
   ImageView.prototype.createDom = function createDom (node) {
-      this.dom = $('<img>').attr({
-          src: node.attrs.src,
-          title: clean$1(node.attrs.title) || null,
-          width: clean$1(node.attrs.width) || null,
-          height: clean$1(node.attrs.height) || null,
-          alt: clean$1(node.attrs.alt) || null,
-          'data-file-guid': clean$1(node.attrs.fileGuid)
-      })[0];
-  };
+      var src = validateHref(node.attrs.src) ? node.attrs.src : '#';
 
-  var clean$1 = function (val) {
-      return (val) ? val.replace(/(["'])/g, '') : val;
+      this.dom = $('<img>').attr({
+          src: src,
+          title: node.attrs.title || null,
+          width: node.attrs.width || null,
+          height: node.attrs.height || null,
+          alt: node.attrs.alt || null,
+          'data-file-guid': node.attrs.fileGuid
+      })[0];
   };
 
   /*
@@ -73557,9 +73608,8 @@
           markdownIt.renderer.rules.image = function (tokens, idx, options, env, self) {
               var srcIndex = tokens[idx].attrIndex('src');
 
-
               var srcFilter = (window.humhub) ? humhub.modules.file.filterFileUrl(tokens[idx].attrs[srcIndex][1]) : {url : tokens[idx].attrs[srcIndex][1]};
-              tokens[idx].attrs[srcIndex][1] = srcFilter.url;
+              tokens[idx].attrs[srcIndex][1] = validateHref(srcFilter.url) ? srcFilter.url : '#';
 
               if(srcFilter.guid) {
                   tokens[idx].attrPush(['data-file-guid', srcFilter.guid]); // add new attribute
@@ -73591,14 +73641,14 @@
                   title: {default: null},
                   target: {default: '_blank'},
                   fileGuid: { default: null},
-                  rel: {default: 'noopener'}
+                  rel: {default: DEFAULT_LINK_REL}
               },
               inclusive: false,
               parseDOM:
                   [{
                       tag: "a[href]", getAttrs: function getAttrs(dom) {
                           var href = dom.getAttribute("href");
-                          if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
+                          if (!validateHref(href))  {
                               href = '#';
                           }
 
@@ -73610,27 +73660,12 @@
                           }
                       }
                   }],
-              toDOM: function (node) {
-                  var href = (window.humhub && node.attrs.fileGuid) ? humhub.modules.file.getFileUrl(node.attrs.fileGuid)  : node.attrs.href;
-
-                  if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
-                      href = '#';
-                  }
-
-                  return ["a", {
-                      href: href,
-                      title: node.attrs.title || null,
-                      target: node.attrs.target || '_blank',
-                      rel: 'noopener',
-                      'data-file-guid': node.attrs.fileGuid || null
-                  }]
-              },
               parseMarkdown: {
                   mark: "link", getAttrs: function (tok) {
                       var href = (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("href")).url : tok.attrGet("href");
                       var fileGuid = (window.humhub) ? humhub.modules.file.filterFileUrl(tok.attrGet("href")).guid : null;
 
-                      if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href) && !/^ftps?:\/\//i.test(href))  {
+                      if (!validateHref(href))  {
                           href = '#';
                       }
 
@@ -73673,17 +73708,7 @@
                   return false;
               }
 
-              var allowLink = true;
-              state.doc.nodesBetween(state.selection.$from.pos, state.selection.$to.pos, function(node, start, parent, index) {
-                  node.marks.forEach(function(mark) {
-                      var spec = mark.type.spec;
-                      if(spec.preventMarks && $.inArray('link', spec.preventMarks) >= 0) {
-                          allowLink = false;
-                      }
-                  });
-              });
-
-              return allowLink;
+              return canInsertLink(state);
           },
           run: function run(state, dispatch, view) {
               if (markActive(state, mark)) {
@@ -73718,34 +73743,22 @@
 
   function promt$1(title, context, attrs, node, mark) {
       var view = context.editor.view;
-      var doc = context.editor.view.state.doc;
 
       var fields =  {
-          text:  new TextField({label: "Text", value: attrs && attrs.text, clean: clean$2}),
+          text:  new TextField({label: "Text", value: attrs && attrs.text}),
           href: new TextField({
               label: context.translate("Link target"),
               value: attrs && attrs.href,
               required: true,
               clean: function (val) {
-                  var validate = context.getPluginOption('link', 'validate');
-                  var tested = (validate) ? validate(val) : false;
-
-                  if(tested) {
-                      return (typeof tested === 'string') ? tested : val;
-                  }
-
-                  if(validate &&  validate(val)) {
-                      return val;
-                  }
-
-                  if (!/^https?:\/\//i.test(val) && !/^mailto:/i.test(val) && !/^ftps?:\/\//i.test(val))  {
-                      return 'http://' + val;
+                  if (!validateHref(val))  {
+                      return 'https://' + val;
                   }
 
                   return val;
               }
           }),
-          title: new TextField({label: "Title", value: attrs && attrs.title, clean: clean$2})
+          title: new TextField({label: "Title", value: attrs && attrs.title})
       };
 
       if(!node) {
@@ -73778,10 +73791,6 @@
           }
       });
   }
-
-  var clean$2 = function (val) {
-      return val.replace(/(["'])/g, '');
-  };
 
   function getLinkMark(node, context) {
       var result = null;
@@ -73829,19 +73838,13 @@
   };
 
   LinkView.prototype.createDom = function createDom (mark) {
-      this.dom = $('<a>').attr({
-          href: clean$3(mark.attrs.href),
-          'data-file-guid': clean$3(mark.attrs.fileGuid),
-          target: clean$3(mark.attrs.target) || '_blank',
-          rel: 'noopener',
-      })[0];
+      this.dom = $(buildLink(mark.attrs.href, {
+          'data-file-guid': mark.attrs.fileGuid,
+          target: mark.attrs.target || '_blank'
+      }))[0];
   };
 
   LinkView.prototype.stopEvent = function stopEvent () { return true };
-
-  var clean$3 = function (val) {
-      return (val) ? val.replace(/(["'])/g, '') : val;
-  };
 
   var HTTP_LINK_REGEX = /((https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,})|[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})/ig;
 
@@ -73921,7 +73924,7 @@
                   tokens[idx].attrPush(['data-file-url', hrefFilter.url]); // add new attribute
               }
 
-              if (!/^https?:\/\//i.test(hrefFilter.url) && !/^mailto:/i.test(hrefFilter.url) && !/^ftps?:\/\//i.test(hrefFilter.url))  {
+              if (!validateHref(hrefFilter.url, {anchor: tokens[idx].anchor}))  {
                   tokens[idx].attrs[hrefIndex][1] = '#';
               }
 
@@ -73934,7 +73937,7 @@
                   tokens[idx].attrs[aIndex][1] = '_blank';    // replace value of existing attr
               }
 
-              tokens[idx].attrPush(['rel', 'noopener']);
+              tokens[idx].attrPush(['rel', DEFAULT_LINK_REL]);
 
               // pass token to default renderer.
               return defaultRender(tokens, idx, options, env, self);
@@ -74326,9 +74329,17 @@
               }
 
               // [link](  <id>:<href>  "title"  )
-              //          ^^^^^^ parsing oembed
-              start = pos;
+              //          ^^^^ parsing prefix
+              for(var i = 0;i < prefix.length; i++) {
+                  if(state.src.charAt(pos++) !== prefix.charAt(i)) {
+                      return false;
+                  }
+              }
+
+              // [link](  <id>:<href>  "title"  )
+              //               ^^^^ parsing href
               res = state.md.helpers.parseLinkDestination(state.src, pos, state.posMax);
+
               if (res.ok) {
                   href = state.md.normalizeLink(res.str);
                   if (state.md.validateLink(href)) {
@@ -74337,12 +74348,6 @@
                       href = '';
                   }
               }
-
-              if (href.indexOf(prefix) !== 0) {
-                  return false;
-              }
-
-              href = href.substring(prefix.length, href.length);
 
               // [link](  <id>:<href>  "title"  )
               //                     ^^ skipping these spaces
@@ -74407,7 +74412,8 @@
                   state.pos++;
               }
 
-              state.md.inline.tokenize(state);
+          // NOTE linkExtensions currently do not support inline formatting:
+          // TODO: make _open, _close behavior optional in order to support inline label format state.md.inline.tokenize(state);
           }
 
           state.pos = pos;
@@ -74445,41 +74451,22 @@
           }));
 
           markdownIt.renderer.rules.mention = function(token, idx) {
-              var oembed = token[idx];
-              var href = markdownIt.utils.escapeHtml(oembed.attrGet('href'));
-              var guid = markdownIt.utils.escapeHtml(oembed.attrGet('guid'));
-              var name = markdownIt.utils.escapeHtml(oembed.attrGet('name'));
+              var mentioning = token[idx];
+              var href = mentioning.attrGet('href');
+              var guid = mentioning.attrGet('guid');
+              var label = '@'+mentioning.attrGet('name');
 
-              if(href === '#') {
-                  return '<a href="#" class="not-found">@'+name+'</a>';
+
+              if(!validateHref(href, {relative: true})) {
+                  return buildLink('#',{'class':'not-found'}, label);
               }
 
-              return '<a href="'+href+'" data-contentcontainer-guid="'+guid+'" target="_blank" rel="noopener">@'+name+'</a>';
+              return buildLink(href, {'data-contentcontainer-guid': guid}, label, false);
           };
 
 
       }
   };
-
-  var HTML_ESCAPE_TEST_RE = /[&<>"]/;
-  var HTML_ESCAPE_REPLACE_RE = /[&<>"]/g;
-  var HTML_REPLACEMENTS = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;'
-  };
-
-  function replaceUnsafeChar(ch) {
-      return HTML_REPLACEMENTS[ch];
-  }
-
-  function escapeHtml$2(str) {
-      if (HTML_ESCAPE_TEST_RE.test(str)) {
-          return str.replace(HTML_ESCAPE_REPLACE_RE, replaceUnsafeChar);
-      }
-      return str;
-  }
 
   var oembed = {
       attrs: {
@@ -74502,16 +74489,16 @@
           var $oembed = humhub.require('oembed').get(node.attrs.href);
 
           if ($oembed && $oembed.length) {
-              return $oembed.clone().show()[0];
-          } else {
-              return $('<a href="' + escapeHtml$2(node.attrs.href) + '" class="not-found" style="color:#FF7F00" target="_blank" rel="noopener">' + escapeHtml$2(node.attrs.href) + '</a>')[0];
+              return $oembed.show()[0];
           }
+
+          return $(buildLink(node.attrs.href, {'class': 'not-found'}))[0];
       },
       parseMarkdown: {
           node: "oembed", getAttrs: function(tok) {
               return ({
                   href: tok.attrGet("href")
-              })
+              });
           }
       },
       toMarkdown: function (state, node) {
@@ -74575,17 +74562,75 @@
 
           markdownIt.renderer.rules.oembed = function(token, idx) {
               var oembed = token[idx];
-              var href = markdownIt.utils.escapeHtml(oembed.attrGet('href'));
-              var $oembed = $('[data-oembed="'+href+'"]');
+              var href = oembed.attrGet('href');
+              var $oembed = humhub
+                  .require('oembed')
+                  .get(href);
 
-              if(!$oembed.length) {
-                  return '<a href="'+href+'" target="_blank" rel="noopener">'+href+'</a>';
+              if(!$oembed || !$oembed.length) {
+                  return buildLink(href);
               }
 
-              $oembed = $oembed.clone();
-              return $oembed.html();
+              return $('<div>').append($oembed).html();
           };
       }
+  };
+
+  /*
+   * @link https://www.humhub.org/
+   * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
+   * @license https://www.humhub.com/licences
+   *
+   */
+
+  var focusKey = new PluginKey('focus');
+
+  var focusPlugin = function (context) {
+      return new Plugin({
+          key: focusKey,
+          state: {
+              init: function init() {
+                  return false;
+              },
+              apply: function apply(transaction, prevFocused) {
+                  var focused = transaction.getMeta(focusKey);
+                  if (typeof focused === 'boolean') {
+                      return focused;
+                  }
+                  return prevFocused;
+              }
+          },
+          props: {
+              handleDOMEvents: {
+                  blur: function (view) {
+                      view.dispatch(view.state.tr.setMeta(focusKey, false));
+                      return false;
+
+                  },
+                  focus: function (view, event) {
+                      view.dispatch(view.state.tr.setMeta(focusKey, true));
+                      return false;
+
+                  }
+              }
+          }
+      });
+  };
+
+  /*
+   * @link https://www.humhub.org/
+   * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
+   * @license https://www.humhub.com/licences
+   *
+   */
+
+  var focus = {
+      id: 'focus',
+      plugins: function (context) {
+          return [
+              focusPlugin()
+          ];
+      },
   };
 
   /*
@@ -74704,15 +74749,14 @@
                   return ["p", 0]
               },
               parseMarkdown: {block: "paragraph"},
-              toMarkdown: function (state, node) {
+              toMarkdown: function (state, node, parent) {
+
                   state.renderInline(node);
 
                   if(!state.table) {
                       state.closeBlock(node);
-                  } else {
-                      if(node.content && node.content.size) {
-                          state.write('<br><br>');
-                      }
+                  } else if(node.content && node.content.size && parent.lastChild !== node) {
+                      state.write('<br><br>');
                   }
               }
           }
@@ -76835,14 +76879,19 @@
           state: {
               init: function init(config, state) {
                   if(!isEmpty(state.doc, context)) {
-                      return DecorationSet.empty
+                      return DecorationSet.empty;
                   } else {
                       return DecorationSet.create(state.doc, [createDecoration(state.doc, context)]);
                   }
               },
-              apply: function apply(tr, set) {
-                  // TODO: Currently if we leafe the node with an empty e.g heading there is no placeholder
+              apply: function apply(tr, set, state, newState) {
+                  // TODO: Currently if we leave the node with an empty e.g heading there is no placeholder
                   // We should check when focusout, if the node is empty and change the first child to a paragraph
+
+                  if(focusKey.getState(newState)) {
+                      return DecorationSet.empty;
+                  }
+
                   if (!isEmpty(tr.doc, context)) {
                       return DecorationSet.empty;
                   }
@@ -76851,15 +76900,17 @@
               }
           },
           props: {
-              decorations: function decorations(state) { return this.getState(state) }
+              decorations: function decorations(state) {
+                  return this.getState(state);
+              }
           }
-      })
+      });
   };
 
   var isEmpty = function (doc, context) {
-      return doc.childCount === 1 &&
-          doc.firstChild.type.name === 'paragraph' &&
-          doc.firstChild.content.size === 0 &&
+      return doc.childCount === 1
+          && doc.firstChild.type.name === 'paragraph'
+          && doc.firstChild.content.size === 0 &&
           !context.hasContentDecorations()
   };
 
@@ -76886,7 +76937,7 @@
 
           return [
               placeholderPlugin(context)
-          ]
+          ];
       },
   };
 
@@ -76978,7 +77029,7 @@
           label: context.translate("Upload File"),
           sortOrder: 0,
           enable: function enable(state) {
-              return state.selection.$from.parent.inlineContent
+              return canInsertLink(state);
           },
           run: function run(state, dispatch, view) {
               if (view.state.selection.$from.parent.inlineContent) {
@@ -77131,6 +77182,7 @@
 
               var linkTokens = [
                   Object.assign(new state.Token('link_open', 'a', 1), {
+                      anchor: true,
                       attrs: [
                           ['class', opts.permalinkClass],
                           ['href', opts.permalinkHref(slug, state)],
@@ -77139,7 +77191,7 @@
                           ['aria-hidden', 'true']
                       ]
                   }),
-                  Object.assign(new state.Token('text', '', 0), { content: opts.permalinkSymbol }),
+                  Object.assign(new state.Token('text', '', 0), {content: opts.permalinkSymbol }),
                   new state.Token('link_close', 'a', -1)
               ];
 
@@ -77625,12 +77677,14 @@
   };
 
   registerPlugin(doc$1, 'markdown');
+  registerPlugin(focus, 'markdown');
   registerPlugin(clipboard$2, 'markdown');
   registerPlugin(loader$1, 'markdown');
   registerPlugin(paragraph$2, 'markdown');
   registerPlugin(blockquote$1, 'markdown');
   registerPlugin(bullet_list, 'markdown');
   registerPlugin(strong, 'markdown');
+  registerPlugin(link$4, 'markdown');
   registerPlugin(code$2, 'markdown');
   registerPlugin(code_block$1, 'markdown');
   registerPlugin(emoji);
@@ -77646,7 +77700,6 @@
   registerPlugin(strikethrough$2, 'markdown');
   registerPlugin(table$2, 'markdown');
   registerPlugin(text$2, 'markdown');
-  registerPlugin(link$4, 'markdown');
   registerPlugin(attributes, 'markdown');
   registerPlugin(upload, 'markdown');
   registerPlugin(placeholder, 'markdown');
@@ -78392,7 +78445,7 @@
 
       var above = $head.node(-1);
       var after = $head.indexAfter(-1);
-      var type = above.defaultContentType(after);
+      var type = above.contentMatchAt(after).defaultType;
 
       if (!above.canReplaceWith(after, after, type)) {
           return false;
@@ -78549,8 +78602,14 @@
           { bind("Ctrl->", wrapIn(type)); }
       if (type = schema.nodes.hard_break) {
           var br = type, cmd = chainCommands(exitCode, function (state, dispatch) {
+              if(state.selection
+                  && state.selection.$anchor.parent
+                  && state.selection.$anchor.parent.type === schema.nodes.heading) {
+                  splitBlock(state, dispatch);
+                  return true;
+              }
               dispatch(state.tr.replaceSelectionWith(br.create()).scrollIntoView());
-              return true
+              return true;
           });
           bind("Mod-Enter", cmd);
           bind("Shift-Enter", cmd);

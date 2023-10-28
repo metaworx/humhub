@@ -1,6 +1,26 @@
 Changelog
 =========
 
+1.0.26 (May 20, 2020)
+-----------------------------------------
+- Fix: Disable emoji menu items in inline code
+- Fix https://github.com/humhub/humhub/issues/4049 faulty line break within headline formatting
+- Enh: Unified link creation and validation in `core/util/linkUtil.js`
+- Fix: Oembed not wrapped in `oembed_snippet` container when cached
+- Fix #11: Table cell paragraph always renders two line breaks
+
+1.0.25 (May 13, 2020)
+-----------------------------------------
+- Fix: Fix linkExtensionTokenizer prevent inline text parsing issue
+- Fix: Initial cursor not visible on firefox due to placeholder decoration
+- Enh: Added new focus plugin for triggering plugin updates on focus/blur
+- Fix #17: Links in inline code not parsed
+- Fix: `exitCodeAtLast` broken due to usage of removed `defaultContentType`
+- Fix: Focus menu closes when clicking outside of a menu button 
+- Enh: Added `canInsertLink` menu utility
+- Fix: Anchor plugin broken due to restricted url validation
+- Fix: Disable link/image/file menu items in code blocks
+
 1.0.24 (April 18, 2020)
 -----------------------------------------
 - Fix: Removed debugger statement
