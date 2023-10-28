@@ -17,9 +17,7 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  '<strong>Latest</strong> updates' => '',
-  'Delete' => '@@Удалить@@',
-  'Email settings' => '@@Настройки E-Mail@@',
+  '<strong>Latest</strong> updates' => '<strong>Последние</strong> обновления',
   'Account settings' => 'Настройки аккаунта',
   'Administration' => 'Администрирование',
   'Back to dashboard' => 'Вернуться на главную',
@@ -39,7 +37,7 @@ return array (
   'Menu' => 'Меню',
   'Module is not on this content container enabled!' => 'Модуль не включён в этой оболочке контента',
   'My profile' => 'Мой профиль',
-  'New profile image' => 'Ваше новое изображение',
+  'New profile image' => 'Новое изображение профиля',
   'Nothing found with your input.' => 'Ничего не найдено по вашему запросу.',
   'Oooops...' => 'Ой...',
   'Results' => 'Результаты',

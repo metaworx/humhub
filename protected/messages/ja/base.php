@@ -18,8 +18,6 @@
  */
 return array (
   '<strong>Latest</strong> updates' => '',
-  'Delete' => '@@削除@@',
-  'Email settings' => '@@メールの設定@@',
   'Account settings' => 'アカウント設定',
   'Administration' => '管理',
   'Back to dashboard' => 'ダッシュボードへ戻る',

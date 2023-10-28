@@ -17,9 +17,7 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  '<strong>Latest</strong> updates' => '',
-  'Delete' => '@@Sil@@',
-  'Email settings' => '@@Eposta ayarları@@',
+  '<strong>Latest</strong> updates' => '<strong>Son</strong> güncellemeler',
   'Account settings' => 'Hesap ayarları',
   'Administration' => 'Yönetim',
   'Back to dashboard' => 'Panele geri dön',

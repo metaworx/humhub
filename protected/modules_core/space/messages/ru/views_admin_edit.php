@@ -17,12 +17,6 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'For everyone' => '@@Свободная@@',
-  'Invisible' => '@@Скрыто@@',
-  'Invite and request' => '@@Приглашение или запрос@@',
-  'Only by invite' => '@@Только по приглашению@@',
-  'Visible for all' => '@@Только для зарегистрированные@@',
-  'Visible for network users' => '@@Все@@',
   '<strong>General</strong> space settings' => '<strong>Главные</strong> настройки пространства',
   'Archive' => 'Архив',
   'Choose the kind of membership you want to provide for this workspace.' => 'Политика вступления',
