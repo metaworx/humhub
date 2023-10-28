@@ -2,14 +2,8 @@ HumHub Change Log
 =================
 
 
-1.3.17  (October 17, 2019)
---------------------------
-
-- Fix #3690: Rollback from broken version 2.8.6 to 2.8.1 of bower-asset/clipboard.js
-
-
-1.3.16  (October 17, 2019)
---------------------------
+1.3.16  (Unreleased)
+-------------------------
 
 - Fix #3647: GroupID field is not translatable in Registration Form
 - Fix #3655: Fix CommentLink widget Comment class usage conflict
