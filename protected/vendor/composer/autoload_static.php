@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc
+class ComposerStaticInitd5d773589c4292b7f1cf516efe91a44e
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -330,11 +330,11 @@ class ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc
         ),
         'kartik\\rating\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-rating',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-rating/src',
         ),
         'kartik\\range\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-rangeinput',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-rangeinput/src',
         ),
         'kartik\\plugins\\fileinput\\' => 
         array (
@@ -354,7 +354,7 @@ class ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc
         ),
         'kartik\\file\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-fileinput',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-fileinput/src',
         ),
         'kartik\\depdrop\\' => 
         array (
@@ -370,7 +370,7 @@ class ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc
         ),
         'kartik\\color\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-colorinput',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-colorinput/src',
         ),
         'kartik\\base\\' => 
         array (
@@ -1114,10 +1114,10 @@ class ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitc9b8463277eae92ae07d462a9b529ebc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd5d773589c4292b7f1cf516efe91a44e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd5d773589c4292b7f1cf516efe91a44e::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitd5d773589c4292b7f1cf516efe91a44e::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitd5d773589c4292b7f1cf516efe91a44e::$classMap;
 
         }, null, ClassLoader::class);
     }

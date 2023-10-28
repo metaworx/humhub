@@ -15,7 +15,7 @@ return array (
   'kartik-v/yii2-krajee-base' => 
   array (
     'name' => 'kartik-v/yii2-krajee-base',
-    'version' => '1.9.3.0',
+    'version' => '1.9.5.0',
     'alias' => 
     array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base/src',
@@ -33,7 +33,7 @@ return array (
   'kartik-v/yii2-widget-touchspin' => 
   array (
     'name' => 'kartik-v/yii2-widget-touchspin',
-    'version' => '1.2.2.0',
+    'version' => '1.2.3.0',
     'alias' => 
     array (
       '@kartik/touchspin' => $vendorDir . '/kartik-v/yii2-widget-touchspin/src',
@@ -78,7 +78,7 @@ return array (
   'kartik-v/yii2-widget-select2' => 
   array (
     'name' => 'kartik-v/yii2-widget-select2',
-    'version' => '2.1.2.0',
+    'version' => '2.1.3.0',
     'alias' => 
     array (
       '@kartik/select2' => $vendorDir . '/kartik-v/yii2-widget-select2/src',
@@ -87,19 +87,19 @@ return array (
   'kartik-v/yii2-widget-rating' => 
   array (
     'name' => 'kartik-v/yii2-widget-rating',
-    'version' => '1.0.3.0',
+    'version' => '1.0.4.0',
     'alias' => 
     array (
-      '@kartik/rating' => $vendorDir . '/kartik-v/yii2-widget-rating',
+      '@kartik/rating' => $vendorDir . '/kartik-v/yii2-widget-rating/src',
     ),
   ),
   'kartik-v/yii2-widget-rangeinput' => 
   array (
     'name' => 'kartik-v/yii2-widget-rangeinput',
-    'version' => '1.0.1.0',
+    'version' => '1.0.2.0',
     'alias' => 
     array (
-      '@kartik/range' => $vendorDir . '/kartik-v/yii2-widget-rangeinput',
+      '@kartik/range' => $vendorDir . '/kartik-v/yii2-widget-rangeinput/src',
     ),
   ),
   'kartik-v/yii2-widget-growl' => 
@@ -114,10 +114,10 @@ return array (
   'kartik-v/yii2-widget-fileinput' => 
   array (
     'name' => 'kartik-v/yii2-widget-fileinput',
-    'version' => '1.0.6.0',
+    'version' => '1.0.8.0',
     'alias' => 
     array (
-      '@kartik/file' => $vendorDir . '/kartik-v/yii2-widget-fileinput',
+      '@kartik/file' => $vendorDir . '/kartik-v/yii2-widget-fileinput/src',
     ),
   ),
   'kartik-v/yii2-widget-depdrop' => 
@@ -150,10 +150,10 @@ return array (
   'kartik-v/yii2-widget-colorinput' => 
   array (
     'name' => 'kartik-v/yii2-widget-colorinput',
-    'version' => '1.0.3.0',
+    'version' => '1.0.5.0',
     'alias' => 
     array (
-      '@kartik/color' => $vendorDir . '/kartik-v/yii2-widget-colorinput',
+      '@kartik/color' => $vendorDir . '/kartik-v/yii2-widget-colorinput/src',
     ),
   ),
   'kartik-v/yii2-widget-alert' => 
@@ -177,7 +177,7 @@ return array (
   'kartik-v/yii2-widget-activeform' => 
   array (
     'name' => 'kartik-v/yii2-widget-activeform',
-    'version' => '1.5.1.0',
+    'version' => '1.5.3.0',
     'alias' => 
     array (
       '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform/src',
@@ -213,7 +213,7 @@ return array (
   'yiisoft/yii2-authclient' => 
   array (
     'name' => 'yiisoft/yii2-authclient',
-    'version' => '2.1.5.0',
+    'version' => '2.1.7.0',
     'alias' => 
     array (
       '@yii/authclient' => $vendorDir . '/yiisoft/yii2-authclient/src',
