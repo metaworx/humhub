@@ -8,6 +8,7 @@ Version 1.16 (Unreleased)
 -------------------------
 
 ### Deprecations
+- `\humhub\components\Event` use `\humhub\events\Event` instead
 - `\humhub\modules\content\components\ContentAddonActiveRecord::canWrite()`
 - `\humhub\modules\file\models\File::canRead()` use `canView()` instead
 - `\humhub\modules\content\components\ContentAddonActiveRecord::canRead()` use `canView()` instead
